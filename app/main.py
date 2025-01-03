@@ -1,5 +1,5 @@
+from app.services.player_service import PlayerService
 from models.player import Player
-from models.team import Team
 
 def main():
     # Création d'instances de la classe Player
@@ -9,6 +9,13 @@ def main():
     # Affichage des informations sur les joueurs
     print(player1)
     print(player2)
+
+    # Recherche de l'ID d'un joueur par son nom
+    try:
+        player_id = PlayerService.get_player_id_by_name("LeBron James")
+        print(f"L'ID de LeBron James est {player_id}")
+    except ValueError as e:
+        print(e)
 
 if __name__ == "__main__":
     main()
