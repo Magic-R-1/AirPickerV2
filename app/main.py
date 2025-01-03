@@ -3,8 +3,8 @@ from models.player import Player
 
 def main():
     # Création d'instances de la classe Player
-    player1 = Player(id=1, name="LeBron James", team="Los Angeles Lakers")
-    player2 = Player(id=2, name="Stephen Curry", team="Golden State Warriors")
+    player1 = Player(player_id=1, name="LeBron James", team="Los Angeles Lakers")
+    player2 = Player(player_id=2, name="Stephen Curry", team="Golden State Warriors")
 
     # Affichage des informations sur les joueurs
     print(player1)

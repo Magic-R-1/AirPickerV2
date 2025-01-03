@@ -5,6 +5,6 @@ class ApiService:
         pass
 
     @staticmethod
-    def get_players(self):
+    def get_players():
         # Utilisation de la fonction get_players de nba_api pour obtenir les joueurs
         return players.get_players()
