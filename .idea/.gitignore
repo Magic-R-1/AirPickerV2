@@ -1,0 +1,17 @@
+# Default ignored files
+/shelf/
+/workspace.xml
+
+# Dossier d'environnement virtuel
+venv/
+
+# Fichiers IntelliJ
+.idea/
+
+# Fichiers générés par Python
+__pycache__/
+*.pyc
+*.pyo
+
+# Fichiers spécifiques à Git
+.git/
