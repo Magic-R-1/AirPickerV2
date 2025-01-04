@@ -1,5 +1,6 @@
 from app.dto.player_dto import PlayerDTO
 from app.services.nba_api_service import NbaApiService
+from app.utils.utils import Utils
 
 class PlayerService:
 
@@ -9,7 +10,7 @@ class PlayerService:
     @staticmethod
     def get_player_id_by_name(player_name):
 
-        player_list = NbaApiService.get_players() # TODO : appel API, à optimiser
+        player_list = NbaApiService.get_players() # TODO : appel API, à remplacer par la recherche en BDD
 
         # Recherche du joueur par son nom
         player = next((player for player in player_list if player['full_name'] == player_name), None)
@@ -55,3 +56,23 @@ class PlayerService:
             draft_round = player_data['DRAFT_ROUND'].iloc[0],
             draft_number = player_data['DRAFT_NUMBER'].iloc[0]
         )
+
+
+    @staticmethod
+    def common_player_info_to_df(person_id):
+        player_info = NbaApiService.common_player_info(person_id)
+        player_data = player_info.get_data_frames()[0]              # Obtenir le DataFrame
+        player_data = Utils.convert_yes_no_to_boolean(player_data)
+        player_data = Utils.convert_empty_to_none(player_data)
+        player_data = player_data.astype(object)                    # Convertir les types NumPy en types natifs Python, évite psycopg2: can't adapt type 'numpy.int64'
+
+        return player_data
+
+    @staticmethod
+    def get_active_players():
+        list_players = NbaApiService.get_players()
+
+        # Compréhension de liste pour filtrer les joueurs actifs
+        list_active_players = [player for player in list_players if player['is_active']]
+
+        return list_active_players

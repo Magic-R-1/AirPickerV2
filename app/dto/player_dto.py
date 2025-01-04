@@ -7,7 +7,7 @@ Base = declarative_base()
 class PlayerDTO(Base):
     __tablename__ = 'player'  # Nom de la table dans la base de données
 
-    # Définition des colonnes avec nullable=True
+    # Définition des colonnes
     person_id = Column(Integer, primary_key=True)
     first_name = Column(String, nullable=True)
     last_name = Column(String, nullable=True)
@@ -36,9 +36,9 @@ class PlayerDTO(Base):
     dleague_flag = Column(Boolean, nullable=True)
     nba_flag = Column(Boolean, nullable=True)
     games_played_flag = Column(Boolean, nullable=True)
-    draft_year = Column(Integer, nullable=True)
-    draft_round = Column(Integer, nullable=True)
-    draft_number = Column(Integer, nullable=True)
+    draft_year = Column(String, nullable=True)
+    draft_round = Column(String, nullable=True)
+    draft_number = Column(String, nullable=True)
 
     def __init__(self, person_id=None, first_name=None, last_name=None, display_first_last=None,
                  display_last_comma_first=None, display_fi_last=None, player_slug=None, birthdate=None,

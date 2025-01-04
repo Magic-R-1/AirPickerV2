@@ -42,6 +42,3 @@ class PlayerDAO:
             except Exception as e:
                 db.rollback()  # Annuler en cas d'erreur
                 print(f"Une erreur est survenue lors du vidage de la table player : {e}")
-
-if __name__ == "__main__":
-    PlayerDAO.clear_player_table()
