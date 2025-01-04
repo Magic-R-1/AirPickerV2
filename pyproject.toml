@@ -17,6 +17,9 @@ nba-api = "^1.6.1"
 jedi = "^0.19.2"
 ipython = "^8.31.0"
 pyright = "^1.1.391"
+psycopg2 = "^2.9.10"
+psycopg2-binary = "^2.9.10"
+sqlalchemy = "^2.0.36"
 
 
 [tool.poetry.group.dev.dependencies]
