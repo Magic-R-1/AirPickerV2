@@ -3,6 +3,7 @@ from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 from app.config import Config
 
+
 # Utiliser l'URL de connexion depuis la configuration centralisée
 DATABASE_URL = Config.DATABASE_URL
 

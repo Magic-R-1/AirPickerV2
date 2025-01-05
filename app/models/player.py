@@ -1,6 +1,6 @@
 from sqlalchemy import Column, Integer, String, Float, Boolean, Date
 from sqlalchemy.ext.declarative import declarative_base
-
+ 
 # Définir la base pour SQLAlchemy
 Base = declarative_base()
 
