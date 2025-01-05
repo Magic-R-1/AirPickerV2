@@ -10,7 +10,7 @@ class PlayerService:
         pass
 
     @staticmethod
-    def get_player_id_by_name(player_name: str):
+    def get_player_id_by_display_first_last(player_name: str):
 
         try:
             player_from_sqlalchemy = PlayerDAO.get_player_by_display_first_last(player_name)

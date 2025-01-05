@@ -37,10 +37,12 @@ class PlayerDAO:
     @staticmethod
     def get_player_by_display_first_last(display_first_last: str):
         with SessionLocal() as session:
-            player_from_sqlalchemy = session.query(Player).filter_by(display_first_last=display_first_last).first()
-            if player_from_sqlalchemy is None:
+            player_from_sqlalchemy = session.query(Player).filter_by(display_first_last=display_first_last).all()
+            if not player_from_sqlalchemy: # Aucun joueur trouvé
                 raise PlayerNotFoundError(f"Joueur avec display_first_last '{display_first_last}' non trouvé.")
-            if len(player_from_sqlalchemy) > 1:
+            elif len(player_from_sqlalchemy) == 1:  # Un joueur trouvé
+                player_from_sqlalchemy = player_from_sqlalchemy[0]
+            else: # Plusieurs joueurs trouvés
                 raise ValueError(f"Plusieurs joueurs trouvés pour le nom '{display_first_last}.")
             return player_from_sqlalchemy
 
@@ -106,13 +108,18 @@ class PlayerDAO:
         :param sqlalchemy_obj: Un objet ou une liste d'objets SQLAlchemy.
         :return: Une instance ou une liste d'instances de PlayerDTO.
         """
-        # Si l'argument est une liste, on parcourt chaque élément
-        if isinstance(sqlalchemy_obj, list):
-            return [PlayerDTO(**{key: value for key, value in obj.__dict__.items() if not key.startswith('_')}) for obj in sqlalchemy_obj]
+        def convert_to_dto(obj):
+            """ Convertit un seul objet SQLAlchemy en PlayerDTO """
+            attributes = {key: value for key, value in vars(obj).items() if not key.startswith('_')}
+            return PlayerDTO(**attributes)
 
-        # Si c'est un seul objet, on retourne l'objet PlayerDTO directement
-        attributes = {key: value for key, value in sqlalchemy_obj.__dict__.items() if not key.startswith('_')}
-        return PlayerDTO(**attributes)
+        # Si l'argument est une liste, on parcourt chaque élément et on les convertit
+        if isinstance(sqlalchemy_obj, list):
+            return [convert_to_dto(obj) for obj in sqlalchemy_obj]
+
+        # Si c'est un seul objet, on le convertit directement en PlayerDTO
+        return convert_to_dto(sqlalchemy_obj)
+
 
     @staticmethod
     def player_dto_to_sqlalchemy(player_dto):
@@ -125,8 +132,11 @@ class PlayerDAO:
 
 if __name__ == "__main__":
 
-    player = PlayerDTO(person_id=201587, first_name="Nicolas", last_name="Batum")
-    PlayerDAO.update_player(player)
+    #player = PlayerDTO(person_id=201587, first_name="Nicolas", last_name="Batum")
+    #PlayerDAO.update_player(player)
+
+    player = PlayerDTO(person_id=1, first_name="Erwan", last_name="Gretillat")
+    PlayerDAO.delete_player(1)
 
     #player_sqlalchemy = PlayerDAO.get_player_by_id(201587)
     #player_dto = PlayerDAO.player_from_sqlalchemy_to_dto(player_sqlalchemy)
