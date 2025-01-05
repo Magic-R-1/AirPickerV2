@@ -1,11 +1,7 @@
-import time
-from tqdm import tqdm
-
-from app.config import Config
 from app.database.db_connector import SessionLocal, engine
 from app.dto.player_dto import PlayerDTO
+from app.exceptions.exceptions import PlayerNotFoundError
 from app.models.player import Player
-from app.services.player_service import PlayerService
 
 
 class PlayerDAO:
@@ -14,22 +10,47 @@ class PlayerDAO:
     # =================================
 
     @staticmethod
-    def add_player(player_data):
-        with SessionLocal() as session:
-            session.add(player_data)
-            session.commit()
-            session.refresh(player_data)
-            return player_data
+    def add_player(player_dto: PlayerDTO):
+        try:
+            # Convertir le PlayerDTO en objet Player
+            player_to_sqlalchemy = PlayerDAO.player_dto_to_sqlalchemy(player_dto)
+
+            # Ajouter l'objet Player à la session SQLAlchemy
+            with SessionLocal() as session:
+                session.add(player_to_sqlalchemy)
+                session.commit()
+                session.refresh(player_to_sqlalchemy)
+                return player_to_sqlalchemy  # Retourner l'objet Player nouvellement ajouté
+
+        except Exception as e:
+            print(f"Erreur lors de l'ajout du joueur: {e}")
+            return None
 
     @staticmethod
     def get_player_by_id(player_id: int):
         with SessionLocal() as session:
-            return session.query(Player).filter_by(person_id=player_id).first()
+            player_from_sqlalchemy = session.query(Player).filter_by(person_id=player_id).first()
+            if player_from_sqlalchemy is None:
+                raise PlayerNotFoundError(f"Joueur avec l'id '{player_id}' non trouvé.")
+            return player_from_sqlalchemy
+
+    @staticmethod
+    def get_player_by_display_first_last(display_first_last: str):
+        with SessionLocal() as session:
+            player_from_sqlalchemy = session.query(Player).filter_by(display_first_last=display_first_last).first()
+            if player_from_sqlalchemy is None:
+                raise PlayerNotFoundError(f"Joueur avec display_first_last '{display_first_last}' non trouvé.")
+            if len(player_from_sqlalchemy) > 1:
+                raise ValueError(f"Plusieurs joueurs trouvés pour le nom '{display_first_last}.")
+            return player_from_sqlalchemy
 
     @staticmethod
     def get_all_players():
         with SessionLocal() as session:
-            return session.query(Player).all()
+            players_from_sqlalchemy = session.query(Player).all()
+            if players_from_sqlalchemy is None:
+                raise PlayerNotFoundError(f"Aucun joueur trouvé.")
+            return players_from_sqlalchemy
 
     @staticmethod
     def update_player(player_dto: PlayerDTO):
@@ -39,107 +60,68 @@ class PlayerDAO:
         """
         with SessionLocal() as session:
             try:
-                # Récupérer le joueur à mettre à jour à partir du modèle SQLAlchemy Player
                 player_from_sqlalchemy = session.query(Player).filter_by(person_id=player_dto.person_id).first()
-
                 if player_from_sqlalchemy is None:
                     print(f"Aucun joueur trouvé avec person_id = {player_dto.person_id}")
-                    return
+                    return None
 
-                # Mettre à jour les champs du joueur
+                # Mettre à jour directement les champs
                 for field, value in vars(player_dto).items():
                     if hasattr(player_from_sqlalchemy, field) and value is not None:
                         setattr(player_from_sqlalchemy, field, value)
 
                 # Valider les modifications
-                session.flush()
                 session.commit()
-
                 print(f"Les informations du joueur {player_dto.person_id} ont été mises à jour avec succès.")
+                return player_from_sqlalchemy
+
             except Exception as e:
                 session.rollback()
                 print(f"Une erreur est survenue lors de la mise à jour du joueur : {e}")
+                return None
 
     @staticmethod
     def delete_player(player_id: int):
-        with SessionLocal() as session:
-            player = session.query(Player).filter_by(person_id=player_id).first()
-            if player:
-                session.delete(player)
-                session.commit()
-                return True
+        try:
+            with SessionLocal() as session:
+                player_from_sqlalchemy = session.query(Player).filter_by(person_id=player_id).first()
+                if player_from_sqlalchemy:
+                    session.delete(player_from_sqlalchemy)
+                    session.commit()
+                    return True
+                else:
+                    print(f"Aucun joueur trouvé avec l'ID: {player_id}")
+                    return False
+        except Exception as e:  # Capture toutes les exceptions générales
+            print(f"Erreur lors de la suppression du joueur avec ID {player_id}: {e}")
             return False
 
     # 2. Utils
     # =================================
 
     @staticmethod
-    def player_from_sqlalchemy_to_dto(sqlalchemy_obj):
+    def players_from_sqlalchemy_to_dto(sqlalchemy_obj):
         """
-        Convertit un objet SQLAlchemy en une instance de PlayerDTO de manière dynamique.
-        :param sqlalchemy_obj: Objet SQLAlchemy (ex: Player)
-        :return: Une instance de PlayerDTO
+        Convertit un objet ou une liste d'objets SQLAlchemy en une ou plusieurs instances de PlayerDTO.
+        :param sqlalchemy_obj: Un objet ou une liste d'objets SQLAlchemy.
+        :return: Une instance ou une liste d'instances de PlayerDTO.
         """
-        # Utilisation de __dict__ pour récupérer tous les attributs de l'objet SQLAlchemy
-        # On filtre les éléments qui commencent par '_' (attributs internes à SQLAlchemy)
-        attributes = {key: value for key, value in sqlalchemy_obj.__dict__.items() if not key.startswith('_')}
+        # Si l'argument est une liste, on parcourt chaque élément
+        if isinstance(sqlalchemy_obj, list):
+            return [PlayerDTO(**{key: value for key, value in obj.__dict__.items() if not key.startswith('_')}) for obj in sqlalchemy_obj]
 
-        # Créer une instance de PlayerDTO avec ces attributs
+        # Si c'est un seul objet, on retourne l'objet PlayerDTO directement
+        attributes = {key: value for key, value in sqlalchemy_obj.__dict__.items() if not key.startswith('_')}
         return PlayerDTO(**attributes)
 
-    # 3. Table lifecycle
-    # =================================
-
     @staticmethod
-    def create_player_table():
-        # Base.metadata.create_all(engine) # Pour créer toutes les classes héritant de Base
-        Player.__table__.create(engine)
-
-        print("Table 'player' créée avec succès.")
-
-    @staticmethod
-    def fill_player_table():
-        # Récupérer la liste des joueurs via l'API
-        players_list = PlayerService.get_active_players()
-
-        # Boucler sur ces joueurs en ajoutant leurs informations avec CommonPlayerInfo
-        with SessionLocal() as db:
-            try:
-                # La barre de progression avec tqdm
-                for i, player in tqdm(enumerate(players_list), desc="Ajout des joueurs", unit="joueur", total=len(players_list)):
-                    person_id = player['id']
-                    player_info = PlayerService.common_player_info_to_df(person_id)
-
-                    # Mapper les données de l'API vers PlayerDTO
-                    player_dto = PlayerService.map_common_player_info_to_player_dto(player_info)
-
-                    # Ajouter l'entrée à la session sans valider
-                    db.add(player_dto)
-
-                    # Ajouter une pause après chaque x joueurs
-                    if (i % Config.NBA_API_TEMPO_PLAYERS == 0) & (i!=0):
-                        delai = Config.NBA_API_TEMPO
-                        print(f"Pause de {delai} secondes après l'ajout de {i} joueurs...")
-                        time.sleep(delai)  # Pause de x secondes
-
-                db.commit()
-                print(f"Tous les {len(players_list)} joueurs ont été ajoutés à la base de données avec succès.")
-
-            except Exception as e:
-                db.rollback()
-                print(f"Une erreur est survenue lors de l'ajout des joueurs : {e}")
-
-    @staticmethod
-    def clear_player_table():
-        with SessionLocal() as session:
-            try:
-                # Vider la table en supprimant tous les enregistrements
-                session.query(Player).delete()
-                session.commit()  # Valider les changements
-                print("La table player a été vidée avec succès.")
-            except Exception as e:
-                session.rollback()  # Annuler en cas d'erreur
-                print(f"Une erreur est survenue lors du vidage de la table player : {e}")
+    def player_dto_to_sqlalchemy(player_dto):
+        if isinstance(player_dto, list):
+            # Si l'entrée est une liste, on la convertit en une liste d'objets Player
+            return [Player(**{k: v for k, v in vars(p).items() if hasattr(Player, k)}) for p in player_dto]
+        else:
+            # Si l'entrée est un seul objet, on le convertit directement
+            return Player(**{k: v for k, v in vars(player_dto).items() if hasattr(Player, k)})
 
 if __name__ == "__main__":
 

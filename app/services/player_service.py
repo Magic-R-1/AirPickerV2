@@ -1,4 +1,6 @@
 from app.dto.player_dto import PlayerDTO
+from app.dao.player_dao import PlayerDAO
+from app.exceptions.exceptions import PlayerNotFoundError
 from app.services.nba_api_service import NbaApiService
 from app.utils.utils import Utils
 
@@ -8,17 +10,21 @@ class PlayerService:
         pass
 
     @staticmethod
-    def get_player_id_by_name(player_name):
+    def get_player_id_by_name(player_name: str):
 
-        player_list = NbaApiService.get_players() # TODO : appel API, à remplacer par la recherche en BDD
+        try:
+            player_from_sqlalchemy = PlayerDAO.get_player_by_display_first_last(player_name)
+        except (PlayerNotFoundError, ValueError) as e:
+            print(f"Erreur: {e}")
+            return None
 
-        # Recherche du joueur par son nom
-        player = next((player for player in player_list if player['full_name'] == player_name), None)
+        player = PlayerDAO.players_from_sqlalchemy_to_dto(player_from_sqlalchemy)
 
-        if player:
-            return player['id']
-        else:
-            raise ValueError(f"Le joueur '{player_name}' n'a pas été trouvé.")
+        print(player.person_id) #TODO : à enlever
+        return player.person_id
+
+        #else:
+        #    raise ValueError(f"Le joueur '{player_name}' n'a pas été trouvé.")
 
     @staticmethod
     def map_common_player_info_to_player_dto(player_data):
@@ -57,9 +63,8 @@ class PlayerService:
             draft_number = player_data['DRAFT_NUMBER'].iloc[0]
         )
 
-
     @staticmethod
-    def common_player_info_to_df(person_id):
+    def person_id_to_common_player_info_df(person_id: int):
         player_info = NbaApiService.common_player_info(person_id)
         player_data = player_info.get_data_frames()[0]              # Obtenir le DataFrame
         player_data = Utils.convert_yes_no_to_boolean(player_data)
@@ -76,3 +81,6 @@ class PlayerService:
         list_active_players = [player for player in list_players if player['is_active']]
 
         return list_active_players
+
+if __name__ == "__main__":
+    PlayerService.get_player_id_by_name("LeBron James")
