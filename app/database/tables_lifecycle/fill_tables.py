@@ -1,5 +1,5 @@
-from app.dao.player_dao import PlayerDAO
+from app.database.tables_lifecycle.player_table_lifecycle.player_table_lifecycle import PlayerTableLifeCycle
 
 
 class FillTables:
-    PlayerDAO.fill_player_table()
+    PlayerTableLifeCycle.fill_player_table()

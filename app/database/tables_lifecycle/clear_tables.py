@@ -1,5 +1,5 @@
-from app.dao.player_dao import PlayerDAO
+from app.database.tables_lifecycle.player_table_lifecycle.player_table_lifecycle import PlayerTableLifeCycle
 
 
 class ClearTables:
-    PlayerDAO.clear_player_table()
+    PlayerTableLifeCycle.clear_player_table()
