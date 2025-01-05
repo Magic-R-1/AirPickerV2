@@ -83,4 +83,4 @@ class PlayerService:
         return list_active_players
 
 if __name__ == "__main__":
-    PlayerService.get_player_id_by_name("LeBron James")
+    PlayerService.get_player_id_by_display_first_last("LeBron James")
