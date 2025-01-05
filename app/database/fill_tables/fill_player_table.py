@@ -3,6 +3,7 @@ import time
 from tqdm import tqdm
 from app.database.db_connector import SessionLocal
 from app.services.player_service import PlayerService
+from app.config import Config
 
 def fill_players_table():
     # Récupérer la liste des joueurs via l'API
@@ -22,18 +23,17 @@ def fill_players_table():
                 # Ajouter l'entrée à la session sans valider
                 db.add(player_dto)
 
-                # Ajouter une pause après chaque 100 joueurs
-                if (i % 100 == 0) & (i!=0):
-                    delai = 60
+                # Ajouter une pause après chaque x joueurs
+                if (i % Config.NBA_API_TEMPO_PLAYERS == 0) & (i!=0):
+                    delai = Config.NBA_API_TEMPO
                     print(f"Pause de {delai} secondes après l'ajout de {i} joueurs...")
-                    time.sleep(delai)  # Pause de {delai} secondes
+                    time.sleep(delai)  # Pause de x secondes
 
-            # Une seule validation à la fin de la boucle
             db.commit()
             print(f"Tous les {len(players_list)} joueurs ont été ajoutés à la base de données avec succès.")
 
         except Exception as e:
-            db.rollback()  # Annuler en cas d'erreur
+            db.rollback()
             print(f"Une erreur est survenue lors de l'ajout des joueurs : {e}")
 
 if __name__ == "__main__":
