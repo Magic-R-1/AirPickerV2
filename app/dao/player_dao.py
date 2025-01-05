@@ -49,20 +49,11 @@ class PlayerDAO:
                 # Mettre à jour les champs du joueur
                 for field, value in vars(player_dto).items():
                     if hasattr(player_from_sqlalchemy, field) and value is not None:
-                        print(f"Mise à jour du champ {field} avec la valeur {value}")
                         setattr(player_from_sqlalchemy, field, value)
 
-                # Vérifier les modifications sur l'objet player avant commit
-                player_from_sqlalchemy_to_dto = PlayerDAO.player_from_sqlalchemy_to_dto(player_from_sqlalchemy)
-                print(f"Joueur modifié avant commit: {player_from_sqlalchemy_to_dto}")
-
                 # Valider les modifications
-                session.commit()  # Utiliser commit pour valider définitivement
-
-                # Récupérer les informations après commit pour confirmer les changements
-                updated_player = session.query(Player).filter_by(person_id=player_dto.person_id).first()
-                updated_player_dto = PlayerDAO.player_from_sqlalchemy_to_dto(updated_player)
-                print(f"Joueur mis à jour après commit: {updated_player_dto}")
+                session.flush()
+                session.commit()
 
                 print(f"Les informations du joueur {player_dto.person_id} ont été mises à jour avec succès.")
             except Exception as e:
@@ -98,7 +89,7 @@ class PlayerDAO:
 
 if __name__ == "__main__":
 
-    player = PlayerDTO(person_id=201587, first_name="Nicolasse", last_name="Batume")
+    player = PlayerDTO(person_id=201587, first_name="Nicolas", last_name="Batum")
     PlayerDAO.update_player(player)
 
     #player_sqlalchemy = PlayerDAO.get_player_by_id(201587)
