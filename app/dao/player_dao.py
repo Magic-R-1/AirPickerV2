@@ -5,8 +5,6 @@ from app.dto.player_dto import PlayerDTO
 from app.exceptions.exceptions import PlayerNotFoundError
 from app.models.player import Player
 
-from typing import List, Union
-
 
 class PlayerDAO:
 

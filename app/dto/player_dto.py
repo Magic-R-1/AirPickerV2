@@ -2,6 +2,7 @@ from dataclasses import dataclass
 from datetime import date
 from typing import Optional
 
+
 @dataclass
 class PlayerDTO:
     person_id: [int] = None
