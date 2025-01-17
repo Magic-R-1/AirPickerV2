@@ -1,4 +1,7 @@
-from app.database.db_connector import SessionLocal, engine
+from dataclasses import fields
+
+from app.dao.player_dao import PlayerDAO
+from app.database.db_connector import session_scope
 from app.dto.team_dto import TeamDTO
 from app.exceptions.exceptions import TeamNotFoundError
 from app.models.team import Team
@@ -11,7 +14,7 @@ class TeamDAO:
 
     @staticmethod
     def get_team_by_id(team_id: int):
-        with SessionLocal() as session:
+        with session_scope() as session:
             team_from_sql = session.query(Team).filter_by(team_id=team_id).first()
             if team_from_sql is None:
                 raise TeamNotFoundError(f"Équipe avec l'id '{team_id}' non trouvée.")
@@ -29,7 +32,13 @@ class TeamDAO:
         """
         def convert_to_dto(obj):
             """ Convertit un seul objet SQLAlchemy en TeamDTO """
-            attributes = {key: value for key, value in vars(obj).items() if not key.startswith('_')}
+
+            # On s'assure de récupérer la liste des joueurs et de la transformer en PlayerDTO si nécessaire
+            list_players_dto = PlayerDAO.players_from_sqlalchemy_to_dto(obj.players) if hasattr(obj, 'players') else []
+
+            # On ajoute la liste des joueurs à l'attribut players dans le DTO
+            attributes = {field.name: getattr(obj, field.name) for field in fields(TeamDTO)}
+            attributes['players'] = list_players_dto
             return TeamDTO(**attributes)
 
         # Si l'argument est une liste, on parcourt chaque élément et on les convertit
@@ -51,4 +60,5 @@ class TeamDAO:
 if __name__ == "__main__":
     team_sql = TeamDAO.get_team_by_id(1610612763)
     team_dto = TeamDAO.teams_from_sqlalchemy_to_dto(team_sql)
+    players = team_dto.players
     print("toto")

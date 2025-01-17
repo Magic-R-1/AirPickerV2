@@ -1,7 +1,11 @@
-from app.database.db_connector import SessionLocal, engine
+from dataclasses import fields
+
+from app.database.db_connector import session_scope
 from app.dto.player_dto import PlayerDTO
 from app.exceptions.exceptions import PlayerNotFoundError
 from app.models.player import Player
+
+from typing import List, Union
 
 
 class PlayerDAO:
@@ -16,7 +20,7 @@ class PlayerDAO:
             player_sql = PlayerDAO.player_dto_to_sqlalchemy(player_dto)
 
             # Ajouter l'objet Player à la session SQLAlchemy
-            with SessionLocal() as session:
+            with session_scope() as session:
                 session.add(player_sql)
                 session.commit()
                 session.refresh(player_sql)
@@ -28,7 +32,7 @@ class PlayerDAO:
 
     @staticmethod
     def get_player_by_id(player_id: int):
-        with SessionLocal() as session:
+        with session_scope() as session:
             player_from_sql = session.query(Player).filter_by(person_id=player_id).first()
             if player_from_sql is None:
                 raise PlayerNotFoundError(f"Joueur avec l'id '{player_id}' non trouvé.")
@@ -36,7 +40,7 @@ class PlayerDAO:
 
     @staticmethod
     def get_player_by_display_first_last(display_first_last: str):
-        with SessionLocal() as session:
+        with session_scope() as session:
             player_from_sql = session.query(Player).filter_by(display_first_last=display_first_last).all()
             if not player_from_sql: # Aucun joueur trouvé
                 raise PlayerNotFoundError(f"Joueur avec display_first_last '{display_first_last}' non trouvé.")
@@ -48,7 +52,7 @@ class PlayerDAO:
 
     @staticmethod
     def get_all_players():
-        with SessionLocal() as session:
+        with session_scope() as session:
             players_from_sqlalchemy = session.query(Player).all()
             if players_from_sqlalchemy is None:
                 raise PlayerNotFoundError(f"Aucun joueur trouvé.")
@@ -60,7 +64,7 @@ class PlayerDAO:
         Met à jour les informations d'un joueur en base de données à partir d'un PlayerDTO.
         :param player_dto: Un objet PlayerDTO contenant les nouvelles informations du joueur.
         """
-        with SessionLocal() as session:
+        with session_scope() as session:
             try:
                 player_from_sql = session.query(Player).filter_by(person_id=player_dto.person_id).first()
                 if player_from_sql is None:
@@ -85,7 +89,7 @@ class PlayerDAO:
     @staticmethod
     def delete_player(player_id: int):
         try:
-            with SessionLocal() as session:
+            with session_scope() as session:
                 player_from_sql = session.query(Player).filter_by(person_id=player_id).first()
                 if player_from_sql:
                     session.delete(player_from_sql)
@@ -110,7 +114,7 @@ class PlayerDAO:
         """
         def convert_to_dto(obj):
             """ Convertit un seul objet SQLAlchemy en PlayerDTO """
-            attributes = {key: value for key, value in vars(obj).items() if not key.startswith('_')}
+            attributes = {field.name: getattr(obj, field.name) for field in fields(PlayerDTO)}
             return PlayerDTO(**attributes)
 
         # Si l'argument est une liste, on parcourt chaque élément et on les convertit

@@ -19,6 +19,7 @@ class TeamTableLifeCycle:
 
     @staticmethod
     def fill_team_table():
+        # TODO : rajouter l'équipe en 0 No team
         teams_list = TeamService.get_teams()
         # Boucler sur ces joueurs en ajoutant leurs informations avec CommonPlayerInfo
         with SessionLocal() as db:

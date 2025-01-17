@@ -1,3 +1,4 @@
+from app.dao.team_dao import TeamDAO
 from app.services.player_service import PlayerService
 from dto.player_dto import PlayerDTO
 
@@ -20,4 +21,7 @@ def main():
         print(e)
 
 if __name__ == "__main__":
-    instancier_players()
+    team_sql = TeamDAO.get_team_by_id(1610612763)
+    team_dto = TeamDAO.teams_from_sqlalchemy_to_dto(team_sql)
+    players = team_dto.players
+    print("toto")

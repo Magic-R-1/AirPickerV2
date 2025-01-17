@@ -40,4 +40,4 @@ class Player(Base):
     draft_number = Column(String, nullable=True)
 
     # Relation avec Team
-    team = relationship("Team", back_populates="players")  # Relation one-to-many
+    team = relationship("Team", back_populates="players", lazy='joined')  # Relation one-to-many

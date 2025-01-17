@@ -1,14 +1,16 @@
-class TeamDTO:
+from dataclasses import dataclass, field
+from typing import Optional
 
-    def __init__(self, team_id=None, full_name=None, abbreviation=None, nickname=None, city=None, state=None, year_founded=None, players=None):
-        self.team_id = team_id
-        self.full_name = full_name
-        self.abbreviation = abbreviation
-        self.nickname = nickname
-        self.city = city
-        self.state = state
-        self.year_founded = year_founded
-        self.players = players if players is not None else []  # Liste de joueurs associée à l'équipe
+@dataclass
+class TeamDTO:
+    team_id: [int] = None
+    full_name: Optional[str] = None
+    abbreviation: Optional[str] = None
+    nickname: Optional[str] = None
+    city: Optional[str] = None
+    state: Optional[str] = None
+    year_founded: Optional[int] = None
+    players: Optional[list] = field(default_factory=list)
 
     def __repr__(self):
         # Affichage propre pour le débogage ou la journalisation
