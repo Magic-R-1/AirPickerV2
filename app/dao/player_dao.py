@@ -29,22 +29,22 @@ class PlayerDAO:
     @staticmethod
     def get_player_by_id(player_id: int):
         with SessionLocal() as session:
-            player_from_sqlalchemy = session.query(Player).filter_by(person_id=player_id).first()
-            if player_from_sqlalchemy is None:
+            player_from_sql = session.query(Player).filter_by(person_id=player_id).first()
+            if player_from_sql is None:
                 raise PlayerNotFoundError(f"Joueur avec l'id '{player_id}' non trouvé.")
-            return player_from_sqlalchemy
+            return player_from_sql
 
     @staticmethod
     def get_player_by_display_first_last(display_first_last: str):
         with SessionLocal() as session:
-            player_from_sqlalchemy = session.query(Player).filter_by(display_first_last=display_first_last).all()
-            if not player_from_sqlalchemy: # Aucun joueur trouvé
+            player_from_sql = session.query(Player).filter_by(display_first_last=display_first_last).all()
+            if not player_from_sql: # Aucun joueur trouvé
                 raise PlayerNotFoundError(f"Joueur avec display_first_last '{display_first_last}' non trouvé.")
-            elif len(player_from_sqlalchemy) == 1:  # Un joueur trouvé
-                player_from_sqlalchemy = player_from_sqlalchemy[0]
+            elif len(player_from_sql) == 1:  # Un joueur trouvé
+                player_from_sql = player_from_sql[0]
             else: # Plusieurs joueurs trouvés
                 raise ValueError(f"Plusieurs joueurs trouvés pour le nom '{display_first_last}.")
-            return player_from_sqlalchemy
+            return player_from_sql
 
     @staticmethod
     def get_all_players():
@@ -62,20 +62,20 @@ class PlayerDAO:
         """
         with SessionLocal() as session:
             try:
-                player_from_sqlalchemy = session.query(Player).filter_by(person_id=player_dto.person_id).first()
-                if player_from_sqlalchemy is None:
+                player_from_sql = session.query(Player).filter_by(person_id=player_dto.person_id).first()
+                if player_from_sql is None:
                     print(f"Aucun joueur trouvé avec person_id = {player_dto.person_id}")
                     return None
 
                 # Mettre à jour directement les champs
                 for field, value in vars(player_dto).items():
-                    if hasattr(player_from_sqlalchemy, field) and value is not None:
-                        setattr(player_from_sqlalchemy, field, value)
+                    if hasattr(player_from_sql, field) and value is not None:
+                        setattr(player_from_sql, field, value)
 
                 # Valider les modifications
                 session.commit()
                 print(f"Les informations du joueur {player_dto.person_id} ont été mises à jour avec succès.")
-                return player_from_sqlalchemy
+                return player_from_sql
 
             except Exception as e:
                 session.rollback()
@@ -86,9 +86,9 @@ class PlayerDAO:
     def delete_player(player_id: int):
         try:
             with SessionLocal() as session:
-                player_from_sqlalchemy = session.query(Player).filter_by(person_id=player_id).first()
-                if player_from_sqlalchemy:
-                    session.delete(player_from_sqlalchemy)
+                player_from_sql = session.query(Player).filter_by(person_id=player_id).first()
+                if player_from_sql:
+                    session.delete(player_from_sql)
                     session.commit()
                     return True
                 else:

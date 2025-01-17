@@ -1,8 +1,7 @@
-from sqlalchemy import Column, Integer, String, Float, Boolean, Date
-from sqlalchemy.ext.declarative import declarative_base
- 
-# Définir la base pour SQLAlchemy
-Base = declarative_base()
+from sqlalchemy import Column, Integer, String, Float, Boolean, Date, ForeignKey
+from sqlalchemy.orm import relationship
+from app.database.declarative_base import Base
+
 
 class Player(Base):
     __tablename__ = 'player'  # Nom de la table dans la base de données
@@ -25,7 +24,7 @@ class Player(Base):
     jersey = Column(Integer, nullable=True)
     position = Column(String, nullable=True)
     roster_status = Column(String, nullable=True)
-    team_id = Column(Integer, nullable=True)
+    team_id = Column(Integer, ForeignKey("team.team_id"), nullable=True)
     team_name = Column(String, nullable=True)
     team_abbreviation = Column(String, nullable=True)
     team_code = Column(String, nullable=True)
@@ -39,3 +38,6 @@ class Player(Base):
     draft_year = Column(String, nullable=True)
     draft_round = Column(String, nullable=True)
     draft_number = Column(String, nullable=True)
+
+    # Relation avec Team
+    team = relationship("Team", back_populates="players")  # Relation one-to-many

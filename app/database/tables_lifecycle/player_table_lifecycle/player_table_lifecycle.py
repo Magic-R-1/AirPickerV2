@@ -20,7 +20,7 @@ class PlayerTableLifeCycle:
     @staticmethod
     def fill_player_table():
         # Récupérer la liste des joueurs via l'API
-        players_list = PlayerService.get_active_players()
+        players_list = PlayerService.get_active_players()[:10]
 
         # Boucler sur ces joueurs en ajoutant leurs informations avec CommonPlayerInfo
         with SessionLocal() as db:

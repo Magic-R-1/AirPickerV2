@@ -1,6 +1,6 @@
 class TeamDTO:
 
-    def __init__(self, team_id=None, full_name=None, abbreviation=None, nickname=None, city=None, state=None, year_founded=None):
+    def __init__(self, team_id=None, full_name=None, abbreviation=None, nickname=None, city=None, state=None, year_founded=None, players=None):
         self.team_id = team_id
         self.full_name = full_name
         self.abbreviation = abbreviation
@@ -8,6 +8,7 @@ class TeamDTO:
         self.city = city
         self.state = state
         self.year_founded = year_founded
+        self.players = players if players is not None else []  # Liste de joueurs associée à l'équipe
 
     def __repr__(self):
         # Affichage propre pour le débogage ou la journalisation
