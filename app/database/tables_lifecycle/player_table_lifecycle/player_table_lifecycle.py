@@ -2,6 +2,7 @@ import time
 from tqdm import tqdm
 
 from app.config import Config
+from app.dao.player_dao import PlayerDAO
 from app.database.db_connector import engine, SessionLocal
 from app.models.player import Player
 from app.services.player_service import PlayerService
@@ -32,8 +33,11 @@ class PlayerTableLifeCycle:
                     # Mapper les données de l'API vers PlayerDTO
                     player_dto = PlayerService.map_common_player_info_to_player_dto(player_info)
 
+                    # Conversion du DTO en model Team
+                    player_sql = PlayerDAO.player_dto_to_sqlalchemy(player_dto)
+
                     # Ajouter l'entrée à la session sans valider
-                    db.add(player_dto)
+                    db.add(player_sql)
 
                     # Ajouter une pause après chaque x joueurs
                     if (i % Config.NBA_API_TEMPO_PLAYERS == 0) & (i!=0):
@@ -59,3 +63,6 @@ class PlayerTableLifeCycle:
             except Exception as e:
                 session.rollback()  # Annuler en cas d'erreur
                 print(f"Une erreur est survenue lors du vidage de la table player : {e}")
+
+if __name__ == "__main__":
+    PlayerTableLifeCycle.fill_player_table()

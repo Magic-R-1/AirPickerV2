@@ -13,14 +13,14 @@ class PlayerDAO:
     def add_player(player_dto: PlayerDTO):
         try:
             # Convertir le PlayerDTO en objet Player
-            player_to_sqlalchemy = PlayerDAO.player_dto_to_sqlalchemy(player_dto)
+            player_sql = PlayerDAO.player_dto_to_sqlalchemy(player_dto)
 
             # Ajouter l'objet Player à la session SQLAlchemy
             with SessionLocal() as session:
-                session.add(player_to_sqlalchemy)
+                session.add(player_sql)
                 session.commit()
-                session.refresh(player_to_sqlalchemy)
-                return player_to_sqlalchemy  # Retourner l'objet Player nouvellement ajouté
+                session.refresh(player_sql)
+                return player_sql  # Retourner l'objet Player nouvellement ajouté
 
         except Exception as e:
             print(f"Erreur lors de l'ajout du joueur: {e}")
@@ -122,7 +122,7 @@ class PlayerDAO:
 
 
     @staticmethod
-    def player_dto_to_sqlalchemy(player_dto):
+    def player_dto_to_sqlalchemy(player_dto: PlayerDTO):
         if isinstance(player_dto, list):
             # Si l'entrée est une liste, on la convertit en une liste d'objets Player
             return [Player(**{k: v for k, v in vars(p).items() if hasattr(Player, k)}) for p in player_dto]
