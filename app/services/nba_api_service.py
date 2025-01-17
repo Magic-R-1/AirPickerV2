@@ -22,3 +22,7 @@ class NbaApiService:
     @staticmethod
     def get_teams():
         return teams.get_teams()
+
+if __name__ == "__main__":
+    list_teams = NbaApiService.get_teams()
+    print("toto")
