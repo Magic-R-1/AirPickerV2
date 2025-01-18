@@ -1,6 +1,6 @@
 from app.database.declarative_base import Base
 from app.database.db_connector import engine
-from app.models import Player, Team
+from app.models import Player, Team # Peut-être nécessaire pour la création de table, à garder
 
 class CreateTables:
 

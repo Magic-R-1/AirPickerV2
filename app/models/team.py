@@ -15,5 +15,5 @@ class Team(Base):
     state = Column(String, nullable=True)
     year_founded = Column(Integer, nullable=True)
 
-    # Relation avec Player
-    players = relationship("Player", back_populates="team", lazy='joined')  # Relation one-to-many
+    # Relation one-to-many avec Player
+    # players = relationship(Player, back_populates="team", lazy='select')

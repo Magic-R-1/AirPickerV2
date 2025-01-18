@@ -3,6 +3,7 @@ from dataclasses import fields
 from app.database.db_connector import session_scope
 from app.dto.player_dto import PlayerDTO
 from app.exceptions.exceptions import PlayerNotFoundError
+from app.schemas.player_schema import PlayerSchema
 from app.models.player import Player
 
 
@@ -137,9 +138,7 @@ if __name__ == "__main__":
     #player = PlayerDTO(person_id=201587, first_name="Nicolas", last_name="Batum")
     #PlayerDAO.update_player(player)
 
-    player = PlayerDTO(person_id=1, first_name="Erwan", last_name="Gretillat")
-    PlayerDAO.delete_player(1)
+    # player = PlayerDTO(person_id=1, first_name="Erwan", last_name="Gretillat")
+    # PlayerDAO.delete_player(1)
 
-    #player_sqlalchemy = PlayerDAO.get_player_by_id(201587)
-    #player_dto = PlayerDAO.player_from_sqlalchemy_to_dto(player_sqlalchemy)
-    #print(player_dto)
+    player_sql = PlayerDAO.get_player_by_id(2544)

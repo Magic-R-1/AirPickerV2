@@ -4,6 +4,8 @@ from typing import Optional
 
 @dataclass
 class TeamDTO:
+
+    # Attributs provenant de la base de données
     team_id: [int] = None
     full_name: Optional[str] = None
     abbreviation: Optional[str] = None
@@ -11,7 +13,12 @@ class TeamDTO:
     city: Optional[str] = None
     state: Optional[str] = None
     year_founded: Optional[int] = None
-    players: Optional[list] = field(default_factory=list)
+
+    # Attributs relationnels
+    # players: Optional[List[PlayerDTO]] = None
+
+    # Attributs fonctionnels
+    #
 
     def __repr__(self):
         # Affichage propre pour le débogage ou la journalisation

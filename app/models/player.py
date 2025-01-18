@@ -4,9 +4,10 @@ from app.database.declarative_base import Base
 
 
 class Player(Base):
-    __tablename__ = 'player'  # Nom de la table dans la base de données
+    # Nom de la table dans la base de données
+    __tablename__ = 'player'
 
-    # Définition des colonnes
+    # Nom des colonnes dans la base de données
     person_id = Column(Integer, primary_key=True)
     first_name = Column(String, nullable=True)
     last_name = Column(String, nullable=True)
@@ -35,9 +36,9 @@ class Player(Base):
     dleague_flag = Column(Boolean, nullable=True)
     nba_flag = Column(Boolean, nullable=True)
     games_played_flag = Column(Boolean, nullable=True)
-    draft_year = Column(String, nullable=True)
-    draft_round = Column(String, nullable=True)
-    draft_number = Column(String, nullable=True)
+    draft_year = Column(String, nullable=True)      # String car peut être Undrafted
+    draft_round = Column(String, nullable=True)     # String car peut être Undrafted
+    draft_number = Column(String, nullable=True)    # String car peut être Undrafted
 
-    # Relation avec Team
-    team = relationship("Team", back_populates="players", lazy='joined')  # Relation one-to-many
+    # Relation many-to-one avec Team
+    team = relationship("Team", backref=None, lazy='joined')

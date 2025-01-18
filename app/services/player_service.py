@@ -1,6 +1,7 @@
 from app.dto.player_dto import PlayerDTO
 from app.dao.player_dao import PlayerDAO
 from app.exceptions.exceptions import PlayerNotFoundError
+from app.schemas.player_schema import PlayerSchema
 from app.services.nba_api_service import NbaApiService
 from app.utils.utils import Utils
 
@@ -11,20 +12,24 @@ class PlayerService:
 
     @staticmethod
     def get_player_id_by_display_first_last(player_name: str):
-
+        # TODO : à scinder
+        # SQL
         try:
-            player_from_sqlalchemy = PlayerDAO.get_player_by_display_first_last(player_name)
+            player_sql = PlayerDAO.get_player_by_display_first_last(player_name)
         except (PlayerNotFoundError, ValueError) as e:
             print(f"Erreur: {e}")
             return None
 
-        player = PlayerDAO.players_from_sqlalchemy_to_dto(player_from_sqlalchemy)
+        # Schema
+        # Créer une instance du schéma pour sérialiser les données
+        instance_player_schema = PlayerSchema()
+        # Sérialiser l'objet SQLAlchemy en dictionnaire
+        player_schema = instance_player_schema.dump(player_sql)
 
-        print(player.person_id) #TODO : à enlever
-        return player.person_id
+        # DTO
+        player_dto = PlayerDTO(**player_schema)
 
-        #else:
-        #    raise ValueError(f"Le joueur '{player_name}' n'a pas été trouvé.")
+        return player_dto.person_id
 
     @staticmethod
     def map_common_player_info_to_player_dto(player_data):
@@ -83,4 +88,6 @@ class PlayerService:
         return list_active_players
 
 if __name__ == "__main__":
-    PlayerService.get_player_id_by_display_first_last("LeBron James")
+
+    player_id = PlayerService.get_player_id_by_display_first_last("LeBron James")
+    print(player_id)
