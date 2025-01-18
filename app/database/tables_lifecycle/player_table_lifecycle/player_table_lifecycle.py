@@ -20,7 +20,17 @@ class PlayerTableLifeCycle:
     @staticmethod
     def fill_player_table():
         # Récupérer la liste des joueurs via l'API
-        players_list = PlayerService.get_active_players()[:10]
+        players_list = PlayerService.get_active_players()
+
+        # Diviser la liste en 2 pour éviter les erreurs de timeout de l'API NBA
+        size = round(players_list.__sizeof__()/2,0)
+
+        moitie = 2
+
+        if moitie==1 :
+            players_list = PlayerService.get_active_players()[:size]
+        elif moitie==2:
+            players_list = PlayerService.get_active_players()[size:]
 
         # Boucler sur ces joueurs en ajoutant leurs informations avec CommonPlayerInfo
         with SessionLocal() as db:
@@ -42,7 +52,7 @@ class PlayerTableLifeCycle:
                     # Ajouter une pause après chaque x joueurs
                     if (i % Config.NBA_API_TEMPO_PLAYERS == 0) & (i!=0):
                         delai = Config.NBA_API_TEMPO
-                        print(f"Pause de {delai} secondes après l'ajout de {i} joueurs...")
+                        print(f"Pause de {delai} secondes après l'ajout de {i} joueurs.")
                         time.sleep(delai)  # Pause de x secondes
 
                 db.commit()
