@@ -54,7 +54,7 @@ class PlayerService:
 
     @staticmethod
     def get_common_player_info_df_by_player_id(player_id: int):
-        player_info = NbaApiService.common_player_info(player_id)
+        player_info = NbaApiService.get_common_player_info(player_id)
         player_data = player_info.get_data_frames()[0]              # Obtenir le DataFrame
         player_data = Utils.convert_yes_no_to_boolean(player_data)
         player_data = Utils.convert_empty_to_none(player_data)

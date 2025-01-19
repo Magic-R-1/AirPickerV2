@@ -23,3 +23,4 @@ class Config:
     # NBA API config
     NBA_API_TEMPO = int(os.getenv("NBA_API_TEMPO", 60))
     NBA_API_TEMPO_PLAYERS = int(os.getenv("NBA_API_TEMPO_PLAYERS", 100))
+    SAISON_EN_COURS = int(os.getenv("SAISON_EN_COURS", 2024))
