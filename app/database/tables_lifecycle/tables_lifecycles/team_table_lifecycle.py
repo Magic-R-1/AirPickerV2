@@ -3,6 +3,7 @@ from tqdm import tqdm
 from app.dao.team_dao import TeamDAO
 from app.database.db_connector import engine, SessionLocal
 from app.models.team import Team
+from app.services.nba_api_service import NbaApiService
 from app.services.team_service import TeamService
 
 
@@ -18,7 +19,7 @@ class TeamTableLifeCycle:
     @staticmethod
     def fill_team_table():
 
-        teams_list = TeamService.get_teams()
+        teams_list = NbaApiService.get_teams()
 
         # Ajout de l'équipe "No team"
         teams_list.append({
@@ -39,7 +40,7 @@ class TeamTableLifeCycle:
                     team_dto = TeamService.map_static_team_to_team_dto(team)
 
                     # Conversion du DTO en model Team
-                    team_sql = TeamDAO.team_dto_to_sqlalchemy(team_dto)
+                    team_sql = TeamDAO.team_from_dto_to_sql(team_dto)
 
                     # Ajouter l'entrée à la session sans valider
                     db.add(team_sql)
@@ -72,6 +73,7 @@ class TeamTableLifeCycle:
                 print("La table team a été supprimée avec succès.")
             except Exception as e:
                 print(f"Une erreur est survenue lors de la suppression de la table team : {e}")
+
 
 if __name__ == "__main__":
     TeamTableLifeCycle.fill_team_table()

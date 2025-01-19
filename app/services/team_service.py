@@ -1,5 +1,6 @@
-from app.dto.team_dto import TeamDTO
-from app.services.nba_api_service import NbaApiService
+from app.dao.team_dao import TeamDAO
+from app.exceptions.exceptions import TeamNotFoundError
+from app.schemas.team_schema import TeamSchema
 
 
 class TeamService:
@@ -8,19 +9,39 @@ class TeamService:
         pass
 
     @staticmethod
-    def get_teams():
-        return NbaApiService.get_teams()
+    def get_team_dto_by_nickname(nickname: str):
+
+        try:
+            team_sql = TeamDAO.get_team_by_nickname(nickname)
+        except (TeamNotFoundError, ValueError) as e:
+            print(f"Erreur: {e}")
+            return None
+
+        team_dto = TeamDAO.team_from_sql_to_dto(team_sql)
+
+        return team_dto
 
     @staticmethod
     def map_static_team_to_team_dto(team_data):
-        # Mapping complet des données vers le DTO
-        return TeamDTO(
-            team_id = team_data[1]['id'],
-            full_name = team_data[1]['full_name'],
-            abbreviation = team_data[1]['abbreviation'],
-            nickname = team_data[1]['nickname'],
-            city = team_data[1]['city'],
-            state = team_data[1]['state'],
-            year_founded = team_data[1]['year_founded']
-        )
+        """
+        Mappe les données d'une équipe statique vers un objet TeamDTO en utilisant TeamSchema.
 
+        :param team_data: Un tuple contenant une clé et les données d'équipe statique (dictionnaire).
+        :return: Une instance de TeamDTO ou None en cas d'erreur.
+        """
+        team_dict = team_data[1]  # Extraire les données de l'équipe (dictionnaire)
+
+        # Vérifier et renommer la clé 'id' en 'team_id'
+        team_dict['team_id'] = team_dict.pop('id')
+
+        try:
+            # Désérialisation des données pour obtenir un objet TeamDTO
+            return TeamSchema().load(team_dict)
+
+        except Exception as e:
+            print(f"Erreur lors du mapping des données de l'équipe : {e}")
+            return None
+
+
+if __name__ == "__main__":
+    print("toto")

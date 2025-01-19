@@ -38,7 +38,7 @@ class PlayerTableLifeCycle:
                 # La barre de progression avec tqdm
                 for i, player in tqdm(enumerate(players_list), desc="Ajout des joueurs", unit="joueur", total=len(players_list)):
                     person_id = player['id']
-                    player_info = PlayerService.person_id_to_common_player_info_df(person_id)
+                    player_info = PlayerService.get_common_player_info_df_by_person_id(person_id)
 
                     # Mapper les données de l'API vers PlayerDTO
                     player_dto = PlayerService.map_common_player_info_to_player_dto(player_info)

@@ -1,16 +1,31 @@
-from dataclasses import fields
-
-from app.dao.player_dao import PlayerDAO
 from app.database.db_connector import session_scope
 from app.dto.team_dto import TeamDTO
 from app.exceptions.exceptions import TeamNotFoundError
 from app.models.team import Team
+from app.schemas.team_schema import TeamSchema
 
 
 class TeamDAO:
 
     # 1. CRUD
     # =================================
+
+    @staticmethod
+    def add_team(team_dto: TeamDTO):
+        try:
+            # Convertir le TeamDTO en objet Team
+            team_sqlalchemy = TeamDAO.team_from_dto_to_sql(team_dto)
+
+            # Ajouter l'objet Team à la session SQLAlchemy
+            with session_scope() as session:
+                session.add(team_sqlalchemy)
+                session.commit()
+                session.refresh(team_sqlalchemy)
+                return team_sqlalchemy  # Retourner l'objet Team nouvellement ajouté
+
+        except Exception as e:
+            print(f"Erreur lors de l'ajout de l'équipe : {e}")
+            return None
 
     @staticmethod
     def get_team_by_id(team_id: int):
@@ -20,45 +35,103 @@ class TeamDAO:
                 raise TeamNotFoundError(f"Équipe avec l'id '{team_id}' non trouvée.")
             return team_from_sql
 
+    @staticmethod
+    def get_team_by_nickname(team_nickname: str):
+        with session_scope() as session:
+            team_from_sql = session.query(Team).filter_by(team_id=team_nickname).first()
+            if team_from_sql is None:
+                raise TeamNotFoundError(f"Équipe avec le nickname '{team_nickname}' non trouvée.")
+            return team_from_sql
+
+    @staticmethod
+    def get_all_teams():
+        with session_scope() as session:
+            teams_from_sqlalchemy = session.query(Team).all()
+            if teams_from_sqlalchemy is None:
+                raise TeamNotFoundError(f"Aucune équipe trouvée.")
+            return teams_from_sqlalchemy
+
+    @staticmethod
+    def update_team(team_dto: TeamDTO):
+        """
+        Met à jour les informations d'un joueur en base de données à partir d'un TeamDTO.
+        Méthode non-destructive : les champs existants non spécifiés dans l'input restent inchangés.
+
+        :param team_dto: Un objet TeamDTO contenant les nouvelles informations du joueur.
+        :return: L'instance mise à jour de Team ou None si le joueur n'a pas été trouvé.
+        """
+        with session_scope() as session:
+            try:
+                # Récupérer le joueur en base
+                team_from_sql = session.query(Team).filter_by(team_id=team_dto.team_id).first()
+
+                if team_from_sql is None:
+                    print(f"Aucun joueur trouvé avec team_id = {team_dto.team_id}")
+                    return None
+
+                # Mise à jour des champs valides
+                team_schema = TeamSchema().dump(team_dto)
+                for field, value in team_schema.items():
+                    if hasattr(team_from_sql, field):
+                        setattr(team_from_sql, field, value)
+
+                # Valider les modifications
+                session.commit()
+                print(f"Les informations du joueur {team_dto.team_id} ont été mises à jour avec succès.")
+                return team_from_sql
+
+            except Exception as e:
+                session.rollback()
+                print(f"Une erreur est survenue lors de la mise à jour du joueur : {e}")
+                return None
+
+    @staticmethod
+    def delete_team_by_id(team_id: int):
+        try:
+            with session_scope() as session:
+                team_from_sql = session.query(Team).filter_by(team_id=team_id).first()
+                if team_from_sql:
+                    session.delete(team_from_sql)
+                    session.commit()
+                    return True
+                else:
+                    print(f"Aucune équipe trouvée avec l'ID: {team_id}")
+                    return False
+        except Exception as e:  # Capture toutes les exceptions générales
+            print(f"Erreur lors de la suppression de l'équipe avec l'ID {team_id}: {e}")
+            return False
+
     # 2. Utils
     # =================================
 
     @staticmethod
-    def teams_from_sqlalchemy_to_dto(sqlalchemy_obj):
+    def team_from_dto_to_sql(team_dto: TeamDTO):
         """
-        Convertit un objet ou une liste d'objets SQLAlchemy en une ou plusieurs instances de TeamDTO.
-        :param sqlalchemy_obj: Un objet ou une liste d'objets SQLAlchemy.
-        :return: Une instance ou une liste d'instances de TeamDTO.
+        Convertit une instance TeamDTO en une instance SQLAlchemy Team en passant par TeamSchema.
+
+        :param team_dto: Instance de TeamDTO contenant les données.
+        :return: Instance SQLAlchemy du modèle Team.
         """
-        def convert_to_dto(obj):
-            """ Convertit un seul objet SQLAlchemy en TeamDTO """
-
-            # On s'assure de récupérer la liste des joueurs et de la transformer en PlayerDTO si nécessaire
-            list_players_dto = PlayerDAO.players_from_sqlalchemy_to_dto(obj.players) if hasattr(obj, 'players') else []
-
-            # On ajoute la liste des joueurs à l'attribut players dans le DTO
-            attributes = {field.name: getattr(obj, field.name) for field in fields(TeamDTO)}
-            attributes['players'] = list_players_dto
-            return TeamDTO(**attributes)
-
-        # Si l'argument est une liste, on parcourt chaque élément et on les convertit
-        if isinstance(sqlalchemy_obj, list):
-            return [convert_to_dto(obj) for obj in sqlalchemy_obj]
-
-        # Si c'est un seul objet, on le convertit directement en TeamDTO
-        return convert_to_dto(sqlalchemy_obj)
+        # Convertir TeamDTO en dictionnaire
+        team_schema = TeamSchema().dump(team_dto)
+        # Créer une instance SQLAlchemy Team
+        return Team(**team_schema)
 
     @staticmethod
-    def team_dto_to_sqlalchemy(team_dto: TeamDTO):
-        if isinstance(team_dto, list):
-            # Si l'entrée est une liste, on la convertit en une liste d'objets Team
-            return [Team(**{k: v for k, v in vars(p).items() if hasattr(Team, k)}) for p in team_dto]
-        else:
-            # Si l'entrée est un seul objet, on le convertit directement
-            return Team(**{k: v for k, v in vars(team_dto).items() if hasattr(Team, k)})
+    def team_from_sql_to_dto(team_sqlalchemy: Team):
+        """
+        Convertit une instance SQLAlchemy Team en une instance TeamDTO.
+
+        :param team_sqlalchemy: Instance SQLAlchemy du modèle Team.
+        :return: Instance de TeamDTO.
+        """
+        # Sérialisation avec Marshmallow
+        team_schema = TeamSchema().dump(team_sqlalchemy)
+        # Création de l'instance TeamDTO
+        return TeamDTO(**team_schema)
+
 
 if __name__ == "__main__":
-    team_sql = TeamDAO.get_team_by_id(1610612763)
-    team_dto = TeamDAO.teams_from_sqlalchemy_to_dto(team_sql)
-    players = team_dto.players
+    #team_sql = TeamDAO.get_team_by_id(1610612763)
+    #team_dto = TeamDAO.team_from_sql_to_dto(team_sql)
     print("toto")

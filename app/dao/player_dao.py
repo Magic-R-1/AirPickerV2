@@ -24,7 +24,7 @@ class PlayerDAO:
                 return player_sqlalchemy  # Retourner l'objet Player nouvellement ajouté
 
         except Exception as e:
-            print(f"Erreur lors de l'ajout du joueur: {e}")
+            print(f"Erreur lors de l'ajout du joueur : {e}")
             return None
 
     @staticmethod
@@ -59,6 +59,7 @@ class PlayerDAO:
     def update_player(player_dto: PlayerDTO):
         """
         Met à jour les informations d'un joueur en base de données à partir d'un PlayerDTO.
+        Méthode non-destructive : les champs existants non spécifiés dans l'input restent inchangés.
 
         :param player_dto: Un objet PlayerDTO contenant les nouvelles informations du joueur.
         :return: L'instance mise à jour de Player ou None si le joueur n'a pas été trouvé.
@@ -129,9 +130,10 @@ class PlayerDAO:
         :return: Instance de PlayerDTO.
         """
         # Sérialisation avec Marshmallow
-        player_data = PlayerSchema().dump(player_sqlalchemy)
+        player_schema = PlayerSchema().dump(player_sqlalchemy)
         # Création de l'instance PlayerDTO
-        return PlayerDTO(**player_data)
+        return PlayerDTO(**player_schema)
+
 
 if __name__ == "__main__":
 
