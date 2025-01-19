@@ -4,7 +4,7 @@ from app.schemas.team_schema import TeamSchema
 
 
 class PlayerSchema(Schema):
-    person_id = fields.Int(required=True)
+    player_id = fields.Int(required=True)
     first_name = fields.Str(allow_none=True)
     last_name = fields.Str(allow_none=True)
     display_first_last = fields.Str(allow_none=True)

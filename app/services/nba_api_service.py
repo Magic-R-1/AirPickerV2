@@ -13,8 +13,8 @@ class NbaApiService:
         return players.get_players()
 
     @staticmethod
-    def common_player_info(person_id):
-        return commonplayerinfo.CommonPlayerInfo(player_id=person_id)
+    def common_player_info(player_id):
+        return commonplayerinfo.CommonPlayerInfo(player_id=player_id)
 
     # 2. Teams
     # =================================

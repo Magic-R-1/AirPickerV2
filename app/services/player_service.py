@@ -36,8 +36,7 @@ class PlayerService:
             # Convertir la première ligne du DataFrame en dictionnaire
             player_dict = player_data.iloc[0].to_dict()
             # Renommer les clés avec un nom différent entre l'API NBA et PlayerSchema
-            # TODO
-            # player_dict['PERSON_ID'] = player_dict.pop('PLAYER_ID')
+            player_dict['PERSON_ID'] = player_dict.pop('PLAYER_ID')
             player_dict['PLAYER_CODE'] = player_dict.pop('PLAYERCODE')
             player_dict['ROSTER_STATUS'] = player_dict.pop('ROSTERSTATUS')
             # Mettre les clés en minuscules (si nécessaire pour le schéma)
@@ -54,8 +53,8 @@ class PlayerService:
             return None
 
     @staticmethod
-    def get_common_player_info_df_by_person_id(person_id: int):
-        player_info = NbaApiService.common_player_info(person_id)
+    def get_common_player_info_df_by_player_id(player_id: int):
+        player_info = NbaApiService.common_player_info(player_id)
         player_data = player_info.get_data_frames()[0]              # Obtenir le DataFrame
         player_data = Utils.convert_yes_no_to_boolean(player_data)
         player_data = Utils.convert_empty_to_none(player_data)
@@ -76,6 +75,6 @@ class PlayerService:
 
 if __name__ == "__main__":
 
-    player_info = PlayerService.get_common_player_info_df_by_person_id(2544)
+    player_info = PlayerService.get_common_player_info_df_by_player_id(2544)
     player_dto = PlayerService.map_common_player_info_to_player_dto(player_info)
     print(player_dto)

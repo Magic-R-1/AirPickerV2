@@ -9,7 +9,7 @@ from app.dto.team_dto import TeamDTO
 class PlayerDTO:
 
     # Attributs provenant de la base de données
-    person_id: int = None
+    player_id: int = None
     first_name: Optional[str] = None
     last_name: Optional[str] = None
     display_first_last: Optional[str] = None
@@ -88,4 +88,4 @@ class PlayerDTO:
 
     def __repr__(self):
         # Permet d'afficher quelque chose de propre, en debug par exemple, plutôt que <dto.player_dto.PlayerDTO object at 0x1037b0c20>
-        return f"PlayerDTO({self.person_id}, {self.first_name} {self.last_name}, {self.team_name})"
+        return f"PlayerDTO({self.player_id}, {self.first_name} {self.last_name}, {self.team_name})"

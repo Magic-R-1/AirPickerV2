@@ -8,7 +8,7 @@ class Player(Base):
     __tablename__ = 'player'
 
     # Nom des colonnes dans la base de données
-    person_id = Column(Integer, primary_key=True)
+    player_id = Column(Integer, primary_key=True)
     first_name = Column(String, nullable=True)
     last_name = Column(String, nullable=True)
     display_first_last = Column(String, nullable=True)

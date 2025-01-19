@@ -30,7 +30,7 @@ class PlayerDAO:
     @staticmethod
     def get_player_by_id(player_id: int):
         with session_scope() as session:
-            player_from_sql = session.query(Player).filter_by(person_id=player_id).first()
+            player_from_sql = session.query(Player).filter_by(player_id=player_id).first()
             if player_from_sql is None:
                 raise PlayerNotFoundError(f"Joueur avec l'id '{player_id}' non trouvé.")
             return player_from_sql
@@ -67,10 +67,10 @@ class PlayerDAO:
         with session_scope() as session:
             try:
                 # Récupérer le joueur en base
-                player_from_sql = session.query(Player).filter_by(person_id=player_dto.person_id).first()
+                player_from_sql = session.query(Player).filter_by(player_id=player_dto.player_id).first()
 
                 if player_from_sql is None:
-                    print(f"Aucun joueur trouvé avec person_id = {player_dto.person_id}")
+                    print(f"Aucun joueur trouvé avec player_id = {player_dto.player_id}")
                     return None
 
                 # Mise à jour des champs valides
@@ -81,7 +81,7 @@ class PlayerDAO:
 
                 # Valider les modifications
                 session.commit()
-                print(f"Les informations du joueur {player_dto.person_id} ont été mises à jour avec succès.")
+                print(f"Les informations du joueur {player_dto.player_id} ont été mises à jour avec succès.")
                 return player_from_sql
 
             except Exception as e:
@@ -93,7 +93,7 @@ class PlayerDAO:
     def delete_player_by_id(player_id: int):
         try:
             with session_scope() as session:
-                player_from_sql = session.query(Player).filter_by(person_id=player_id).first()
+                player_from_sql = session.query(Player).filter_by(player_id=player_id).first()
                 if player_from_sql:
                     session.delete(player_from_sql)
                     session.commit()
@@ -137,10 +137,10 @@ class PlayerDAO:
 
 if __name__ == "__main__":
 
-    #player = PlayerDTO(person_id=201587, first_name="Nicolas", last_name="Batum")
+    #player = PlayerDTO(player_id=201587, first_name="Nicolas", last_name="Batum")
     #PlayerDAO.update_player(player)
 
-    #player_dto = PlayerDTO(person_id=1, first_name="Erwan", last_name="Gretillat")
+    #player_dto = PlayerDTO(player_id=1, first_name="Erwan", last_name="Gretillat")
     #player_sqlalchemy = PlayerDAO.player_from_dto_to_sql(player_dto)
     #PlayerDAO.add_player(player_dto)
     PlayerDAO.delete_player_by_id(1)
