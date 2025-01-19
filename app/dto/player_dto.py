@@ -37,6 +37,8 @@ class PlayerDTO:
     dleague_flag: Optional[bool] = None
     nba_flag: Optional[bool] = None
     games_played_flag: Optional[bool] = None
+    games_played_current_season_flag: Optional[bool] = None
+    greatest_75_flag: Optional[bool] = None
     draft_year: Optional[str] = None    # String car peut être Undrafted
     draft_round: Optional[str] = None   # String car peut être Undrafted
     draft_number: Optional[str] = None  # String car peut être Undrafted

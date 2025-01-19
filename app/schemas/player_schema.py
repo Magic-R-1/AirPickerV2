@@ -11,7 +11,7 @@ class PlayerSchema(Schema):
     display_last_comma_first = fields.Str(allow_none=True)
     display_fi_last = fields.Str(allow_none=True)
     player_slug = fields.Str(allow_none=True)
-    birthdate = fields.Date(allow_none=True)
+    birthdate = fields.Str(allow_none=True)
     school = fields.Str(allow_none=True)
     country = fields.Str(allow_none=True)
     last_affiliation = fields.Str(allow_none=True)
@@ -32,6 +32,8 @@ class PlayerSchema(Schema):
     dleague_flag = fields.Bool(allow_none=True)
     nba_flag = fields.Bool(allow_none=True)
     games_played_flag = fields.Bool(allow_none=True)
+    games_played_current_season_flag  = fields.Bool(allow_none=True)
+    greatest_75_flag = fields.Bool(allow_none=True)
     draft_year = fields.Str(allow_none=True)    # String car peut être Undrafted
     draft_round = fields.Str(allow_none=True)   # String car peut être Undrafted
     draft_number = fields.Str(allow_none=True)  # String car peut être Undrafted

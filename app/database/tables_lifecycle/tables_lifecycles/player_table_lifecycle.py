@@ -44,7 +44,7 @@ class PlayerTableLifeCycle:
                     player_dto = PlayerService.map_common_player_info_to_player_dto(player_info)
 
                     # Conversion du DTO en model Team
-                    player_sql = PlayerDAO.player_dto_to_sqlalchemy(player_dto)
+                    player_sql = PlayerDAO.player_from_dto_to_sql(player_dto)
 
                     # Ajouter l'entrée à la session sans valider
                     db.add(player_sql)
@@ -73,6 +73,16 @@ class PlayerTableLifeCycle:
             except Exception as e:
                 session.rollback()  # Annuler en cas d'erreur
                 print(f"Une erreur est survenue lors du vidage de la table player : {e}")
+
+    @staticmethod
+    def drop_player_table():
+        with SessionLocal() as session:
+            try:
+                # Supprimer la table Player
+                Player.__table__.drop(bind=session.get_bind())
+                print("La table player a été supprimée avec succès.")
+            except Exception as e:
+                print(f"Une erreur est survenue lors de la suppression de la table player : {e}")
 
 if __name__ == "__main__":
     PlayerTableLifeCycle.fill_player_table()

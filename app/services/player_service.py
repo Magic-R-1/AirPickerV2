@@ -11,28 +11,42 @@ class PlayerService:
         pass
 
     @staticmethod
-    def get_player_id_by_display_first_last(player_name: str):
-        # TODO : à scinder
-        # SQL
+    def get_player_dto_by_display_first_last(player_name: str):
+
         try:
             player_sql = PlayerDAO.get_player_by_display_first_last(player_name)
         except (PlayerNotFoundError, ValueError) as e:
             print(f"Erreur: {e}")
             return None
 
-        # Schema
-        # Créer une instance du schéma pour sérialiser les données
-        instance_player_schema = PlayerSchema()
-        # Sérialiser l'objet SQLAlchemy en dictionnaire
-        player_schema = instance_player_schema.dump(player_sql)
+        player_dto = PlayerDAO.player_from_sql_to_dto(player_sql)
 
-        # DTO
-        player_dto = PlayerDTO(**player_schema)
-
-        return player_dto.person_id
+        return player_dto
 
     @staticmethod
     def map_common_player_info_to_player_dto(player_data):
+        """
+        Convertit les données de l'API NBA en PlayerDTO en utilisant PlayerSchema.
+
+        :param player_data: Dictionnaire contenant les données de l'API NBA.
+        :return: Instance de PlayerDTO.
+        """
+        # Convertir la première ligne du DataFrame en dictionnaire
+        player_dict = player_data.iloc[0].to_dict()
+        # Renommer les clés avec un nom différent entre l'API NBA et PlayerSchema
+        player_dict['PLAYER_CODE'] = player_dict.pop('PLAYERCODE')
+        player_dict['ROSTER_STATUS'] = player_dict.pop('ROSTERSTATUS')
+        # Mettre les clés en minuscules (si nécessaire pour le schéma)
+        player_dict = {key.lower(): value for key, value in player_dict.items()}
+
+        # Utilisation de PlayerSchema pour valider et structurer les données
+        player_schema = PlayerSchema().load(player_dict)  # Valide et prépare les données
+
+        # Création de PlayerDTO à partir des données validées
+        return PlayerDTO(**player_schema)
+
+    @staticmethod
+    def zmap_common_player_info_to_player_dto(player_data):
         # Mapping complet des données vers le DTO
         return PlayerDTO(
             person_id = player_data['PERSON_ID'].iloc[0],
@@ -89,5 +103,6 @@ class PlayerService:
 
 if __name__ == "__main__":
 
-    player_id = PlayerService.get_player_id_by_display_first_last("LeBron James")
-    print(player_id)
+    player_info = PlayerService.person_id_to_common_player_info_df(2544)
+    player_dto = PlayerService.map_common_player_info_to_player_dto(player_info)
+    print(player_dto)

@@ -36,6 +36,8 @@ class Player(Base):
     dleague_flag = Column(Boolean, nullable=True)
     nba_flag = Column(Boolean, nullable=True)
     games_played_flag = Column(Boolean, nullable=True)
+    games_played_current_season_flag  = Column(Boolean, nullable=True)
+    greatest_75_flag = Column(Boolean, nullable=True)
     draft_year = Column(String, nullable=True)      # String car peut être Undrafted
     draft_round = Column(String, nullable=True)     # String car peut être Undrafted
     draft_number = Column(String, nullable=True)    # String car peut être Undrafted
