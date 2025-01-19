@@ -58,6 +58,7 @@ class PlayerService:
         player_data = player_info.get_data_frames()[0]              # Obtenir le DataFrame
         player_data = Utils.convert_yes_no_to_boolean(player_data)
         player_data = Utils.convert_empty_to_none(player_data)
+        # TODO : à surveiller...
         player_data = player_data.astype(object)                    # Convertir les types NumPy en types natifs Python, évite psycopg2: can't adapt type 'numpy.int64'
 
         return player_data
