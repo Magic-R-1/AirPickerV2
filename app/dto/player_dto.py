@@ -2,6 +2,7 @@ from dataclasses import dataclass
 from datetime import date
 from typing import Optional, List
 
+from app.dto.boxscore_dto import BoxscoreDTO
 from app.dto.team_dto import TeamDTO
 
 
@@ -45,6 +46,8 @@ class PlayerDTO:
 
     # Attributs relationnels
     team: Optional[TeamDTO] = None
+    boxscores: Optional[List[BoxscoreDTO]] = None
+    # TODO : ou liste de playergamelog ? Probablement suffisant, mais comment stocker ça en BDD ? Au moins les Boxscores elles sont stockées, quitte à devoir les retravailler
 
     # Attributs fonctionnels
     moyenne_5_matchs: Optional[float] = None
@@ -61,6 +64,7 @@ class PlayerDTO:
     impact_domicile: Optional[float] = None
     impact_exterieur: Optional[float] = None
 
+    # TODO : créer un autre objet, InformationsMatchsAVenir, avec des liste de chaque attribut ?
     domicile_exterieur_match_plus_1: Optional[str] = None
     adv_match_plus_1: Optional[TeamDTO] = None
     impact_poste_adv_match_plus_1: Optional[float] = None

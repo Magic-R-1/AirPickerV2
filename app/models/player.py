@@ -42,5 +42,6 @@ class Player(Base):
     draft_round = Column(String, nullable=True)     # String car peut être Undrafted
     draft_number = Column(String, nullable=True)    # String car peut être Undrafted
 
-    # Relation many-to-one avec Team
+    # Relation avec Team
     team = relationship("Team", backref=None, lazy='joined')
+    # boxscores = relationship("Boxscore", backref=None, lazy='joined')

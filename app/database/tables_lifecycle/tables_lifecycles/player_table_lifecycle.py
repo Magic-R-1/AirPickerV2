@@ -24,10 +24,12 @@ class PlayerTableLifeCycle:
         # Diviser la liste en 2 pour éviter les erreurs de timeout de l'API NBA
         size = round(players_list.__sizeof__()/2,0)
 
-        moitie = 2
+        moitie = 1
 
         if moitie==1 :
-            players_list = PlayerService.get_active_players()[:size]
+            #players_list = PlayerService.get_active_players()[:size]
+            # TODO : à enlever un jour
+            players_list = PlayerService.get_active_players()[:90]
         elif moitie==2:
             players_list = PlayerService.get_active_players()[size:]
 

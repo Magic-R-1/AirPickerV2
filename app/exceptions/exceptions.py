@@ -5,3 +5,7 @@ class PlayerNotFoundError(Exception):
 class TeamNotFoundError(Exception):
     """Exception levée lorsqu'une équipe n'est pas trouvée."""
     pass
+
+class BoxscoreNotFoundError(Exception):
+    """Exception levée lorsqu'une Boxscore n'est pas trouvée."""
+    pass

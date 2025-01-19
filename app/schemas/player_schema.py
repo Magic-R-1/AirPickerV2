@@ -1,5 +1,6 @@
 from marshmallow import Schema, fields
 
+from app.schemas.boxscore_schema import BoxscoreSchema
 from app.schemas.team_schema import TeamSchema
 
 
@@ -38,5 +39,6 @@ class PlayerSchema(Schema):
     draft_round = fields.Str(allow_none=True)   # String car peut être Undrafted
     draft_number = fields.Str(allow_none=True)  # String car peut être Undrafted
 
-    # Relation many-to-one avec Team
+    # Relation avec Team
     team = fields.Nested(TeamSchema, allow_none=True)
+    # boxscores = fields.Nested(BoxscoreSchema, allow_none=True)
