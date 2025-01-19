@@ -11,7 +11,6 @@ class TeamTableLifeCycle:
 
     @staticmethod
     def create_team_table():
-        # Base.metadata.create_all(engine) # Pour créer toutes les classes héritant de Base
         Team.__table__.create(engine)
 
         print("Table 'team' créée avec succès.")

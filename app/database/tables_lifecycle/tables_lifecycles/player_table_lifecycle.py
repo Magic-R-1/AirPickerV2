@@ -12,7 +12,6 @@ class PlayerTableLifeCycle:
 
     @staticmethod
     def create_player_table():
-        # Base.metadata.create_all(engine) # Pour créer toutes les classes héritant de Base
         Player.__table__.create(engine)
 
         print("Table 'player' créée avec succès.")
