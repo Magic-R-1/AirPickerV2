@@ -37,7 +37,7 @@ class TeamGameLogTableLifeCycle:
 
                     # Boucle sur les lignes du DataFrame
                     for i, row in teamgamelog_df.iterrows():
-                        teamgamelog_model = TeamGameLogService.map_row_to_teamgamelog_model(row)
+                        teamgamelog_model = TeamGameLogService.map_row_teamgamelog_df_to_teamgamelog_model(row)
                         # print(type(teamgamelog_model))
                         db.add(teamgamelog_model)
 

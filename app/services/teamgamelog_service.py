@@ -31,17 +31,14 @@ class TeamGameLogService:
         team_game_logs = []
 
         for index, row in teamgamelog_df.iterrows():
-            # Convertir la ligne en dictionnaire
-            row_dict = row.to_dict()
-
             # Désérialiser la ligne en un objet TeamGameLog
-            team_game_log = team_game_log_schema.load(row_dict)
-            team_game_logs.append(team_game_log)
+            teamgamelog_model = TeamGameLogService.map_row_teamgamelog_df_to_teamgamelog_model(row)
+            team_game_logs.append(teamgamelog_model)
 
         return team_game_logs
 
     @staticmethod
-    def map_row_to_teamgamelog_model(row):
+    def map_row_teamgamelog_df_to_teamgamelog_model(row):
         """
         Cette méthode prend un dictionnaire représentant une ligne de données et le convertit
         en un objet TeamGameLog en utilisant le schema Marshmallow.
