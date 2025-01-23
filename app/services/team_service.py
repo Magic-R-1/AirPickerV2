@@ -22,6 +22,11 @@ class TeamService:
         return team_dto
 
     @staticmethod
+    def get_all_team_ids():
+        tuple_teams = TeamDAO.get_all_team_ids()
+        return [team_id[0] for team_id in tuple_teams]
+
+    @staticmethod
     def map_static_team_to_team_dto(team_data):
         """
         Mappe les données d'une équipe statique vers un objet TeamDTO en utilisant TeamSchema.
@@ -44,4 +49,5 @@ class TeamService:
 
 
 if __name__ == "__main__":
+    all_team_ids = TeamService.get_all_team_ids()
     print("toto")

@@ -31,7 +31,7 @@ class TeamTableLifeCycle:
             'year_founded': None
         })
 
-        # Boucler sur ces joueurs en ajoutant leurs informations avec CommonPlayerInfo
+        # Boucler sur ces équipes
         with SessionLocal() as db:
             try:
                 # La barre de progression avec tqdm
@@ -40,6 +40,7 @@ class TeamTableLifeCycle:
 
                     # Conversion du DTO en model Team
                     team_sql = TeamDAO.team_from_dto_to_sql(team_dto)
+                    print(type(team_sql))
 
                     # Ajouter l'entrée à la session sans valider
                     db.add(team_sql)
@@ -75,4 +76,5 @@ class TeamTableLifeCycle:
 
 
 if __name__ == "__main__":
+    #TeamTableLifeCycle.clear_team_table()
     TeamTableLifeCycle.fill_team_table()

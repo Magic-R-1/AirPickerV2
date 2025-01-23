@@ -39,7 +39,7 @@ class PlayerService:
             player_dict['PERSON_ID'] = player_dict.pop('PLAYER_ID')
             player_dict['PLAYER_CODE'] = player_dict.pop('PLAYERCODE')
             player_dict['ROSTER_STATUS'] = player_dict.pop('ROSTERSTATUS')
-            # Mettre les clés en minuscules (si nécessaire pour le schéma)
+            # Mettre les clés en minuscules
             player_dict = {key.lower(): value for key, value in player_dict.items()}
 
             # Utilisation de PlayerSchema pour valider et structurer les données
@@ -55,11 +55,8 @@ class PlayerService:
     @staticmethod
     def get_common_player_info_df_by_player_id(player_id: int):
         player_info = NbaApiService.get_common_player_info(player_id)
-        player_data = player_info.get_data_frames()[0]              # Obtenir le DataFrame
+        player_data = Utils.obtenir_df_manipulable(player_info)
         player_data = Utils.convert_yes_no_to_boolean(player_data)
-        player_data = Utils.convert_empty_to_none(player_data)
-        # TODO : à surveiller...
-        player_data = player_data.astype(object)                    # Convertir les types NumPy en types natifs Python, évite psycopg2: can't adapt type 'numpy.int64'
 
         return player_data
 

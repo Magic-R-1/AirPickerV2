@@ -1,5 +1,5 @@
-from app.database.tables_lifecycle.tables_lifecycles.team_table_lifecycle import TeamTableLifeCycle
-from app.database.tables_lifecycle.tables_lifecycles.player_table_lifecycle import PlayerTableLifeCycle
+from app.database.tables_mgmt.unit_mgmt.team_table_mgmt import TeamTableLifeCycle
+from app.database.tables_mgmt.unit_mgmt.player_table_mgmt import PlayerTableLifeCycle
 
 
 class FillTables:

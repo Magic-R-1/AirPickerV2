@@ -1,5 +1,8 @@
 # AirPickerV2
 
+# TODO
+Gestion des dates, les convertir et les mettre en date en base
+
 # Aide avec PostgreSQL
 brew services list
 brew services stop postgresql

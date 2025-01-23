@@ -52,6 +52,16 @@ class TeamDAO:
             return teams_from_sqlalchemy
 
     @staticmethod
+    def get_all_team_ids():
+        """
+        Récupère tous les team_id de la table Team.
+
+        :return: Une liste d'entiers représentant les team_id.
+        """
+        with session_scope() as session:
+            return session.query(Team.team_id).all()
+
+    @staticmethod
     def update_team(team_dto: TeamDTO):
         """
         Met à jour les informations d'un joueur en base de données à partir d'un TeamDTO.

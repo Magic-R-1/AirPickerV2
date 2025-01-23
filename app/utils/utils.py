@@ -1,6 +1,13 @@
 class Utils:
 
     @staticmethod
+    def obtenir_df_manipulable(data):
+        df = data.get_data_frames()[0]  # Obtenir le DataFrame
+        df = Utils.convert_empty_to_none(df)
+        df = df.astype(object) # Convertir les types NumPy en types natifs Python, évite psycopg2: can't adapt type 'numpy.int64', cannot convert float NaN to integer
+        return df
+
+    @staticmethod
     def convert_yes_no_to_boolean(df):
         """
         Parcourt chaque élément d'un DataFrame et convertit les valeurs 'Y' en True
@@ -10,4 +17,15 @@ class Utils:
 
     @staticmethod
     def convert_empty_to_none(df):
+        """
+        Cette méthode prend un DataFrame et remplace toutes les valeurs vides (comme des chaînes vides,
+        des valeurs None, ou NaN) par `None` (qui est l'équivalent Python de `null` en base de données).
+
+        :param df: Le DataFrame sur lequel effectuer la conversion.
+        :return: Un DataFrame où toutes les valeurs vides sont remplacées par `None`.
+
+        Cette méthode utilise la fonction `map` de Pandas pour itérer sur chaque élément du DataFrame
+        et applique une condition qui vérifie si l'élément est une valeur vide (une chaîne vide,
+        `None` ou NaN). Si c'est le cas, il est remplacé par `None`, sinon l'élément reste inchangé.
+        """
         return df.map(lambda x: None if x in ("", None, float("nan")) else x)

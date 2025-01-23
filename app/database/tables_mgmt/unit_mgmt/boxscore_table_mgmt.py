@@ -16,6 +16,7 @@ class BoxscoreTableLifeCycle:
 
     @staticmethod
     def fill_boxscore_table():
+        # TODO : renommer person_id en player_id au moment de remplir la table
         print("toto")
 
     @staticmethod

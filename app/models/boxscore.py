@@ -1,8 +1,5 @@
 from sqlalchemy import Column, Integer, String, Float, ForeignKey
-from sqlalchemy.ext.declarative import declarative_base
-
-
-Base = declarative_base()
+from app.database.declarative_base import Base
 
 class Boxscore(Base):
     # Nom de la table dans la base de données
@@ -10,7 +7,7 @@ class Boxscore(Base):
 
     # Nom des colonnes dans la base de données
     game_id = Column(String, primary_key=True)  # Utilisation d'une clé primaire composée (game_id et person_id)
-    team_id = Column(Integer, ForeignKey('team.team_id'), nullable=True)  # Clé étrangère vers la table Team
+    team_id = Column(Integer, ForeignKey("team.team_id"), nullable=True)    # Clé étrangère vers la table Team
     team_city = Column(String, nullable=True)
     team_name = Column(String, nullable=True)
     team_tricode = Column(String, nullable=True)
