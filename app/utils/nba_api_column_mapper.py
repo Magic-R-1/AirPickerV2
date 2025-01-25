@@ -1,6 +1,8 @@
 import os
 import json
 import pandas as pd
+
+from enum.nba_api_endpoints import NbaApiEndpoints
 from services.player_service import PlayerService
 
 
@@ -78,7 +80,7 @@ class NbaApiColumnMapper:
         return None  # Retourner None si aucun champ ne correspond
 
     @staticmethod
-    def rename_columns(df: pd.DataFrame, endpoint: str):
+    def rename_columns(df: pd.DataFrame, endpoint: NbaApiEndpoints):
         """Renomme les colonnes d'un DataFrame selon les correspondances dans le fichier JSON en fonction de l'endpoint."""
         # Vérifier que l'endpoint est valide
         if not endpoint:
@@ -111,5 +113,5 @@ class NbaApiColumnMapper:
 if __name__ == "__main__":
     # Exemple d'utilisation pour renommer les colonnes
     df_avant = PlayerService.get_common_player_info_df_by_player_id(2544)
-    df_apres = NbaApiColumnMapper.rename_columns(df_avant, "commonplayerinfo")
+    df_apres = NbaApiColumnMapper.rename_columns(df_avant, NbaApiEndpoints.BOX_SCORE_TRADITIONAL_V3.value)
     print("toto")
