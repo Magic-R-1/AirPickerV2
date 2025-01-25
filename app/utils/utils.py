@@ -1,3 +1,6 @@
+from datetime import datetime, date
+
+
 class Utils:
 
     @staticmethod
@@ -6,6 +9,17 @@ class Utils:
         df = Utils.convert_empty_to_none(df)
         df = df.astype(object) # Convertir les types NumPy en types natifs Python, évite psycopg2: can't adapt type 'numpy.int64', cannot convert float NaN to integer
         return df
+
+    @staticmethod
+    def convert_to_date(date_str: str) -> date:
+        """
+        Convertit une date sous forme de chaîne (format : 'APR 14, 2024') en un objet datetime.date.
+
+        :param date_str: La date sous forme de chaîne.
+        :return: Un objet datetime.date correspondant.
+        """
+        return datetime.strptime(date_str, "%b %d, %Y").date()
+
 
     @staticmethod
     def convert_yes_no_to_boolean(df):
@@ -31,4 +45,7 @@ class Utils:
         return df.map(lambda x: None if x in ("", None, float("nan")) else x)
 
 if __name__ == "__main__":
-    print("")
+
+    date_string = "APR 14, 2024"
+    converted_date = Utils.convert_to_date(date_string)
+    print(converted_date)  # Résultat : 2024-04-14

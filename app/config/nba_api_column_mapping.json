@@ -86,7 +86,7 @@
   },
   "game_date": {
     "reference": "game_date",
-    "exemple": "APR 14, 2024",
+    "exemple": ["APR 14, 2024","converti en 2024-04-14"],
     "endpoints": {
       "boxscoretraditionalv3": "",
       "teamgamelog": "GAME_DATE",
@@ -498,7 +498,7 @@
     }
   },
   "o_reb": {
-    "reference": "oreb",
+    "reference": "o_reb",
     "exemple": "",
     "endpoints": {
       "boxscoretraditionalv3": "reboundsOffensive",
@@ -507,7 +507,7 @@
     }
   },
   "d_reb": {
-    "reference": "dreb",
+    "reference": "d_reb",
     "exemple": "",
     "endpoints": {
       "boxscoretraditionalv3": "reboundsDefensive",
