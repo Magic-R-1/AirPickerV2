@@ -18,6 +18,6 @@ if __name__ == "__main__":
     list_past_games = NbaApiService.get_player_game_log_by_player_id(2544).get_data_frames()[0]
     list_game_id = list_past_games[["Game_ID"]]
     premier_id = list_game_id.iloc[0][0]
-    feuille_de_match = NbaApiService.get_feuille_de_match_by_game_id(premier_id).get_data_frames()[0]
+    boxscore = NbaApiService.get_boxscore_by_game_id(premier_id).get_data_frames()[0]
 
     print("toto")

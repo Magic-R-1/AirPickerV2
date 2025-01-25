@@ -44,10 +44,10 @@ class NbaApiService:
     # 3. Feuilles de match
     # =================================
     @staticmethod
-    def get_feuille_de_match_by_game_id(game_id: str):  #str car les id des matchs commencent par 00, effacés avec un int
+    def get_boxscore_by_game_id(game_id: str):  #str car les id des matchs commencent par 00, effacés avec un int
         return boxscoretraditionalv3.BoxScoreTraditionalV3(game_id=game_id)
 
 
 if __name__ == "__main__":
-    NbaApiService.get_feuille_de_match_by_game_id("0022400596")
-    print("toto")
+    data = NbaApiService.get_boxscore_by_game_id("0022400596")
+    print("")
