@@ -17,37 +17,41 @@ class PlayerDTO:
     display_last_comma_first: Optional[str] = None
     display_fi_last: Optional[str] = None
     player_slug: Optional[str] = None
+
     birthdate: Optional[date] = None
     school: Optional[str] = None
     country: Optional[str] = None
     last_affiliation: Optional[str] = None
     height: Optional[str] = None
-    weight: Optional[float] = None
+    weight: Optional[int] = None
     season_exp: Optional[int] = None
     jersey: Optional[int] = None
     position: Optional[str] = None
     roster_status: Optional[str] = None
+
     team_id: Optional[int] = None
     team_name: Optional[str] = None
     team_abbreviation: Optional[str] = None
     team_code: Optional[str] = None
     team_city: Optional[str] = None
+
     player_code: Optional[str] = None
     from_year: Optional[int] = None
     to_year: Optional[int] = None
+
     dleague_flag: Optional[bool] = None
     nba_flag: Optional[bool] = None
     games_played_flag: Optional[bool] = None
     games_played_current_season_flag: Optional[bool] = None
     greatest_75_flag: Optional[bool] = None
-    draft_year: Optional[str] = None    # String car peut être Undrafted
-    draft_round: Optional[str] = None   # String car peut être Undrafted
-    draft_number: Optional[str] = None  # String car peut être Undrafted
+
+    draft_year: Optional[str] = None
+    draft_round: Optional[str] = None
+    draft_number: Optional[str] = None
 
     # Attributs relationnels
     team: Optional[TeamDTO] = None
     boxscores: Optional[List[BoxscoreDTO]] = None
-    # TODO : ou liste de playergamelog ? Probablement suffisant, mais comment stocker ça en BDD ? Au moins les Boxscores elles sont stockées, quitte à devoir les retravailler
 
     # Attributs fonctionnels
     moyenne_5_matchs: Optional[float] = None
