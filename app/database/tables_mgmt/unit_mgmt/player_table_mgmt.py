@@ -8,7 +8,7 @@ from app.models.player import Player
 from app.services.player_service import PlayerService
 
 
-class PlayerTableLifeCycle:
+class PlayerTableMgmt:
 
     @staticmethod
     def create_player_table():
@@ -86,4 +86,4 @@ class PlayerTableLifeCycle:
                 print(f"Une erreur est survenue lors de la suppression de la table player : {e}")
 
 if __name__ == "__main__":
-    PlayerTableLifeCycle.fill_player_table()
+    PlayerTableMgmt.fill_player_table()
