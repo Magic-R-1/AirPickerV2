@@ -1,7 +1,3 @@
-import time
-from tqdm import tqdm
-
-from app.config import Config
 from app.database.db_connector import engine, SessionLocal
 from app.models.boxscore import Boxscore
 

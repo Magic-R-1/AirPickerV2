@@ -2,7 +2,7 @@ from nba_api.stats.static import players, teams
 from nba_api.stats.endpoints import boxscoretraditionalv3, commonplayerinfo, commonteamroster, playergamelog, playernextngames, teamgamelog
 # scoreboardv2 : permet d’obtenir les matchs programmés pour une date précise
 
-from app.config import Config
+from config.config import Config
 
 
 class NbaApiService:

@@ -14,7 +14,10 @@ Settings
 Editor
 File Types
 Ignored Files and Folders
+
 __init__.py
+venv
+.idea
 
 # Niveau de log globaux et de SQLAlchemy
 CRITICAL (50) : Utilisé pour les messages les plus graves qui indiquent des erreurs fatales.
@@ -28,4 +31,4 @@ NOTSET (0) : Le niveau le plus bas, affichant absolument tout. Ce niveau est gé
 1 - models : couche chargée de répliquer ce qui est en BDD
 2 - schemas : couche chargée de sérialiser l'objet model récupéré
 3 - dto : couche chargée de contenir les attributs absents de la base, tels que toutes les mesures du tableau d'impact
-4 - services : couche chargée de contenir les méthodes utiliser pour calculer les mesures du tableau d'impact
+4 - services : couche chargée de contenir les méthodes utilisées pour calculer les mesures du tableau d'impact

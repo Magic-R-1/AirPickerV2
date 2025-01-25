@@ -1,7 +1,7 @@
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from contextlib import contextmanager
-from app.config import Config
+from config.config import Config
 
 # URL de connexion de la base de données
 DATABASE_URL = Config.DATABASE_URL
