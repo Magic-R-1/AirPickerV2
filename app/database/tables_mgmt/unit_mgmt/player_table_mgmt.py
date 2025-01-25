@@ -19,7 +19,7 @@ class PlayerTableMgmt:
     @staticmethod
     def fill_player_table():
         # Récupérer la liste des joueurs via l'API
-        players_list = PlayerService.get_active_players()
+        players_list = PlayerService.get_list_active_players()
 
         # Diviser la liste en 2 pour éviter les erreurs de timeout de l'API NBA
         size = round(players_list.__sizeof__()/2,0)
@@ -29,9 +29,9 @@ class PlayerTableMgmt:
         if moitie==1 :
             #players_list = PlayerService.get_active_players()[:size]
             # TODO : à enlever un jour
-            players_list = PlayerService.get_active_players()[:90]
+            players_list = PlayerService.get_list_active_players()[:90]
         elif moitie==2:
-            players_list = PlayerService.get_active_players()[size:]
+            players_list = PlayerService.get_list_active_players()[size:]
 
         # Boucler sur ces joueurs en ajoutant leurs informations avec CommonPlayerInfo
         with SessionLocal() as db:

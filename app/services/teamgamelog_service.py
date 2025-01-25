@@ -60,7 +60,7 @@ class TeamGameLogService:
     @staticmethod
     def get_df_pk_teamgamelog_by_team_id(team_id: int):
 
-        list_pk = TeamGameLogDAO.get_df_pk_by_team_id(team_id)
+        list_pk = TeamGameLogDAO.get_list_pk_by_team_id(team_id)
 
         # Transformer le résultat de la requête en DataFrame
         df_pk = pd.DataFrame(list_pk, columns=["team_id", "game_id"])

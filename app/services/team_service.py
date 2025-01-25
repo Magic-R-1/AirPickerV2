@@ -22,9 +22,9 @@ class TeamService:
         return team_dto
 
     @staticmethod
-    def get_all_team_ids():
-        tuple_teams = TeamDAO.get_all_team_ids()
-        return [team_id[0] for team_id in tuple_teams]
+    def get_list_all_team_ids():
+        list_from_db = TeamDAO.get_all_team_ids()
+        return [team_id[0] for team_id in list_from_db]
 
     @staticmethod
     def map_static_team_to_team_dto(team_data):
@@ -49,5 +49,5 @@ class TeamService:
 
 
 if __name__ == "__main__":
-    all_team_ids = TeamService.get_all_team_ids()
+    all_team_ids = TeamService.get_list_all_team_ids()
     print("toto")

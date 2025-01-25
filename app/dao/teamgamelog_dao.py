@@ -1,4 +1,3 @@
-import pandas as pd
 from app.database.db_connector import session_scope
 from app.dto.teamgamelog_dto import TeamGameLogDTO
 from app.exceptions.exceptions import TeamGameLogNotFoundError
@@ -15,7 +14,7 @@ class TeamGameLogDAO:
     def add_teamgamelog(teamgamelog_dto: TeamGameLogDTO):
         try:
             # Convertir le TeamGameLogDTO en objet TeamGameLog
-            teamgamelog_sqlalchemy = TeamGameLogDAO.player_from_dto_to_sql(teamgamelog_dto)
+            teamgamelog_sqlalchemy = TeamGameLogDAO.teamgamelog_from_dto_to_sql(teamgamelog_dto)
 
             # Ajouter l'objet TeamGameLog à la session SQLAlchemy
             with session_scope() as session:
@@ -29,7 +28,7 @@ class TeamGameLogDAO:
             return None
 
     @staticmethod
-    def get_teamgamelog_by_team_id_and_game_id(team_id: int, game_id: int):
+    def get_teamgamelog_by_pk(team_id: int, game_id: int):
         with session_scope() as session:
             teamgamelog_from_sql = session.query(TeamGameLog).get((team_id, game_id))
             if teamgamelog_from_sql is None:
@@ -45,7 +44,7 @@ class TeamGameLogDAO:
             return teamgamelogs_from_sql
 
     @staticmethod
-    def get_df_pk_by_team_id(team_id: int):
+    def get_list_pk_by_team_id(team_id: int):
         with session_scope() as session:
             # Récupérer la liste des tuples (team_id, game_id) pour une équipe donnée
             list_pk = session.query(TeamGameLog.team_id, TeamGameLog.game_id) \
@@ -92,5 +91,5 @@ class TeamGameLogDAO:
         return TeamGameLogDTO(**teamgamelog_schema)
 
 if __name__ == "__main__":
-    list = TeamGameLogDAO.get_df_pk_by_team_id(1610612737)
+    list = TeamGameLogDAO.get_list_pk_by_team_id(1610612737)
     print("")

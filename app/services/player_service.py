@@ -61,7 +61,7 @@ class PlayerService:
         return player_data
 
     @staticmethod
-    def get_active_players():
+    def get_list_active_players():
 
         list_players = NbaApiService.get_players()
 

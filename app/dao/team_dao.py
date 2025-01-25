@@ -30,18 +30,18 @@ class TeamDAO:
     @staticmethod
     def get_team_by_id(team_id: int):
         with session_scope() as session:
-            team_from_sql = session.query(Team).filter_by(team_id=team_id).first()
-            if team_from_sql is None:
+            team_sqlalchemy = session.query(Team).filter_by(team_id=team_id).first()
+            if team_sqlalchemy is None:
                 raise TeamNotFoundError(f"Équipe avec l'id '{team_id}' non trouvée.")
-            return team_from_sql
+            return team_sqlalchemy
 
     @staticmethod
     def get_team_by_nickname(team_nickname: str):
         with session_scope() as session:
-            team_from_sql = session.query(Team).filter_by(team_id=team_nickname).first()
-            if team_from_sql is None:
+            team_sqlalchemy = session.query(Team).filter_by(team_id=team_nickname).first()
+            if team_sqlalchemy is None:
                 raise TeamNotFoundError(f"Équipe avec le nickname '{team_nickname}' non trouvée.")
-            return team_from_sql
+            return team_sqlalchemy
 
     @staticmethod
     def get_all_teams():
@@ -73,22 +73,22 @@ class TeamDAO:
         with session_scope() as session:
             try:
                 # Récupérer le joueur en base
-                team_from_sql = session.query(Team).filter_by(team_id=team_dto.team_id).first()
+                team_sqlalchemy = session.query(Team).filter_by(team_id=team_dto.team_id).first()
 
-                if team_from_sql is None:
+                if team_sqlalchemy is None:
                     print(f"Aucun joueur trouvé avec team_id = {team_dto.team_id}")
                     return None
 
                 # Mise à jour des champs valides
                 team_schema = TeamSchema().dump(team_dto)
                 for field, value in team_schema.items():
-                    if hasattr(team_from_sql, field):
-                        setattr(team_from_sql, field, value)
+                    if hasattr(team_sqlalchemy, field):
+                        setattr(team_sqlalchemy, field, value)
 
                 # Valider les modifications
                 session.commit()
                 print(f"Les informations du joueur {team_dto.team_id} ont été mises à jour avec succès.")
-                return team_from_sql
+                return team_sqlalchemy
 
             except Exception as e:
                 session.rollback()
@@ -99,9 +99,9 @@ class TeamDAO:
     def delete_team_by_id(team_id: int):
         try:
             with session_scope() as session:
-                team_from_sql = session.query(Team).filter_by(team_id=team_id).first()
-                if team_from_sql:
-                    session.delete(team_from_sql)
+                team_sqlalchemy = session.query(Team).filter_by(team_id=team_id).first()
+                if team_sqlalchemy:
+                    session.delete(team_sqlalchemy)
                     session.commit()
                     return True
                 else:

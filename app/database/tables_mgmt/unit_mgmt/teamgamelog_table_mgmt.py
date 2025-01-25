@@ -4,7 +4,6 @@ from app.database.db_connector import engine, SessionLocal
 from app.models.teamgamelog import TeamGameLog
 from app.services.team_service import TeamService
 from app.services.teamgamelog_service import TeamGameLogService
-from dao.teamgamelog_dao import TeamGameLogDAO
 
 
 class TeamGameLogTableMgmt:
@@ -18,7 +17,7 @@ class TeamGameLogTableMgmt:
     @staticmethod
     def fill_teamgamelog_table():
         # Récupérer la liste des ids de toutes les équipes dans la table team
-        team_ids_list = TeamService.get_all_team_ids()
+        team_ids_list = TeamService.get_list_all_team_ids()
 
         # Boucle id d'équipe par id d'équipe
         with SessionLocal() as db:
@@ -59,7 +58,7 @@ class TeamGameLogTableMgmt:
     def update_teamgamelog_table():
 
         # Récupérer la liste des ids de toutes les équipes dans la table team
-        team_ids_list = TeamService.get_all_team_ids()
+        team_ids_list = TeamService.get_list_all_team_ids()
 
         # Boucle id d'équipe par id d'équipe
         with SessionLocal() as db:
