@@ -12,8 +12,8 @@ class TeamGameLogDTO:
     game_id: str
     # TODO : à convertir en Date, pour le moment : APR 14, 2024
     # Utils.convert_to_date(date_string)
-    #game_date: Optional[date] = None
-    game_date: Optional[str] = None
+    game_date: Optional[date] = None
+    # game_date: Optional[str] = None
     matchup: Optional[str] = None
 
     wl: Optional[str] = None
