@@ -291,6 +291,24 @@
       "commonplayerinfo": "GAMES_PLAYED_FLAG"
     }
   },
+  "games_played_current_season_flag": {
+    "reference": "games_played_current_season_flag",
+    "exemple": ["Y","N"],
+    "endpoints": {
+      "boxscoretraditionalv3": "",
+      "teamgamelog": "",
+      "commonplayerinfo": "GAMES_PLAYED_CURRENT_SEASON_FLAG"
+    }
+  },
+  "greatest_75_flag": {
+    "reference": "greatest_75_flag",
+    "exemple": ["Y","N"],
+    "endpoints": {
+      "boxscoretraditionalv3": "",
+      "teamgamelog": "",
+      "commonplayerinfo": "GREATEST_75_FLAG"
+    }
+  },
   "draft_year": {
     "reference": "draft_year",
     "exemple": "2001",
