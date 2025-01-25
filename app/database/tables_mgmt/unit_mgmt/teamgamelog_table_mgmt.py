@@ -1,3 +1,4 @@
+import pandas as pd
 from tqdm import tqdm
 
 from app.database.db_connector import engine, SessionLocal
@@ -16,47 +17,10 @@ class TeamGameLogTableMgmt:
 
     @staticmethod
     def fill_teamgamelog_table():
-        # Récupérer la liste des ids de toutes les équipes dans la table team
-        team_ids_list = TeamService.get_list_all_team_ids()
-
-        # Boucle id d'équipe par id d'équipe
-        with SessionLocal() as db:
-            try:
-                # Initialiser un compteur global pour les TeamGameLogs
-                count_teamgamelogs = 0
-
-                for index, team_id in tqdm(
-                        enumerate(team_ids_list),
-                        desc="Ajout des teamgamelogs",
-                        unit="teamgamelog",
-                        total=len(team_ids_list)
-                ):
-                    # Appel API à TeamGameLog, pour récupérer les TeamGameLogs de l'équipe
-                    teamgamelog_df = TeamGameLogService.get_df_teamgamelog_from_api_by_team_id(team_id)
-                    # Passer tous les champs en minuscule
-                    teamgamelog_df.columns = teamgamelog_df.columns.str.lower()
-
-                    # Incrémenter le compteur global avec le nombre de nouvelles lignes
-                    count_teamgamelogs += len(teamgamelog_df)
-
-                    # Boucle sur les lignes du DataFrame
-                    for i, row in teamgamelog_df.iterrows():
-                        teamgamelog_model = TeamGameLogService.map_row_teamgamelog_df_to_teamgamelog_model(row)
-                        db.add(teamgamelog_model)
-
-                db.flush()  # Flush avant commit pour s'assurer que les objets sont envoyés à la base de données
-                db.commit()
-
-                # Afficher un message avec le nombre total de TeamGameLogs ajoutés
-                print(f"{count_teamgamelogs} teamgamelogs ont été ajoutés à la base de données.")
-
-            except Exception as e:
-                db.rollback()
-                print(f"Une erreur est survenue lors de l'ajout des teamgamelogs : {e}")
+        TeamGameLogTableMgmt.update_teamgamelog_table()
 
     @staticmethod
     def update_teamgamelog_table():
-
         # Récupérer la liste des ids de toutes les équipes dans la table team
         team_ids_list = TeamService.get_list_all_team_ids()
 
@@ -69,13 +33,17 @@ class TeamGameLogTableMgmt:
                 # Récupérer toute la table teamgamelog avant la boucle
                 df_teamgamelog_in_base = TeamGameLogService.get_df_all_teamgamelogs()
 
+                # Vérification : Si aucun enregistrement existant, utiliser un DataFrame vide
+                if df_teamgamelog_in_base is None or df_teamgamelog_in_base.empty:
+                    print("Aucun TeamGameLog existant trouvé dans la base. Tous les enregistrements API seront considérés comme nouveaux.")
+                    df_teamgamelog_in_base = pd.DataFrame(columns=["team_id", "game_id"])  # Assurez-vous que les colonnes nécessaires sont présentes
+
                 for index, team_id in tqdm(
                         enumerate(team_ids_list),
                         desc="Ajout des teamgamelogs",
                         unit="teamgamelog",
                         total=len(team_ids_list)
                 ):
-
                     # Filtrer les lignes de la table entière pour ne garder que celles correspondant à l'équipe en cours
                     df_pk_teamgamelog_in_base = df_teamgamelog_in_base[df_teamgamelog_in_base['team_id'] == team_id]
 
@@ -92,7 +60,7 @@ class TeamGameLogTableMgmt:
                         indicator=True
                     )
 
-                    # Conserver uniquement les lignes qui ne sont pas dans la base (colonne merge contenant left_only, sinon both)
+                    # Conserver uniquement les lignes qui ne sont pas dans la base
                     teamgamelog_df = merged_df[merged_df["_merge"] == "left_only"].drop(columns=["_merge"])
 
                     # Incrémenter le compteur global avec le nombre de nouvelles lignes
