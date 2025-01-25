@@ -4,6 +4,7 @@ from app.database.declarative_base import Base
 
 
 class Player(Base):
+
     # Nom de la table dans la base de données
     __tablename__ = 'player'
 
@@ -47,6 +48,6 @@ class Player(Base):
     draft_round = Column(String, nullable=True)     # String car peut être Undrafted
     draft_number = Column(String, nullable=True)    # String car peut être Undrafted
 
-    # Relation avec Team
+    # Relations
     team = relationship("Team", backref=None, lazy='joined')
     # boxscores = relationship("Boxscore", backref=None, lazy='joined')
