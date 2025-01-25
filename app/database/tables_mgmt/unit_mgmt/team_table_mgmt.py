@@ -7,7 +7,7 @@ from app.services.nba_api_service import NbaApiService
 from app.services.team_service import TeamService
 
 
-class TeamTableLifeCycle:
+class TeamTableMgmt:
 
     @staticmethod
     def create_team_table():
@@ -77,4 +77,4 @@ class TeamTableLifeCycle:
 
 if __name__ == "__main__":
     #TeamTableLifeCycle.clear_team_table()
-    TeamTableLifeCycle.fill_team_table()
+    TeamTableMgmt.fill_team_table()

@@ -1,3 +1,4 @@
+import pandas as pd
 from app.database.db_connector import session_scope
 from app.dto.teamgamelog_dto import TeamGameLogDTO
 from app.exceptions.exceptions import TeamGameLogNotFoundError
@@ -44,6 +45,19 @@ class TeamGameLogDAO:
             return teamgamelogs_from_sql
 
     @staticmethod
+    def get_df_pk_by_team_id(team_id: int):
+        with session_scope() as session:
+            # Récupérer la liste des tuples (team_id, game_id) pour une équipe donnée
+            list_pk = session.query(TeamGameLog.team_id, TeamGameLog.game_id) \
+                .filter(TeamGameLog.team_id == team_id) \
+                .all()
+
+        # Transformer le résultat de la requête en DataFrame
+        df_pk = pd.DataFrame(list_pk, columns=["team_id", "game_id"])
+
+        return df_pk
+
+    @staticmethod
     def get_all_teamgamelogs():
         with session_scope() as session:
             teamgamelogs_from_sql = session.query(TeamGameLog).all()
@@ -79,3 +93,7 @@ class TeamGameLogDAO:
         teamgamelog_schema = TeamGameLogSchema().dump(teamgamelog_sqlalchemy)
         # Création de l'instance TeamGameLogDTO
         return TeamGameLogDTO(**teamgamelog_schema)
+
+if __name__ == "__main__":
+    list = TeamGameLogDAO.get_df_pk_by_team_id(1610612737)
+    print("")

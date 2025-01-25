@@ -6,7 +6,7 @@ from app.database.db_connector import engine, SessionLocal
 from app.models.boxscore import Boxscore
 
 
-class BoxscoreTableLifeCycle:
+class BoxscoreTableMgmt:
 
     @staticmethod
     def create_boxscore_table():

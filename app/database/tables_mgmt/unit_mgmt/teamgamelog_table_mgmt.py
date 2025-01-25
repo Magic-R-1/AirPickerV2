@@ -4,9 +4,10 @@ from app.database.db_connector import engine, SessionLocal
 from app.models.teamgamelog import TeamGameLog
 from app.services.team_service import TeamService
 from app.services.teamgamelog_service import TeamGameLogService
+from dao.teamgamelog_dao import TeamGameLogDAO
 
 
-class TeamGameLogTableLifeCycle:
+class TeamGameLogTableMgmt:
 
     @staticmethod
     def create_teamgamelog_table():
@@ -15,7 +16,7 @@ class TeamGameLogTableLifeCycle:
         print("Table 'teamgamelog' créée avec succès.")
 
     @staticmethod
-    def fill_teamgamelog_table():
+    def fill_or_update_teamgamelog_table(update: bool = False):
 
         # Récupérer la liste des ids de toutes les équipes dans la table team
         team_ids_list = TeamService.get_all_team_ids()
@@ -23,30 +24,59 @@ class TeamGameLogTableLifeCycle:
         # Boucle id d'équipe par id d'équipe
         with SessionLocal() as db:
             try:
-                # La barre de progression avec tqdm
-                for index, team_id in tqdm(enumerate(team_ids_list), desc="Ajout des teamgamelog", unit="teamgamelog", total=len(team_ids_list)):
+                # Initialiser un compteur global pour les TeamGameLogs
+                count_teamgamelogs = 0
 
-                    # (Récupérer la liste des game_id de la table teamgamelog) : uniquement pour une méthode update, à lancer quotidiennement
-                    # teamgamelog_in_base_list
-                    # Appel API à TeamGameLog
+                for index, team_id in tqdm(
+                        enumerate(team_ids_list),
+                        desc="Ajout des teamgamelogs",
+                        unit="teamgamelog",
+                        total=len(team_ids_list)
+                ):
+
+                    # Appel API à TeamGameLog, pour récupérer les TeamGameLogs de l'équipe
                     teamgamelog_df = TeamGameLogService.get_teamgamelog_df_from_api_by_team_id(team_id)
                     # Passer tous les champs en minuscule
                     teamgamelog_df.columns = teamgamelog_df.columns.str.lower()
-                    # (Conservation uniquement des lignes du dataframe de l'appel, avec un id qui n'est pas en base) : uniquement pour une méthode update, à lancer quotidiennement
-                    # teamgamelog_df = teamgamelog_df[~teamgamelog_df['game_id'].isin(teamgamelog_in_base_list)]
+
+                    # Uniquement pour une méthode update
+                    if update:
+                        # Récupérer la liste des (team_id, game_id) de la table teamgamelog, uniquement pour une méthode update
+                        df_pk_teamgamelog_in_base = TeamGameLogDAO.get_df_pk_by_team_id(team_id)
+
+                        # Effectuer un merge pour garder uniquement les nouvelles lignes
+                        merged_df = teamgamelog_df.merge(
+                            df_pk_teamgamelog_in_base,
+                            on=["team_id", "game_id"],
+                            how="left",
+                            indicator=True
+                        )
+
+                        # Conserver uniquement les lignes qui ne sont pas dans la base (colonne merge contenant left_only, sinon both)
+                        teamgamelog_df = merged_df[merged_df["_merge"] == "left_only"].drop(columns=["_merge"])
+
+                    # Incrémenter le compteur global avec le nombre de nouvelles lignes
+                    count_teamgamelogs += len(teamgamelog_df)
 
                     # Boucle sur les lignes du DataFrame
                     for i, row in teamgamelog_df.iterrows():
                         teamgamelog_model = TeamGameLogService.map_row_teamgamelog_df_to_teamgamelog_model(row)
-                        # print(type(teamgamelog_model))
                         db.add(teamgamelog_model)
 
+                db.flush()  # Flush avant commit pour s'assurer que les objets sont envoyés à la base de données
                 db.commit()
-                print(f"Tous les {len(team_ids_list)} teamgamelogs disponibles ont été ajoutés à la base de données avec succès.")
+
+                # Afficher un message avec le nombre total de TeamGameLogs ajoutés
+                message = f"{count_teamgamelogs} {'nouveaux ' if update else ''}teamgamelogs ont été ajoutés à la base de données."
+                print(message)
 
             except Exception as e:
                 db.rollback()
                 print(f"Une erreur est survenue lors de l'ajout des teamgamelogs : {e}")
+
+    @staticmethod
+    def update_teamgamelog_table():
+        TeamGameLogTableMgmt.fill_or_update_teamgamelog_table(True)
 
     @staticmethod
     def clear_teamgamelog_table():
@@ -71,4 +101,4 @@ class TeamGameLogTableLifeCycle:
                 print(f"Une erreur est survenue lors de la suppression de la table teamgamelog : {e}")
 
 if __name__ == "__main__":
-    TeamGameLogTableLifeCycle.fill_teamgamelog_table()
+    TeamGameLogTableMgmt.update_teamgamelog_table()
