@@ -8,10 +8,10 @@ class DropTables:
 
     @staticmethod
     def drop_all_tables():
+        BoxscoreTableMgmt.drop_boxscore_table()
+        TeamGameLogTableMgmt.drop_teamgamelog_table()
         PlayerTableMgmt.drop_player_table()
         TeamTableMgmt.drop_team_table()
-        #BoxscoreTableLifeCycle.drop_boxscore_table()
-        #TeamGameLogTableLifeCycle.drop_teamgamelog_table()
-
+        
 if __name__ == "__main__":
     DropTables.drop_all_tables()
