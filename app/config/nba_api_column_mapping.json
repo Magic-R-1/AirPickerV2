@@ -1,0 +1,572 @@
+{
+  "game_id": {
+    "reference": "game_id",
+    "exemple": "0022300061",
+    "endpoints": {
+      "boxscoretraditionalv3": "gameId",
+      "teamgamelog": "Game_ID",
+      "commonplayerinfo": "TEAM_ID"
+    }
+  },
+  "team_id": {
+    "reference": "team_id",
+    "exemple": "1610612747",
+    "endpoints": {
+      "boxscoretraditionalv3": "teamId",
+      "teamgamelog": "Team_ID",
+      "commonplayerinfo": "TEAM_ID",
+      "teams.get_teams": "id"
+    }
+  },
+  "team_city": {
+    "reference": "team_city",
+    "exemple": "Los Angeles",
+    "endpoints": {
+      "boxscoretraditionalv3": "teamCity",
+      "teamgamelog": "",
+      "commonplayerinfo": "TEAM_CITY",
+      "teams.get_teams": "city"
+    }
+  },
+  "team_name": {
+    "reference": "team_name",
+    "exemple": "Lakers",
+    "endpoints": {
+      "boxscoretraditionalv3": "teamName",
+      "teamgamelog": "",
+      "commonplayerinfo": "TEAM_NAME",
+      "teams.get_teams": "nickname"
+    }
+  },
+  "team_tricode": {
+    "reference": "team_tricode",
+    "exemple": "LAL",
+    "endpoints": {
+      "boxscoretraditionalv3": "teamTricode",
+      "teamgamelog": "",
+      "commonplayerinfo": "TEAM_ABBREVIATION",
+      "teams.get_teams": "abbreviation"
+    }
+  },
+  "team_slug": {
+    "reference": "team_slug",
+    "exemple": "lakers",
+    "endpoints": {
+      "boxscoretraditionalv3": "teamSlug",
+      "teamgamelog": "",
+      "commonplayerinfo": "TEAM_CODE"
+    }
+  },
+  "full_name": {
+    "reference": "full_name",
+    "exemple": "Los Angeles Lakers",
+    "endpoints": {
+      "boxscoretraditionalv3": "",
+      "teamgamelog": "",
+      "commonplayerinfo": "full_name"
+    }
+  },
+  "state": {
+    "reference": "state",
+    "exemple": "California",
+    "endpoints": {
+      "boxscoretraditionalv3": "",
+      "teamgamelog": "",
+      "commonplayerinfo": "state"
+    }
+  },
+  "year_founded": {
+    "reference": "year_founded",
+    "exemple": "1948",
+    "endpoints": {
+      "boxscoretraditionalv3": "",
+      "teamgamelog": "",
+      "commonplayerinfo": "year_founded"
+    }
+  },
+  "game_date": {
+    "reference": "game_date",
+    "exemple": "APR 14, 2024",
+    "endpoints": {
+      "boxscoretraditionalv3": "",
+      "teamgamelog": "GAME_DATE",
+      "commonplayerinfo": ""
+    }
+  },
+  "matchup": {
+    "reference": "matchup",
+    "exemple": "DAL @ OKC",
+    "endpoints": {
+      "boxscoretraditionalv3": "",
+      "teamgamelog": "MATCHUP",
+      "commonplayerinfo": ""
+    }
+  },
+  "player_id": {
+    "reference": "player_id",
+    "exemple": "1627752",
+    "endpoints": {
+      "boxscoretraditionalv3": "personId",
+      "teamgamelog": "",
+      "commonplayerinfo": "PERSON_ID"
+    }
+  },
+  "first_name": {
+    "reference": "first_name",
+    "exemple": "LeBron",
+    "endpoints": {
+      "boxscoretraditionalv3": "firstName",
+      "teamgamelog": "",
+      "commonplayerinfo": "FIRST_NAME"
+    }
+  },
+  "family_name": {
+    "reference": "family_name",
+    "exemple": "James",
+    "endpoints": {
+      "boxscoretraditionalv3": "familyName",
+      "teamgamelog": "",
+      "commonplayerinfo": "LAST_NAME"
+    }
+  },
+  "display_first_last": {
+    "reference": "display_first_last",
+    "exemple": "LeBron James",
+    "endpoints": {
+      "boxscoretraditionalv3": "",
+      "teamgamelog": "",
+      "commonplayerinfo": "DISPLAY_FIRST_LAST"
+    }
+  },
+  "display_last_comma_first": {
+    "reference": "display_last_comma_first",
+    "exemple": "James, LeBron",
+    "endpoints": {
+      "boxscoretraditionalv3": "",
+      "teamgamelog": "",
+      "commonplayerinfo": "DISPLAY_LAST_COMMA_FIRST"
+    }
+  },
+    "display_fi_last": {
+    "reference": "display_fi_last",
+    "exemple": "L. James",
+    "endpoints": {
+      "boxscoretraditionalv3": "nameI",
+      "teamgamelog": "",
+      "commonplayerinfo": "DISPLAY_FI_LAST"
+    }
+  },
+  "player_slug": {
+    "reference": "player_slug",
+    "exemple": "lebron-james",
+    "endpoints": {
+      "boxscoretraditionalv3": "playerSlug",
+      "teamgamelog": "",
+      "commonplayerinfo": "PLAYER_SLUG"
+    }
+  },
+  "player_code": {
+    "reference": "player_code",
+    "exemple": "lebron_james",
+    "endpoints": {
+      "boxscoretraditionalv3": "playerSlug",
+      "teamgamelog": "",
+      "commonplayerinfo": "PLAYERCODE"
+    }
+  },
+  "birthdate": {
+    "reference": "birthdate",
+    "exemple": "1998-03-03T00:00:00",
+    "endpoints": {
+      "boxscoretraditionalv3": "",
+      "teamgamelog": "",
+      "commonplayerinfo": "BIRTHDATE"
+    }
+  },
+  "school": {
+    "reference": "school",
+    "exemple": "Duke",
+    "endpoints": {
+      "boxscoretraditionalv3": "",
+      "teamgamelog": "",
+      "commonplayerinfo": "SCHOOL"
+    }
+  },
+  "country": {
+    "reference": "country",
+    "exemple": "USA",
+    "endpoints": {
+      "boxscoretraditionalv3": "",
+      "teamgamelog": "",
+      "commonplayerinfo": "COUNTRY"
+    }
+  },
+  "last_affiliation": {
+    "reference": "last_affiliation",
+    "exemple": "Duke/USA",
+    "endpoints": {
+      "boxscoretraditionalv3": "",
+      "teamgamelog": "",
+      "commonplayerinfo": "LAST_AFFILIATION"
+    }
+  },
+  "height": {
+    "reference": "height",
+    "exemple": "6-8",
+    "endpoints": {
+      "boxscoretraditionalv3": "",
+      "teamgamelog": "",
+      "commonplayerinfo": "HEIGHT"
+    }
+  },
+  "weight": {
+    "reference": "weight",
+    "exemple": "210",
+    "endpoints": {
+      "boxscoretraditionalv3": "",
+      "teamgamelog": "",
+      "commonplayerinfo": "WEIGHT"
+    }
+  },
+  "season_exp": {
+    "reference": "season_exp",
+    "exemple": "20",
+    "endpoints": {
+      "boxscoretraditionalv3": "",
+      "teamgamelog": "",
+      "commonplayerinfo": "SEASON_EXP"
+    }
+  },
+  "roster_status": {
+    "reference": "roster_status",
+    "exemple": "Active",
+    "endpoints": {
+      "boxscoretraditionalv3": "",
+      "teamgamelog": "",
+      "commonplayerinfo": "ROSTERSTATUS"
+    }
+  },
+  "from_year": {
+    "reference": "from_year",
+    "exemple": "2001",
+    "endpoints": {
+      "boxscoretraditionalv3": "",
+      "teamgamelog": "",
+      "commonplayerinfo": "FROM_YEAR"
+    }
+  },
+  "to_year": {
+    "reference": "to_year",
+    "exemple": "2020",
+    "endpoints": {
+      "boxscoretraditionalv3": "",
+      "teamgamelog": "",
+      "commonplayerinfo": "TO_YEAR"
+    }
+  },
+    "dleague_flag": {
+    "reference": "dleague_flag",
+    "exemple": ["Y","N"],
+    "endpoints": {
+      "boxscoretraditionalv3": "",
+      "teamgamelog": "",
+      "commonplayerinfo": "DLEAGUE_FLAG"
+    }
+  },
+  "nba_flag": {
+    "reference": "nba_flag",
+    "exemple": ["Y","N"],
+    "endpoints": {
+      "boxscoretraditionalv3": "",
+      "teamgamelog": "",
+      "commonplayerinfo": "NBA_FLAG"
+    }
+  },
+  "games_played_flag": {
+    "reference": "games_played_flag",
+    "exemple": ["Y","N"],
+    "endpoints": {
+      "boxscoretraditionalv3": "",
+      "teamgamelog": "",
+      "commonplayerinfo": "GAMES_PLAYED_FLAG"
+    }
+  },
+  "draft_year": {
+    "reference": "draft_year",
+    "exemple": "2001",
+    "endpoints": {
+      "boxscoretraditionalv3": "",
+      "teamgamelog": "",
+      "commonplayerinfo": "DRAFT_YEAR"
+    }
+  },
+  "draft_round": {
+    "reference": "draft_round",
+    "exemple": "1",
+    "endpoints": {
+      "boxscoretraditionalv3": "",
+      "teamgamelog": "",
+      "commonplayerinfo": "DRAFT_ROUND"
+    }
+  },
+  "draft_number": {
+    "reference": "draft_number",
+    "exemple": "1",
+    "endpoints": {
+      "boxscoretraditionalv3": "",
+      "teamgamelog": "",
+      "commonplayerinfo": "DRAFT_NUMBER"
+    }
+  },
+    "position": {
+    "reference": "position",
+    "exemple": "F",
+    "endpoints": {
+      "boxscoretraditionalv3": "position",
+      "teamgamelog": "",
+      "commonplayerinfo": ""
+    }
+  },
+  "full_position": {
+    "reference": "full_position",
+    "exemple": "Forward-Guard",
+    "endpoints": {
+      "teamgamelog": "",
+      "commonplayerinfo": "POSITION"
+    }
+  },
+  "comment": {
+    "reference": "comment",
+    "exemple": "",
+    "endpoints": {
+      "boxscoretraditionalv3": "comment",
+      "teamgamelog": "",
+      "commonplayerinfo": ""
+    }
+  },
+  "jersey_num": {
+    "reference": "jersey_num",
+    "exemple": "23",
+    "endpoints": {
+      "boxscoretraditionalv3": "jerseyNum",
+      "teamgamelog": "",
+      "commonplayerinfo": "JERSEY"
+    }
+  },
+  "wl": {
+    "reference": "wl",
+    "exemple": ["W","L"],
+    "endpoints": {
+      "boxscoretraditionalv3": "",
+      "teamgamelog": "WL",
+      "commonplayerinfo": ""
+    }
+  },
+  "w": {
+    "reference": "w",
+    "exemple": "50",
+    "endpoints": {
+      "boxscoretraditionalv3": "",
+      "teamgamelog": "W",
+      "commonplayerinfo": ""
+    }
+  },
+  "l": {
+    "reference": "l",
+    "exemple": "50",
+    "endpoints": {
+      "boxscoretraditionalv3": "",
+      "teamgamelog": "L",
+      "commonplayerinfo": ""
+    }
+  },
+  "w_pct": {
+    "reference": "w_pct",
+    "exemple": "0.61",
+    "endpoints": {
+      "boxscoretraditionalv3": "",
+      "teamgamelog": "W_PCT",
+      "commonplayerinfo": ""
+    }
+  },
+  "minutes": {
+    "reference": "minutes",
+    "exemple": "29:53",
+    "endpoints": {
+      "boxscoretraditionalv3": "minutes",
+      "teamgamelog": "MIN",
+      "commonplayerinfo": ""
+    }
+  },
+  "fgm": {
+    "reference": "fgm",
+    "exemple": "",
+    "endpoints": {
+      "boxscoretraditionalv3": "fieldGoalsMade",
+      "teamgamelog": "FGM",
+      "commonplayerinfo": ""
+    }
+  },
+  "fga": {
+    "reference": "fga",
+    "exemple": "",
+    "endpoints": {
+      "boxscoretraditionalv3": "fieldGoalsAttempted",
+      "teamgamelog": "FGA",
+      "commonplayerinfo": ""
+    }
+  },
+  "fg_pct": {
+    "reference": "fg_pct",
+    "exemple": "0.75",
+    "endpoints": {
+      "boxscoretraditionalv3": "fieldGoalsPercentage",
+      "teamgamelog": "FG_PCT",
+      "commonplayerinfo": ""
+    }
+  },
+  "fg3m": {
+    "reference": "fg3m",
+    "exemple": "",
+    "endpoints": {
+      "boxscoretraditionalv3": "threePointersMade",
+      "teamgamelog": "FG3M",
+      "commonplayerinfo": ""
+    }
+  },
+  "fg3a": {
+    "reference": "fg3a",
+    "exemple": "",
+    "endpoints": {
+      "boxscoretraditionalv3": "threePointersAttempted",
+      "teamgamelog": "FG3A",
+      "commonplayerinfo": ""
+    }
+  },
+  "fg3_pct": {
+    "reference": "fg3_pct",
+    "exemple": "0.35",
+    "endpoints": {
+      "boxscoretraditionalv3": "threePointersPercentage",
+      "teamgamelog": "FG3_PCT",
+      "commonplayerinfo": ""
+    }
+  },
+  "ftm": {
+    "reference": "ftm",
+    "exemple": "",
+    "endpoints": {
+      "boxscoretraditionalv3": "freeThrowsMade",
+      "teamgamelog": "FTM",
+      "commonplayerinfo": ""
+    }
+  },
+  "fta": {
+    "reference": "fta",
+    "exemple": "",
+    "endpoints": {
+      "boxscoretraditionalv3": "freeThrowsAttempted",
+      "teamgamelog": "FTA",
+      "commonplayerinfo": ""
+    }
+  },
+  "ft_pct": {
+    "reference": "ft_pct",
+    "exemple": "0.9",
+    "endpoints": {
+      "boxscoretraditionalv3": "freeThrowsPercentage",
+      "teamgamelog": "FT_PCT",
+      "commonplayerinfo": ""
+    }
+  },
+  "o_reb": {
+    "reference": "oreb",
+    "exemple": "",
+    "endpoints": {
+      "boxscoretraditionalv3": "reboundsOffensive",
+      "teamgamelog": "OREB",
+      "commonplayerinfo": ""
+    }
+  },
+  "d_reb": {
+    "reference": "dreb",
+    "exemple": "",
+    "endpoints": {
+      "boxscoretraditionalv3": "reboundsDefensive",
+      "teamgamelog": "DREB",
+      "commonplayerinfo": ""
+    }
+  },
+  "reb": {
+    "reference": "reb",
+    "exemple": "",
+    "endpoints": {
+      "boxscoretraditionalv3": "reboundsTotal",
+      "teamgamelog": "REB",
+      "commonplayerinfo": ""
+    }
+  },
+  "ast": {
+    "reference": "ast",
+    "exemple": "",
+    "endpoints": {
+      "boxscoretraditionalv3": "assists",
+      "teamgamelog": "AST",
+      "commonplayerinfo": ""
+    }
+  },
+  "stl": {
+    "reference": "stl",
+    "exemple": "",
+    "endpoints": {
+      "boxscoretraditionalv3": "steals",
+      "teamgamelog": "STL",
+      "commonplayerinfo": ""
+    }
+  },
+  "blk": {
+    "reference": "blk",
+    "exemple": "",
+    "endpoints": {
+      "boxscoretraditionalv3": "blocks",
+      "teamgamelog": "BLK",
+      "commonplayerinfo": ""
+    }
+  },
+  "tov": {
+    "reference": "tov",
+    "exemple": "",
+    "endpoints": {
+      "boxscoretraditionalv3": "turnovers",
+      "teamgamelog": "TOV",
+      "commonplayerinfo": ""
+    }
+  },
+  "pf": {
+    "reference": "pf",
+    "exemple": "",
+    "endpoints": {
+      "boxscoretraditionalv3": "foulsPersonal",
+      "teamgamelog": "PF",
+      "commonplayerinfo": ""
+    }
+  },
+  "pts": {
+    "reference": "pts",
+    "exemple": "",
+    "endpoints": {
+      "boxscoretraditionalv3": "points",
+      "teamgamelog": "PTS",
+      "commonplayerinfo": ""
+    }
+  },
+  "plus_minus_points": {
+    "reference": "plus_minus_points",
+    "exemple": "5",
+    "endpoints": {
+      "boxscoretraditionalv3": "plusMinusPoints",
+      "teamgamelog": "",
+      "commonplayerinfo": ""
+    }
+  }
+}
