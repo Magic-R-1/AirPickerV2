@@ -2,19 +2,14 @@ import os
 import json
 import pandas as pd
 
-from enum.nba_api_endpoints import NbaApiEndpoints
+from enums.nba_api_endpoints import NbaApiEndpoints
 from services.player_service import PlayerService
 
 
 class NbaApiColumnMapper:
+
     # Charger le chemin du fichier JSON une seule fois pour éviter de charger à chaque appel de méthode
     json_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'config', 'nba_api_column_mapping.json')
-
-    @staticmethod
-    def debug_chemin():
-        """Debug le chemin vers le fichier JSON."""
-        print(os.path.join(os.path.dirname(os.path.abspath(__file__))))
-        print(NbaApiColumnMapper.json_path)
 
     @staticmethod
     def _load_json():
@@ -38,7 +33,7 @@ class NbaApiColumnMapper:
             for endpoint, endpoint_value in endpoints.items():
                 if endpoint_value == field:  # Si la valeur dans endpoints correspond au field
                     return value.get('reference', None)
-        return None  # Si la référence n'est pas trouvée
+        return None
 
     @staticmethod
     def get_endpoints(field: str):
@@ -49,7 +44,7 @@ class NbaApiColumnMapper:
         for key, value in data.items():
             if field in value.get('endpoints', {}).values():
                 return value.get('endpoints', {})
-        return {}  # Si aucun endpoint trouvé
+        return {}
 
     @staticmethod
     def get_example(field: str):
@@ -60,10 +55,10 @@ class NbaApiColumnMapper:
         for key, value in data.items():
             if field in value.get('endpoints', {}).values():
                 return value.get('exemple', None)
-        return None  # Si aucun exemple trouvé
+        return None
 
     @staticmethod
-    def get_field_for_endpoint(endpoint: str, field: str):
+    def get_field_for_endpoint(endpoint: NbaApiEndpoints, field: str):
         """Retourne le champ correspondant à un endpoint pour un champ donné."""
         data = NbaApiColumnMapper._load_json()
 
@@ -77,7 +72,7 @@ class NbaApiColumnMapper:
             for endpoint_key, endpoint_value in endpoints.items():
                 if endpoint_value == field and endpoint_key == endpoint:
                     return key  # Retourner la clé du champ, ici 'player_id'
-        return None  # Retourner None si aucun champ ne correspond
+        return None
 
     @staticmethod
     def rename_columns(df: pd.DataFrame, endpoint: NbaApiEndpoints):

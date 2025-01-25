@@ -12,7 +12,6 @@ class Boxscore(Base):
     team_name = Column(String, nullable=True)
     team_tricode = Column(String, nullable=True)
     team_slug = Column(String, nullable=True)
-    # TODO : renommer person_id en player_id au moment de remplir la table
     player_id = Column(Integer, ForeignKey('player.player_id'), primary_key=True)  # Utilisation de player_id dans la clé primaire, et clé étrangère vers la table Player
     first_name = Column(String, nullable=True)
     family_name = Column(String, nullable=True)
