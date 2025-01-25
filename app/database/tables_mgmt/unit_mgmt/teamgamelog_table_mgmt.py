@@ -36,7 +36,7 @@ class TeamGameLogTableMgmt:
                 # Vérification : Si aucun enregistrement existant, utiliser un DataFrame vide
                 if df_teamgamelog_in_base is None or df_teamgamelog_in_base.empty:
                     print("Aucun TeamGameLog existant trouvé dans la base. Tous les enregistrements API seront considérés comme nouveaux.")
-                    df_teamgamelog_in_base = pd.DataFrame(columns=["team_id", "game_id"])  # Assurez-vous que les colonnes nécessaires sont présentes
+                    df_teamgamelog_in_base = pd.DataFrame(columns=["team_id", "game_id"])
 
                 for index, team_id in tqdm(
                         enumerate(team_ids_list),
