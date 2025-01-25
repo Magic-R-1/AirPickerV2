@@ -57,8 +57,8 @@
       "commonplayerinfo": "TEAM_CODE"
     }
   },
-  "full_name": {
-    "reference": "full_name",
+  "team_full_name": {
+    "reference": "team_full_name",
     "exemple": "Los Angeles Lakers",
     "endpoints": {
       "boxscoretraditionalv3": "",
@@ -66,8 +66,8 @@
       "commonplayerinfo": "full_name"
     }
   },
-  "state": {
-    "reference": "state",
+  "team_state": {
+    "reference": "team_state",
     "exemple": "California",
     "endpoints": {
       "boxscoretraditionalv3": "",

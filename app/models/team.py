@@ -1,19 +1,20 @@
-from sqlalchemy import Column, Integer, String, Float, Boolean, Date
-from sqlalchemy.orm import relationship
+from sqlalchemy import Column, Integer, String
 from app.database.declarative_base import Base
 
 
 class Team(Base):
-    __tablename__ = 'team'  # Nom de la table dans la base de données
 
-    # Définition des colonnes
+    # Nom de la table dans la base de données
+    __tablename__ = 'team'
+
+    # Nom des colonnes dans la base de données
     team_id = Column(Integer, primary_key=True)
-    full_name = Column(String, nullable=True)
-    abbreviation = Column(String, nullable=True)
-    nickname = Column(String, nullable=True)
-    city = Column(String, nullable=True)
-    state = Column(String, nullable=True)
-    year_founded = Column(Integer, nullable=True)
 
-    # Relation one-to-many avec Player
-    # players = relationship(Player, back_populates="team", lazy='select')
+    team_full_name = Column(String, nullable=True)
+    team_tricode = Column(String, nullable=True)
+    team_name = Column(String, nullable=True)
+
+    team_city = Column(String, nullable=True)
+    team_state = Column(String, nullable=True)
+
+    year_founded = Column(Integer, nullable=True)

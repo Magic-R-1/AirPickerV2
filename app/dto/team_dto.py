@@ -1,4 +1,4 @@
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from typing import Optional
 
 
@@ -7,19 +7,17 @@ class TeamDTO:
 
     # Attributs provenant de la base de données
     team_id: [int] = None
-    full_name: Optional[str] = None
-    abbreviation: Optional[str] = None
-    nickname: Optional[str] = None
-    city: Optional[str] = None
-    state: Optional[str] = None
+
+    team_full_name: Optional[str] = None
+    team_tricode: Optional[str] = None
+    team_name: Optional[str] = None
+
+    team_city: Optional[str] = None
+    team_state: Optional[str] = None
+
     year_founded: Optional[int] = None
 
-    # Attributs relationnels
-    # players: Optional[List[PlayerDTO]] = None
-
-    # Attributs fonctionnels
-    #
 
     def __repr__(self):
         # Affichage propre pour le débogage ou la journalisation
-        return f"TeamDTO(id={self.team_id}, full_name={self.full_name}, abbreviation={self.abbreviation}, city={self.city})"
+        return f"TeamDTO(id={self.team_id}, team_full_name={self.team_full_name}, team_tricode={self.team_tricode}, team_city={self.team_city})"
