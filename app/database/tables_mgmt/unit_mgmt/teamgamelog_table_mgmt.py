@@ -29,7 +29,7 @@ class TeamGameLogTableLifeCycle:
                     # (Récupérer la liste des game_id de la table teamgamelog) : uniquement pour une méthode update, à lancer quotidiennement
                     # teamgamelog_in_base_list
                     # Appel API à TeamGameLog
-                    teamgamelog_df = TeamGameLogService.get_teamgamelog_df_by_team_id(team_id)
+                    teamgamelog_df = TeamGameLogService.get_teamgamelog_df_from_api_by_team_id(team_id)
                     # Passer tous les champs en minuscule
                     teamgamelog_df.columns = teamgamelog_df.columns.str.lower()
                     # (Conservation uniquement des lignes du dataframe de l'appel, avec un id qui n'est pas en base) : uniquement pour une méthode update, à lancer quotidiennement

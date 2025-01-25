@@ -5,6 +5,8 @@ from app.utils.utils import Utils
 from marshmallow import ValidationError
 import pandas as pd
 
+from dao.teamgamelog_dao import TeamGameLogDAO
+
 
 class TeamGameLogService:
 
@@ -12,11 +14,31 @@ class TeamGameLogService:
         pass
 
     @staticmethod
-    def get_teamgamelog_df_by_team_id(team_id: int):
+    def get_teamgamelog_df_from_api_by_team_id(team_id: int):
         teamgamelog_data = NbaApiService.get_team_game_log_by_team_id(team_id)
         teamgamelog_df = Utils.obtenir_df_manipulable(teamgamelog_data)
 
         return teamgamelog_df
+
+    @staticmethod
+    def get_list_teamgamelog_dto_by_team_id(team_id: int):
+        """
+        Récupère une liste de TeamGameLogDTO pour un team_id donné.
+
+        :param team_id: L'ID de l'équipe dont les TeamGameLogs sont recherchés.
+        :return: Liste d'instances de TeamGameLogDTO.
+        :raises TeamGameLogNotFoundError: Si aucun TeamGameLog n'est trouvé pour l'équipe donnée.
+        """
+        # Récupérer les TeamGameLog depuis la base
+        teamgamelogs_from_sql = TeamGameLogDAO.get_teamgamelogs_by_team_id(team_id)
+
+        # Convertir chaque TeamGameLog en DTO
+        teamgamelogs_dto = [
+            TeamGameLogDAO.teamgamelog_from_sql_to_dto(teamgamelog)
+            for teamgamelog in teamgamelogs_from_sql
+        ]
+
+        return teamgamelogs_dto
 
     @staticmethod
     def map_teamgamelog_df_to_teamgamelog_models(teamgamelog_df: pd.DataFrame):
@@ -63,5 +85,6 @@ class TeamGameLogService:
 
 if __name__ == "__main__":
 
-    teamgamelog_df = TeamGameLogService.get_teamgamelog_df_by_team_id(1610612742)
+    #teamgamelog_df = TeamGameLogService.get_teamgamelog_df_from_api_by_team_id(1610612742)
+    list = TeamGameLogService.get_list_teamgamelog_dto_by_team_id(1610612737)
     print("toto")

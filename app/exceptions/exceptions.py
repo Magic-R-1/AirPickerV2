@@ -9,3 +9,7 @@ class TeamNotFoundError(Exception):
 class BoxscoreNotFoundError(Exception):
     """Exception levée lorsqu'une Boxscore n'est pas trouvée."""
     pass
+
+class TeamGameLogNotFoundError(Exception):
+    """Exception levée lorsqu'une TeamGameLog n'est pas trouvée."""
+    pass
