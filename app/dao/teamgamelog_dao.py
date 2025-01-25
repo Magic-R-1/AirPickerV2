@@ -52,10 +52,7 @@ class TeamGameLogDAO:
                 .filter(TeamGameLog.team_id == team_id) \
                 .all()
 
-        # Transformer le résultat de la requête en DataFrame
-        df_pk = pd.DataFrame(list_pk, columns=["team_id", "game_id"])
-
-        return df_pk
+        return list_pk
 
     @staticmethod
     def get_all_teamgamelogs():
@@ -69,7 +66,7 @@ class TeamGameLogDAO:
     # =================================
 
     @staticmethod
-    def player_from_dto_to_sql(teamgamelog_dto: TeamGameLogDTO):
+    def teamgamelog_from_dto_to_sql(teamgamelog_dto: TeamGameLogDTO):
         """
         Convertit une instance TeamGameLogDTO en une instance SQLAlchemy TeamGameLog en passant par TeamGameLogSchema.
 

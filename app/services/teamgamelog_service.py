@@ -14,7 +14,7 @@ class TeamGameLogService:
         pass
 
     @staticmethod
-    def get_teamgamelog_df_from_api_by_team_id(team_id: int):
+    def get_df_teamgamelog_from_api_by_team_id(team_id: int):
         teamgamelog_data = NbaApiService.get_team_game_log_by_team_id(team_id)
         teamgamelog_df = Utils.obtenir_df_manipulable(teamgamelog_data)
 
@@ -41,7 +41,34 @@ class TeamGameLogService:
         return teamgamelogs_dto
 
     @staticmethod
-    def map_teamgamelog_df_to_teamgamelog_models(teamgamelog_df: pd.DataFrame):
+    def get_df_all_teamgamelogs():
+
+        teamgamelogs_from_sql = TeamGameLogDAO.get_all_teamgamelogs()
+
+        # Utilisation de la méthode `__dict__` pour obtenir les attributs des objets en dictionnaire
+        teamgamelogs_dict = [teamgamelog.__dict__ for teamgamelog in teamgamelogs_from_sql]
+
+        # Convertir la liste de dictionnaires en DataFrame
+        df_teamgamelogs = pd.DataFrame(teamgamelogs_dict)
+
+        # Supprimer la colonne '__table__' ajoutée par SQLAlchemy pour l'auto-référence
+        if '_sa_instance_state' in df_teamgamelogs.columns:
+            df_teamgamelogs.drop('_sa_instance_state', axis=1, inplace=True)
+
+        return df_teamgamelogs
+
+    @staticmethod
+    def get_df_pk_teamgamelog_by_team_id(team_id: int):
+
+        list_pk = TeamGameLogDAO.get_df_pk_by_team_id(team_id)
+
+        # Transformer le résultat de la requête en DataFrame
+        df_pk = pd.DataFrame(list_pk, columns=["team_id", "game_id"])
+
+        return df_pk
+
+    @staticmethod
+    def map_df_teamgamelog_to_teamgamelog_models(teamgamelog_df: pd.DataFrame):
         """
         Cette méthode prend un DataFrame et le convertit en une liste de TeamGameLog
         en utilisant le schema Marshmallow.
@@ -49,7 +76,6 @@ class TeamGameLogService:
         :param teamgamelog_df: DataFrame contenant les données des matchs
         :return: Liste de dictionnaires représentant les objets TeamGameLog
         """
-        team_game_log_schema = TeamGameLogSchema()
         team_game_logs = []
 
         for index, row in teamgamelog_df.iterrows():
