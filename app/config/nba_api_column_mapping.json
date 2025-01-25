@@ -5,7 +5,7 @@
     "endpoints": {
       "boxscoretraditionalv3": "gameId",
       "teamgamelog": "Game_ID",
-      "commonplayerinfo": "TEAM_ID"
+      "commonplayerinfo": ""
     }
   },
   "team_id": {

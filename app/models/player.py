@@ -11,7 +11,7 @@ class Player(Base):
     # Nom des colonnes dans la base de données
     player_id = Column(Integer, primary_key=True)
     first_name = Column(String, nullable=True)
-    last_name = Column(String, nullable=True)
+    family_name = Column(String, nullable=True)
     display_first_last = Column(String, nullable=True)
     display_last_comma_first = Column(String, nullable=True)
     display_fi_last = Column(String, nullable=True)
@@ -24,14 +24,14 @@ class Player(Base):
     height = Column(String, nullable=True)
     weight = Column(Integer, nullable=True)
     season_exp = Column(Integer, nullable=True)
-    jersey = Column(Integer, nullable=True)
-    position = Column(String, nullable=True)
+    jersey_num = Column(Integer, nullable=True)
+    full_position = Column(String, nullable=True)
     roster_status = Column(String, nullable=True)
 
     team_id = Column(Integer, ForeignKey("team.team_id"), nullable=True)
     team_name = Column(String, nullable=True)
-    team_abbreviation = Column(String, nullable=True)
-    team_code = Column(String, nullable=True)
+    team_tricode = Column(String, nullable=True)
+    team_slug = Column(String, nullable=True)
     team_city = Column(String, nullable=True)
 
     player_code = Column(String, nullable=True)

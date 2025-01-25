@@ -3,7 +3,7 @@ import json
 import pandas as pd
 
 from enums.nba_api_endpoints import NbaApiEndpoints
-from services.player_service import PlayerService
+# from services.player_service import PlayerService # import circulaire
 
 
 class NbaApiColumnMapper:
@@ -107,6 +107,6 @@ class NbaApiColumnMapper:
 
 if __name__ == "__main__":
     # Exemple d'utilisation pour renommer les colonnes
-    df_avant = PlayerService.get_common_player_info_df_by_player_id(2544)
-    df_apres = NbaApiColumnMapper.rename_columns(df_avant, NbaApiEndpoints.BOX_SCORE_TRADITIONAL_V3.value)
+    # df_avant = PlayerService.get_df_common_player_info_by_player_id(2544)
+    # df_apres = NbaApiColumnMapper.rename_columns(df_avant, NbaApiEndpoints.BOX_SCORE_TRADITIONAL_V3.value)
     print("toto")

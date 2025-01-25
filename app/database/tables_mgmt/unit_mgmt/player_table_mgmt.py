@@ -13,7 +13,6 @@ class PlayerTableMgmt:
     @staticmethod
     def create_player_table():
         Player.__table__.create(engine)
-
         print("Table 'player' créée avec succès.")
 
     @staticmethod
@@ -38,8 +37,9 @@ class PlayerTableMgmt:
             try:
                 # La barre de progression avec tqdm
                 for i, player in tqdm(enumerate(players_list), desc="Ajout des joueurs", unit="joueur", total=len(players_list)):
-                    player_id = player['id']
-                    player_info = PlayerService.get_common_player_info_df_by_player_id(player_id)
+
+                    # Récupérer le DataFrame commonplayerinfo depuis l'API
+                    player_info = PlayerService.get_df_common_player_info_by_player_id(player['id'])
 
                     # Mapper les données de l'API vers PlayerDTO
                     player_dto = PlayerService.map_common_player_info_to_player_dto(player_info)

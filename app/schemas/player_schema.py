@@ -1,6 +1,5 @@
 from marshmallow import Schema, fields
 
-from app.schemas.boxscore_schema import BoxscoreSchema
 from app.schemas.team_schema import TeamSchema
 
 
@@ -8,7 +7,7 @@ class PlayerSchema(Schema):
 
     player_id = fields.Int(required=True)
     first_name = fields.Str(allow_none=True)
-    last_name = fields.Str(allow_none=True)
+    family_name = fields.Str(allow_none=True)
     display_first_last = fields.Str(allow_none=True)
     display_last_comma_first = fields.Str(allow_none=True)
     display_fi_last = fields.Str(allow_none=True)
@@ -21,14 +20,14 @@ class PlayerSchema(Schema):
     height = fields.Str(allow_none=True)
     weight = fields.Int(allow_none=True)
     season_exp = fields.Int(allow_none=True)
-    jersey = fields.Int(allow_none=True)
-    position = fields.Str(allow_none=True)
+    jersey_num = fields.Int(allow_none=True)
+    full_position = fields.Str(allow_none=True)
     roster_status = fields.Str(allow_none=True)
 
     team_id = fields.Int(allow_none=True)
     team_name = fields.Str(allow_none=True)
-    team_abbreviation = fields.Str(allow_none=True)
-    team_code = fields.Str(allow_none=True)
+    team_tricode = fields.Str(allow_none=True)
+    team_slug = fields.Str(allow_none=True)
     team_city = fields.Str(allow_none=True)
 
     player_code = fields.Str(allow_none=True)

@@ -12,7 +12,7 @@ class PlayerDTO:
     # Attributs provenant de la base de données
     player_id: int = None
     first_name: Optional[str] = None
-    last_name: Optional[str] = None
+    family_name: Optional[str] = None
     display_first_last: Optional[str] = None
     display_last_comma_first: Optional[str] = None
     display_fi_last: Optional[str] = None
@@ -25,14 +25,14 @@ class PlayerDTO:
     height: Optional[str] = None
     weight: Optional[int] = None
     season_exp: Optional[int] = None
-    jersey: Optional[int] = None
-    position: Optional[str] = None
+    jersey_num: Optional[int] = None
+    full_position: Optional[str] = None
     roster_status: Optional[str] = None
 
     team_id: Optional[int] = None
     team_name: Optional[str] = None
-    team_abbreviation: Optional[str] = None
-    team_code: Optional[str] = None
+    team_tricode: Optional[str] = None
+    team_slug: Optional[str] = None
     team_city: Optional[str] = None
 
     player_code: Optional[str] = None
@@ -96,4 +96,4 @@ class PlayerDTO:
 
     def __repr__(self):
         # Permet d'afficher quelque chose de propre, en debug par exemple, plutôt que <dto.player_dto.PlayerDTO object at 0x1037b0c20>
-        return f"PlayerDTO({self.player_id}, {self.first_name} {self.last_name}, {self.team_name})"
+        return f"PlayerDTO({self.player_id}, {self.first_name} {self.family_name}, {self.team_name})"
