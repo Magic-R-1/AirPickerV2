@@ -29,3 +29,6 @@ class Utils:
         `None` ou NaN). Si c'est le cas, il est remplacé par `None`, sinon l'élément reste inchangé.
         """
         return df.map(lambda x: None if x in ("", None, float("nan")) else x)
+
+if __name__ == "__main__":
+    print("")
