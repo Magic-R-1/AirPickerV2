@@ -19,17 +19,18 @@ class TeamTableMgmt:
     @staticmethod
     def fill_team_table():
 
+        # Récupération des équipes depuis l'API
         teams_list = NbaApiService.get_teams()
-        team_dto_list = []
 
-        # Boucle sur chaque équipe dans la liste, avant d'en faire un DTO ajouté à la liste de DTO
-        for team in teams_list:
-            team_dto = TeamService.map_static_team_to_team_dto(team)
-            team_dto_list.append(team_dto)
+        # Création de la liste de DTO
+        team_dto_list = [
+            TeamService.map_static_team_to_team_dto(team) for team in teams_list
+        ]
 
-        # Ajout de l'équipe "No team"
-        no_team = TeamDTO(team_id=0, team_full_name="No team", team_tricode="NT", team_city="No team")
-        team_dto_list.append(no_team)
+        # Ajout de l'équipe "No team" à la liste
+        team_dto_list.append(
+            TeamDTO(team_id=0, team_full_name="No team", team_tricode="NT", team_city="No team")
+        )
 
         # Boucler sur ces équipes
         with SessionLocal() as db:
