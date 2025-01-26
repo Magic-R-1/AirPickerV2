@@ -15,7 +15,7 @@ class TeamGameLogService:
 
     @staticmethod
     def get_df_teamgamelog_from_api_by_team_id(team_id: int):
-        teamgamelog_data = NbaApiService.get_team_game_log_by_team_id(team_id)
+        teamgamelog_data = NbaApiService.get_raw_team_game_log_by_team_id(team_id)
         teamgamelog_df = Utils.obtenir_df_manipulable(teamgamelog_data)
 
         return teamgamelog_df

@@ -9,7 +9,7 @@ class BoxscoreService:
 
     @staticmethod
     def get_df_boxscore_by_game_id(game_id: str):
-        boxscore_from_api = NbaApiService.get_boxscore_by_game_id(game_id)
+        boxscore_from_api = NbaApiService.get_raw_boxscore_by_game_id(game_id)
         return Utils.obtenir_df_manipulable(boxscore_from_api)
 
 if __name__ == "__main__":

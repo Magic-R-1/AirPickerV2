@@ -86,13 +86,13 @@ class PlayerService:
         """
         try:
             # Étape 1 : Récupération des données brutes depuis l'API
-            player_data = NbaApiService.get_common_player_info(player_id)
+            player_data = NbaApiService.get_raw_common_player_info(player_id)
 
             # Étape 2 : Conversion des données en DataFrame manipulable
             df_player_data = Utils.obtenir_df_manipulable(player_data)
 
             # Étape 3 : Conversion des valeurs "YES/NO" en booléens
-            df_player_data = Utils.convert_yes_no_to_boolean(df_player_data)
+            df_player_data = Utils.convert_y_n_to_boolean(df_player_data)
 
             # Étape 4 : Renommage des colonnes selon le mapper défini
             df_player_data = NbaApiColumnMapper.rename_columns_in_df(
@@ -107,14 +107,12 @@ class PlayerService:
             return None
 
     @staticmethod
-    def get_list_active_players():
+    def get_df_active_players():
 
-        list_players = NbaApiService.get_players()
+        df_players = NbaApiService.get_players()
+        df_filtered = df_players[df_players['is_active']]
 
-        # Compréhension de liste pour filtrer les joueurs actifs
-        list_active_players = [player for player in list_players if player['is_active']]
-
-        return list_active_players
+        return df_filtered
 
 
 if __name__ == "__main__":

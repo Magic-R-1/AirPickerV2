@@ -1,13 +1,23 @@
 from datetime import datetime, date
 
+import pandas as pd
+
 
 class Utils:
 
     @staticmethod
     def obtenir_df_manipulable(data):
         df = data.get_data_frames()[0]  # Obtenir le DataFrame
-        df = Utils.convert_empty_to_none(df)
         df = df.astype(object) # Convertir les types NumPy en types natifs Python, évite psycopg2: can't adapt type 'numpy.int64', cannot convert float NaN to integer
+        df = Utils.convert_empty_to_none(df)
+        df = Utils.convert_y_n_to_boolean(df)
+        return df
+
+    @staticmethod
+    def ameliore_df(df: pd.DataFrame) -> pd.DataFrame:
+        df = df.astype(object) # Convertir les types NumPy en types natifs Python, évite psycopg2: can't adapt type 'numpy.int64', cannot convert float NaN to integer
+        df = Utils.convert_empty_to_none(df)
+        df = Utils.convert_y_n_to_boolean(df)
         return df
 
     @staticmethod
@@ -20,9 +30,8 @@ class Utils:
         """
         return datetime.strptime(date_str, "%b %d, %Y").date()
 
-
     @staticmethod
-    def convert_yes_no_to_boolean(df):
+    def convert_y_n_to_boolean(df):
         """
         Parcourt chaque élément d'un DataFrame et convertit les valeurs 'Y' en True
         et 'N' en False dans toutes les colonnes qui contiennent ces valeurs.

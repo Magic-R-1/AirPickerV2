@@ -16,53 +16,56 @@ class PlayerTableMgmt:
 
     @staticmethod
     def fill_player_table():
-        # Récupérer la liste des joueurs via l'API
-        players_list = PlayerService.get_list_active_players()
+        """
+        Remplit la table des joueurs dans la base de données en récupérant les informations
+        des joueurs actifs via l'API et en les ajoutant à la base de données.
+        """
+        # Récupérer la liste des joueurs actifs via PlayerService
+        active_players_df = PlayerService.get_df_active_players()
 
-        # Diviser la liste en 2 pour éviter les erreurs de timeout de l'API NBA
-        size = round(players_list.__sizeof__()/2,0)
+        # Diviser le DataFrame en deux moitiés pour éviter les erreurs de timeout
+        size = len(active_players_df) // 2
 
-        moitie = 1
+        # Choisir la moitié à traiter
+        moitie = 1  # Modifier cette variable pour choisir la moitié
+        if moitie == 1:
+            active_players_df = active_players_df.iloc[:90]  # Limitation temporaire
+        elif moitie == 2:
+            active_players_df = active_players_df.iloc[size:]
 
-        if moitie==1 :
-            #players_list = PlayerService.get_active_players()[:size]
-            # TODO : à enlever un jour
-            players_list = PlayerService.get_list_active_players()[:90]
-        elif moitie==2:
-            players_list = PlayerService.get_list_active_players()[size:]
-
-        # Boucler sur ces joueurs en ajoutant leurs informations avec CommonPlayerInfo
+        # Boucler sur les joueurs pour ajouter leurs informations
         with SessionLocal() as db:
             try:
-                # La barre de progression avec tqdm
+                # Barre de progression avec tqdm
                 for i, player in tqdm(
-                        enumerate(players_list),
+                        enumerate(active_players_df.itertuples(index=False)),
                         desc="Ajout des joueurs",
                         unit="joueur",
-                        total=len(players_list)
+                        total=len(active_players_df)
                 ):
-
                     # Récupérer le DataFrame commonplayerinfo depuis l'API
-                    player_info = PlayerService.get_df_common_player_info_by_player_id(player['id'])
+                    player_info = PlayerService.get_df_common_player_info_by_player_id(player.player_id)
 
-                    # Mapper les données de l'API vers Player model
+                    # Mapper les données API vers le modèle Player
                     player_sqlalchemy = PlayerService.map_common_player_info_to_player_model(player_info)
 
-                    # Ajouter l'entrée à la session sans valider
+                    # Ajouter l'entrée à la session sans valider immédiatement
                     db.add(player_sqlalchemy)
 
-                    # Ajouter une pause après chaque x joueurs
-                    if (i % Config.NBA_API_TEMPO_PLAYERS == 0) & (i!=0):
+                    # Pause après un certain nombre de joueurs pour éviter les limites de l'API
+                    if (i % Config.NBA_API_TEMPO_PLAYERS == 0) and (i != 0):
                         delai = Config.NBA_API_TEMPO
                         print(f"Pause de {delai} secondes après l'ajout de {i} joueurs.")
-                        time.sleep(delai)  # Pause de x secondes
+                        time.sleep(delai)
 
+                # Commit final pour enregistrer tous les joueurs
                 db.commit()
-                print(f"Tous les {len(players_list)} joueurs ont été ajoutés à la base de données avec succès.")
+                print(f"Tous les {len(active_players_df)} joueurs ont été ajoutés à la base de données avec succès.")
 
             except Exception as e:
                 db.rollback()
                 print(f"Une erreur est survenue lors de l'ajout des joueurs : {e}")
+
 
     @staticmethod
     def update_player_table():

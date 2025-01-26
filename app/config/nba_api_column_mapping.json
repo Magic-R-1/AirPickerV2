@@ -108,7 +108,8 @@
     "endpoints": {
       "boxscoretraditionalv3": "personId",
       "teamgamelog": "",
-      "commonplayerinfo": "PERSON_ID"
+      "commonplayerinfo": "PERSON_ID",
+      "players.get_players": "id"
     }
   },
   "first_name": {
@@ -117,7 +118,8 @@
     "endpoints": {
       "boxscoretraditionalv3": "firstName",
       "teamgamelog": "",
-      "commonplayerinfo": "FIRST_NAME"
+      "commonplayerinfo": "FIRST_NAME",
+      "players.get_players": "first_name"
     }
   },
   "family_name": {
@@ -126,7 +128,8 @@
     "endpoints": {
       "boxscoretraditionalv3": "familyName",
       "teamgamelog": "",
-      "commonplayerinfo": "LAST_NAME"
+      "commonplayerinfo": "LAST_NAME",
+      "players.get_players": "last_name"
     }
   },
   "display_first_last": {
@@ -135,7 +138,8 @@
     "endpoints": {
       "boxscoretraditionalv3": "",
       "teamgamelog": "",
-      "commonplayerinfo": "DISPLAY_FIRST_LAST"
+      "commonplayerinfo": "DISPLAY_FIRST_LAST",
+      "players.get_players": "full_name"
     }
   },
   "display_last_comma_first": {
@@ -244,6 +248,16 @@
       "boxscoretraditionalv3": "",
       "teamgamelog": "",
       "commonplayerinfo": "ROSTERSTATUS"
+    }
+  },
+  "is_active": {
+    "reference": "is_active",
+    "exemple": ["True","False"],
+    "endpoints": {
+      "boxscoretraditionalv3": "",
+      "teamgamelog": "",
+      "commonplayerinfo": "",
+      "players.get_players": "is_active"
     }
   },
   "from_year": {

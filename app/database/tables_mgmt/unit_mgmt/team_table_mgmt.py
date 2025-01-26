@@ -20,7 +20,7 @@ class TeamTableMgmt:
     def fill_team_table():
 
         # Récupération des équipes depuis l'API
-        teams_list = NbaApiService.get_teams()
+        teams_list = NbaApiService.get_raw_teams()
 
         # Création de la liste de DTO
         team_dto_list = [
