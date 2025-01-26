@@ -20,11 +20,13 @@ class TeamTableMgmt:
     def fill_team_table():
 
         # Récupération des équipes depuis l'API
-        teams_list = NbaApiService.get_raw_teams()
+        teams_df = NbaApiService.get_teams()
 
         # Création de la liste de DTO
+        # On utilise les DTO pour bénéficier de son contrôle strict des données, et ainsi ajouter "No team"
+        # Le faible nombre ne pousse pas à rester sur un DataFrame
         team_dto_list = [
-            TeamService.map_static_team_to_team_dto(team) for team in teams_list
+            TeamService.map_team_tuple_to_team_dto(row) for row in teams_df.itertuples(index=False)
         ]
 
         # Ajout de l'équipe "No team" à la liste
@@ -49,7 +51,7 @@ class TeamTableMgmt:
                     db.add(team_sqlalchemy)
 
                 db.commit()
-                print(f"Toutes les {len(teams_list)} équipes ont été ajoutées à la base de données avec succès.")
+                print(f"Toutes les {len(team_dto_list)} équipes ont été ajoutées à la base de données avec succès.")
 
             except Exception as e:
                 db.rollback()

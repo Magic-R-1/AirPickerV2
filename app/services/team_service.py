@@ -76,6 +76,28 @@ class TeamService:
             print(f"Erreur lors du mapping des données de l'équipe : {e}")
             return None
 
+    @staticmethod
+    def map_team_tuple_to_team_dto(team_tuple):
+        """
+        Convertit les données de l'API NBA en TeamDTO en utilisant TeamSchema.
+
+        :param team_tuple: Tuple contenant les données de l'API NBA.
+        :return: Instance de TeamDTO.
+        """
+        try:
+            # Convertir le tuple en dictionnaire
+            team_dict = team_tuple._asdict() # méthode couramment utilisée, ne pas tenir compte du warning
+
+            # Utilisation de TeamSchema pour valider et structurer les données
+            team_schema = TeamSchema().load(team_dict)  # Valide et prépare les données
+
+            # Création de TeamDTO à partir des données validées
+            return TeamDTO(**team_schema)
+
+        except Exception as e:
+            print(f"Erreur lors du mapping des données du joueur : {e}")
+            return None
+
 
 if __name__ == "__main__":
     all_team_ids = TeamService.get_list_all_team_ids()

@@ -23,7 +23,7 @@ class NbaApiService:
     def get_players() -> pd.DataFrame:
         """
         Récupère les joueurs via l'API, les transforme en DataFrame et renomme les colonnes.
-        :return: pd.DataFrame: Liste des joueurs avec colonnes renommées.
+        :return: pd.DataFrame: Liste des joueurs.
         """
 
         list_dicts = NbaApiService.get_raw_players()
@@ -40,7 +40,7 @@ class NbaApiService:
     def get_common_player_info(player_id):
         """
         Récupère l'objet CommonPlayerInfo via l'API, le transforme en DataFrame et renomme les colonnes.
-        :return: pd.DataFrame: Informations des joueurs avec colonnes renommées.
+        :return: pd.DataFrame: Informations des joueurs.
         """
 
         raw_data = NbaApiService.get_raw_common_player_info(player_id)
@@ -58,15 +58,15 @@ class NbaApiService:
 
     # 2. Team
     # =================================
-    @staticmethod #Doing
+    @staticmethod #Done
     def get_raw_teams():
         return teams.get_teams()
 
-    @staticmethod # Liste de dictionnaires vers DataFrame #Doing
+    @staticmethod # Liste de dictionnaires vers DataFrame #Done
     def get_teams():
         """
-        Récupère les joueurs via l'API, les transforme en DataFrame et renomme les colonnes.
-        :return: pd.DataFrame: Liste des joueurs avec colonnes renommées.
+        Récupère les équipes via l'API, les transforme en DataFrame et renomme les colonnes.
+        :return: pd.DataFrame: Liste des équipes.
         """
 
         list_dicts = NbaApiService.get_raw_teams()
@@ -92,6 +92,7 @@ class NbaApiService:
 
 if __name__ == "__main__":
 
-    data = NbaApiService.get_common_player_info(2544)
+    #data = NbaApiService.get_common_player_info(2544)
+    data = NbaApiService.get_teams()
     
     print("")
