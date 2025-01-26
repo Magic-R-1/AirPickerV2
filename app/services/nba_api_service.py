@@ -3,10 +3,10 @@ from nba_api.stats.static import players, teams
 from nba_api.stats.endpoints import boxscoretraditionalv3, commonplayerinfo, commonteamroster, playergamelog, playernextngames, teamgamelog
 # scoreboardv2 : permet d’obtenir les matchs programmés pour une date précise
 
-from config.config import Config
+from app.config.config import Config
 from app.utils.nba_api_column_mapper import NbaApiColumnMapper
-from enums.nba_api_endpoints import NbaApiEndpoints
-from utils.utils import Utils
+from app.enums.nba_api_endpoints import NbaApiEndpoints
+from app.utils.utils import Utils
 
 
 class NbaApiService:
@@ -15,7 +15,7 @@ class NbaApiService:
 
     # 1. Player
     # =================================
-    @staticmethod
+    @staticmethod # Done
     def get_raw_players():
         return players.get_players()
 
@@ -23,18 +23,30 @@ class NbaApiService:
     def get_players() -> pd.DataFrame:
         """
         Récupère les joueurs via l'API, les transforme en DataFrame et renomme les colonnes.
-        :return: pd.DataFrame: Informations des joueurs avec colonnes renommées.
+        :return: pd.DataFrame: Liste des joueurs avec colonnes renommées.
         """
 
         list_dicts = NbaApiService.get_raw_players()
         df = pd.DataFrame(list_dicts)
-        df_renamed = NbaApiColumnMapper.rename_columns_in_df(df, NbaApiEndpoints.PLAYERS_GET_PLAYERS.value)
-        df_ameliore = Utils.ameliore_df(df_renamed)
-        return df_ameliore
+        df_ameliore = Utils.ameliore_df(df)
+        df_renamed = NbaApiColumnMapper.rename_columns_in_df(df_ameliore, NbaApiEndpoints.PLAYERS_GET_PLAYERS.value)
+        return df_renamed
 
     @staticmethod #Done
     def get_raw_common_player_info(player_id):
         return commonplayerinfo.CommonPlayerInfo(player_id=player_id)
+
+    @staticmethod # Objet brut CommonPlayerInfo vers DataFrame # Done
+    def get_common_player_info(player_id):
+        """
+        Récupère l'objet CommonPlayerInfo via l'API, le transforme en DataFrame et renomme les colonnes.
+        :return: pd.DataFrame: Informations des joueurs avec colonnes renommées.
+        """
+
+        raw_data = NbaApiService.get_raw_common_player_info(player_id)
+        df = Utils.obtenir_df_manipulable(raw_data)
+        df_renamed = NbaApiColumnMapper.rename_columns_in_df(df, NbaApiEndpoints.COMMON_PLAYER_INFO.value)
+        return df_renamed
 
     @staticmethod #TODO
     def get_raw_player_game_log_by_player_id(player_id: int):
@@ -46,9 +58,22 @@ class NbaApiService:
 
     # 2. Team
     # =================================
-    @staticmethod #Done
+    @staticmethod #Doing
     def get_raw_teams():
         return teams.get_teams()
+
+    @staticmethod # Liste de dictionnaires vers DataFrame #Doing
+    def get_teams():
+        """
+        Récupère les joueurs via l'API, les transforme en DataFrame et renomme les colonnes.
+        :return: pd.DataFrame: Liste des joueurs avec colonnes renommées.
+        """
+
+        list_dicts = NbaApiService.get_raw_teams()
+        df = pd.DataFrame(list_dicts)
+        df_ameliore = Utils.ameliore_df(df)
+        df_renamed = NbaApiColumnMapper.rename_columns_in_df(df_ameliore, NbaApiEndpoints.TEAMS_GET_TEAMS.value)
+        return df_renamed
 
     @staticmethod #TODO
     def get_raw_team_game_log_by_team_id(team_id: int):
@@ -67,6 +92,6 @@ class NbaApiService:
 
 if __name__ == "__main__":
 
-    data = NbaApiService.get_players()
+    data = NbaApiService.get_common_player_info(2544)
     
     print("")

@@ -29,7 +29,7 @@ class PlayerTableMgmt:
         # Choisir la moitié à traiter
         moitie = 1  # Modifier cette variable pour choisir la moitié
         if moitie == 1:
-            active_players_df = active_players_df.iloc[:90]  # Limitation temporaire
+            active_players_df = active_players_df.iloc[:90]  # Limitation temporaire, à remplacer par active_players_df = active_players_df.iloc[:size]
         elif moitie == 2:
             active_players_df = active_players_df.iloc[size:]
 
@@ -46,8 +46,8 @@ class PlayerTableMgmt:
                     # Récupérer le DataFrame commonplayerinfo depuis l'API
                     player_info = PlayerService.get_df_common_player_info_by_player_id(player.player_id)
 
-                    # Mapper les données API vers le modèle Player
-                    player_sqlalchemy = PlayerService.map_common_player_info_to_player_model(player_info)
+                    # Mapper les données vers le modèle Player
+                    player_sqlalchemy = PlayerService.map_common_player_info_df_to_player_model(player_info)
 
                     # Ajouter l'entrée à la session sans valider immédiatement
                     db.add(player_sqlalchemy)
@@ -65,7 +65,6 @@ class PlayerTableMgmt:
             except Exception as e:
                 db.rollback()
                 print(f"Une erreur est survenue lors de l'ajout des joueurs : {e}")
-
 
     @staticmethod
     def update_player_table():
