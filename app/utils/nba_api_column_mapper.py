@@ -2,7 +2,7 @@ import os
 import json
 import pandas as pd
 
-from enums.nba_api_endpoints import NbaApiEndpoints
+from app.enums.nba_api_endpoints import NbaApiEndpoints
 # from services.player_service import PlayerService # import circulaire
 
 

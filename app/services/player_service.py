@@ -8,8 +8,8 @@ from app.exceptions.exceptions import PlayerNotFoundError
 from app.schemas.player_schema import PlayerSchema
 from app.services.nba_api_service import NbaApiService
 from app.utils.utils import Utils
-from enums.nba_api_endpoints import NbaApiEndpoints
-from models import Player
+from app.enums.nba_api_endpoints import NbaApiEndpoints
+from app.models.player import Player
 from utils.nba_api_column_mapper import NbaApiColumnMapper
 
 

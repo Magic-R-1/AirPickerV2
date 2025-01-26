@@ -1,10 +1,10 @@
 from tqdm import tqdm
 
-from app.dao.team_dao import TeamDAO
 from app.database.db_connector import engine, SessionLocal
 from app.models.team import Team
 from app.services.nba_api_service import NbaApiService
 from app.services.team_service import TeamService
+from app.dto.team_dto import TeamDTO
 
 
 class TeamTableMgmt:
@@ -19,31 +19,34 @@ class TeamTableMgmt:
     def fill_team_table():
 
         teams_list = NbaApiService.get_teams()
+        team_dto_list = []
+
+        # Boucle sur chaque équipe dans la liste
+        for team in teams_list:
+            team_dto = TeamService.map_static_team_to_team_dto(team)
+            team_dto_list.append(team_dto)
+
 
         # Ajout de l'équipe "No team"
-        teams_list.append({
-            'abbreviation': 'NT',
-            'city': None,
-            'full_name': 'No team',
-            'id': 0,
-            'nickname': 'No team',
-            'state': None,
-            'year_founded': None
-        })
+        no_team = TeamDTO(team_id=0, team_full_name="No team", team_tricode="NT", team_city="No team")
+        team_dto_list.append(no_team)
 
         # Boucler sur ces équipes
         with SessionLocal() as db:
             try:
                 # La barre de progression avec tqdm
-                for team in tqdm(enumerate(teams_list), desc="Ajout des équipes", unit="équipe", total=len(teams_list)):
-                    team_dto = TeamService.map_static_team_to_team_dto(team)
+                for team in tqdm(
+                        enumerate(teams_list),
+                        desc="Ajout des équipes",
+                        unit="équipe",
+                        total=len(teams_list)
+                ):
 
-                    # Conversion du DTO en model Team
-                    team_sql = TeamDAO.team_from_dto_to_sql(team_dto)
-                    print(type(team_sql))
+                    team_sqlalchemy = TeamService.map_static_team_to_team_model(team)
+                    #team_sqlalchemy = TeamDAO.team_from_dto_to_sql(team_dto)
 
                     # Ajouter l'entrée à la session sans valider
-                    db.add(team_sql)
+                    db.add(team_sqlalchemy)
 
                 db.commit()
                 print(f"Toutes les {len(teams_list)} équipes ont été ajoutées à la base de données avec succès.")
@@ -76,5 +79,5 @@ class TeamTableMgmt:
 
 
 if __name__ == "__main__":
-    #TeamTableLifeCycle.clear_team_table()
     TeamTableMgmt.fill_team_table()
+    #TeamTableMgmt.create_team_table()

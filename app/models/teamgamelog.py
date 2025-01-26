@@ -1,5 +1,5 @@
 from sqlalchemy import Column, String, Integer, Float, ForeignKey, Date
-from app.database.declarative_base import Base
+from app.database.db_connector import Base
 
 
 class TeamGameLog(Base):

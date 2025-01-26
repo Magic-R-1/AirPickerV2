@@ -1,7 +1,11 @@
-from sqlalchemy import create_engine
+from sqlalchemy import create_engine, MetaData
 from sqlalchemy.orm import sessionmaker
 from contextlib import contextmanager
-from config.config import Config
+from app.config.config import Config
+from sqlalchemy.ext.declarative import declarative_base
+
+# Définir la base pour SQLAlchemy
+Base = declarative_base()
 
 # URL de connexion de la base de données
 DATABASE_URL = Config.DATABASE_URL
@@ -21,3 +25,13 @@ def session_scope():
         yield session  # Retourne la session pour qu'elle soit utilisée dans le bloc
     finally:
         session.close()  # Assure que la session est fermée après utilisation
+
+def reset_metadata():
+    # Réinitialiser les métadonnées avec une nouvelle instance
+    metadata = MetaData()
+    Base.metadata = metadata
+
+if __name__ == "__main__":
+    reset_metadata()
+    print(Base.metadata.tables.keys())
+

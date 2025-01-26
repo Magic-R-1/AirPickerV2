@@ -1,7 +1,7 @@
 from app.dao.team_dao import TeamDAO
 from app.services.nba_api_service import NbaApiService
 from app.services.player_service import PlayerService
-from dto.player_dto import PlayerDTO
+from app.dto.player_dto import PlayerDTO
 
 def instancier_players():
     # Création d'instances de la classe Player

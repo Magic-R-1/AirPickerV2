@@ -1,6 +1,6 @@
 from sqlalchemy import Column, Integer, String, Boolean, Date, ForeignKey
 from sqlalchemy.orm import relationship
-from app.database.declarative_base import Base
+from app.database.db_connector import Base
 
 
 class Player(Base):

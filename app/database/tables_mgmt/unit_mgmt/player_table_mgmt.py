@@ -1,8 +1,7 @@
 import time
 from tqdm import tqdm
 
-from config.config import Config
-from app.dao.player_dao import PlayerDAO
+from app.config.config import Config
 from app.database.db_connector import engine, SessionLocal
 from app.models.player import Player
 from app.services.player_service import PlayerService

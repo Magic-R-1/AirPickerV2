@@ -1,4 +1,4 @@
-from services.nba_api_service import NbaApiService
+from app.services.nba_api_service import NbaApiService
 from utils.utils import Utils
 
 

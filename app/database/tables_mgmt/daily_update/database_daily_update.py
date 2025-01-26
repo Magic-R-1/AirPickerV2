@@ -1,4 +1,4 @@
-from database.tables_mgmt.unit_mgmt.teamgamelog_table_mgmt import TeamGameLogTableMgmt
+from app.database.tables_mgmt.unit_mgmt.teamgamelog_table_mgmt import TeamGameLogTableMgmt
 
 
 class DatabaseDailyUpdate:

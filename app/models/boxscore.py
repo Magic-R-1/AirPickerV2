@@ -1,5 +1,5 @@
 from sqlalchemy import Column, Integer, String, Float, ForeignKey
-from app.database.declarative_base import Base
+from app.database.db_connector import Base
 
 class Boxscore(Base):
     # Nom de la table dans la base de données

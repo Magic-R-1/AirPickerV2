@@ -1,4 +1,4 @@
-from app.models import TeamGameLog
+from app.models.teamgamelog import TeamGameLog
 from app.schemas.teamgamelog_schema import TeamGameLogSchema
 from app.services.nba_api_service import NbaApiService
 from app.utils.utils import Utils
