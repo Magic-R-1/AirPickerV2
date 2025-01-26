@@ -9,6 +9,7 @@ from app.schemas.player_schema import PlayerSchema
 from app.services.nba_api_service import NbaApiService
 from app.utils.utils import Utils
 from enums.nba_api_endpoints import NbaApiEndpoints
+from models import Player
 from utils.nba_api_column_mapper import NbaApiColumnMapper
 
 
@@ -29,6 +30,28 @@ class PlayerService:
         player_dto = PlayerDAO.player_from_sql_to_dto(player_sql)
 
         return player_dto
+
+    @staticmethod
+    def map_common_player_info_to_player_model(player_data):
+        """
+        Convertit les données de l'API NBA en Player en utilisant PlayerSchema.
+
+        :param player_data: Dictionnaire contenant les données de l'API NBA.
+        :return: Instance de Player.
+        """
+        try:
+            # Convertir la première ligne du DataFrame en dictionnaire
+            player_dict = player_data.iloc[0].to_dict()
+
+            # Utilisation de PlayerSchema pour valider et structurer les données
+            player_schema = PlayerSchema().load(player_dict)  # Valide et prépare les données
+
+            # Création de Player à partir des données validées
+            return Player(**player_schema)
+
+        except Exception as e:
+            print(f"Erreur lors du mapping des données du joueur : {e}")
+            return None
 
     @staticmethod
     def map_common_player_info_to_player_dto(player_data):

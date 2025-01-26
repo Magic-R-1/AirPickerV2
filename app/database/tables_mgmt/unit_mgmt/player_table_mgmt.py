@@ -36,19 +36,21 @@ class PlayerTableMgmt:
         with SessionLocal() as db:
             try:
                 # La barre de progression avec tqdm
-                for i, player in tqdm(enumerate(players_list), desc="Ajout des joueurs", unit="joueur", total=len(players_list)):
+                for i, player in tqdm(
+                        enumerate(players_list),
+                        desc="Ajout des joueurs",
+                        unit="joueur",
+                        total=len(players_list)
+                ):
 
                     # Récupérer le DataFrame commonplayerinfo depuis l'API
                     player_info = PlayerService.get_df_common_player_info_by_player_id(player['id'])
 
-                    # Mapper les données de l'API vers PlayerDTO
-                    player_dto = PlayerService.map_common_player_info_to_player_dto(player_info)
-
-                    # Conversion du DTO en model Team
-                    player_sql = PlayerDAO.player_from_dto_to_sql(player_dto)
+                    # Mapper les données de l'API vers Player model
+                    player_sqlalchemy = PlayerService.map_common_player_info_to_player_model(player_info)
 
                     # Ajouter l'entrée à la session sans valider
-                    db.add(player_sql)
+                    db.add(player_sqlalchemy)
 
                     # Ajouter une pause après chaque x joueurs
                     if (i % Config.NBA_API_TEMPO_PLAYERS == 0) & (i!=0):
@@ -62,6 +64,11 @@ class PlayerTableMgmt:
             except Exception as e:
                 db.rollback()
                 print(f"Une erreur est survenue lors de l'ajout des joueurs : {e}")
+
+    @staticmethod
+    def update_player_table():
+        # TODO : Créer un DF avec ce qui est en base, un autre avec tous les joueurs de l'API, comparer les 2, et faire des updates depuis le DF API pour tout ce qui est différent
+        print("")
 
     @staticmethod
     def clear_player_table():
