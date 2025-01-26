@@ -5,7 +5,6 @@ from typing import Dict
 import pandas as pd
 
 from app.enums.nba_api_endpoints import NbaApiEndpoints
-# from services.player_service import PlayerService # import circulaire
 
 
 class NbaApiColumnMapper:
@@ -77,7 +76,7 @@ class NbaApiColumnMapper:
         return None
 
     @staticmethod
-    def rename_columns_in_df(df: pd.DataFrame, endpoint: NbaApiEndpoints):
+    def rename_columns_in_df(df: pd.DataFrame, endpoint: NbaApiEndpoints) -> pd.DataFrame:
         """Renomme les colonnes d'un DataFrame selon les correspondances dans le fichier JSON en fonction de l'endpoint."""
         # Vérifier que l'endpoint est valide
         if not endpoint:
@@ -137,7 +136,4 @@ class NbaApiColumnMapper:
 
 
 if __name__ == "__main__":
-    # Exemple d'utilisation pour renommer les colonnes
-    # df_avant = PlayerService.get_df_common_player_info_by_player_id(2544)
-    # df_apres = NbaApiColumnMapper.rename_columns(df_avant, NbaApiEndpoints.BOX_SCORE_TRADITIONAL_V3.value)
-    print("toto")
+    print("")

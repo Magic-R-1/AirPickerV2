@@ -6,7 +6,7 @@ class Boxscore(Base):
     __tablename__ = 'boxscore'
 
     # Nom des colonnes dans la base de données
-    game_id = Column(String, primary_key=True)  # Utilisation d'une clé primaire composée (game_id et person_id)
+    game_id = Column(String, primary_key=True)  # Utilisation d'une clé primaire composée (game_id et person_id). String car les id commencent par 00
 
     team_id = Column(Integer, ForeignKey("team.team_id"), nullable=True)    # Clé étrangère vers la table Team
     team_city = Column(String, nullable=True)

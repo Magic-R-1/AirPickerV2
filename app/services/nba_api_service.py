@@ -15,11 +15,11 @@ class NbaApiService:
 
     # 1. Player
     # =================================
-    @staticmethod # Done
-    def get_raw_players():
+    @staticmethod
+    def get_raw_players() -> list[dict]:
         return players.get_players()
 
-    @staticmethod # Liste de dictionnaires vers DataFrame # Done
+    @staticmethod # Liste de dictionnaires vers DataFrame
     def get_players() -> pd.DataFrame:
         """
         Récupère les joueurs via l'API, les transforme en DataFrame et renomme les colonnes.
@@ -33,11 +33,11 @@ class NbaApiService:
         return df_renamed
 
     @staticmethod #Done
-    def get_raw_common_player_info(player_id):
+    def get_raw_common_player_info(player_id) -> commonplayerinfo:
         return commonplayerinfo.CommonPlayerInfo(player_id=player_id)
 
-    @staticmethod # Objet brut CommonPlayerInfo vers DataFrame # Done
-    def get_common_player_info(player_id):
+    @staticmethod # Objet brut CommonPlayerInfo vers DataFrame
+    def get_common_player_info(player_id) -> pd.DataFrame:
         """
         Récupère l'objet CommonPlayerInfo via l'API, le transforme en DataFrame et renomme les colonnes.
         :return: pd.DataFrame: Informations des joueurs.
@@ -48,22 +48,24 @@ class NbaApiService:
         df_renamed = NbaApiColumnMapper.rename_columns_in_df(df, NbaApiEndpoints.COMMON_PLAYER_INFO.value)
         return df_renamed
 
-    @staticmethod #TODO
-    def get_raw_player_game_log_by_player_id(player_id: int):
+    #TODO
+    @staticmethod
+    def get_raw_player_game_log_by_player_id(player_id: int) -> playergamelog:
         return playergamelog.PlayerGameLog(player_id=player_id, season=Config.SAISON_EN_COURS)
 
-    @staticmethod #TODO
-    def get_raw_player_next_games_by_player_id(player_id: int):
+    #TODO
+    @staticmethod
+    def get_raw_player_next_games_by_player_id(player_id: int) -> playernextngames:
         return playernextngames.PlayerNextNGames(player_id=player_id)
 
     # 2. Team
     # =================================
-    @staticmethod #Done
-    def get_raw_teams():
+    @staticmethod
+    def get_raw_teams() -> list[dict]:
         return teams.get_teams()
 
-    @staticmethod # Liste de dictionnaires vers DataFrame #Done
-    def get_teams():
+    @staticmethod # Liste de dictionnaires vers DataFrame
+    def get_teams() -> pd.DataFrame:
         """
         Récupère les équipes via l'API, les transforme en DataFrame et renomme les colonnes.
         :return: pd.DataFrame: Liste des équipes.
@@ -75,24 +77,37 @@ class NbaApiService:
         df_renamed = NbaApiColumnMapper.rename_columns_in_df(df_ameliore, NbaApiEndpoints.TEAMS_GET_TEAMS.value)
         return df_renamed
 
-    @staticmethod #TODO
-    def get_raw_team_game_log_by_team_id(team_id: int):
-        return teamgamelog.TeamGameLog(team_id=team_id, season=Config.SAISON_EN_COURS)
-
-    @staticmethod #TODO
-    def get_raw_team_roster_by_team_id(team_id: int):
+    #TODO
+    @staticmethod
+    def get_raw_team_roster_by_team_id(team_id: int) -> commonteamroster:
         return commonteamroster.CommonTeamRoster(team_id=team_id)
+
+    #TODO : avec la gestion des dates, Utils.convert_to_date(date_string)
+    @staticmethod
+    def get_raw_team_game_log_by_team_id(team_id: int) -> teamgamelog:
+        return teamgamelog.TeamGameLog(team_id=team_id, season=Config.SAISON_EN_COURS)
 
     # 3. Feuilles de match
     # =================================
-    @staticmethod #TODO
-    def get_raw_boxscore_by_game_id(game_id: str):  #str car les id des matchs commencent par 00, effacés avec un int
+    @staticmethod
+    def get_raw_boxscore_by_game_id(game_id: str) -> boxscoretraditionalv3:
         return boxscoretraditionalv3.BoxScoreTraditionalV3(game_id=game_id)
 
+    @staticmethod # Objet brut BoxScoreTraditionalV3 vers DataFrame
+    def get_boxscore_by_game_id(game_id: str) -> pd.DataFrame:
+        """
+        Récupère l'objet BoxScoreTraditionalV3 via l'API, le transforme en DataFrame et renomme les colonnes.
+        :return: pd.DataFrame: Informations des boxscores.
+        """
+
+        raw_data = NbaApiService.get_raw_boxscore_by_game_id(game_id)
+        df = Utils.obtenir_df_manipulable(raw_data)
+        df_renamed = NbaApiColumnMapper.rename_columns_in_df(df, NbaApiEndpoints.BOX_SCORE_TRADITIONAL_V3.value)
+        return df_renamed
 
 if __name__ == "__main__":
-
-    #data = NbaApiService.get_common_player_info(2544)
-    data = NbaApiService.get_teams()
+    # data = NbaApiService.get_common_player_info(2544)
+    # data = NbaApiService.get_teams()
+    NbaApiService.get_boxscore_by_game_id("0022400629")
     
     print("")

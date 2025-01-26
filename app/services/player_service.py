@@ -73,7 +73,7 @@ class PlayerService:
     @staticmethod
     def get_df_common_player_info_by_player_id(player_id: int) -> pd.DataFrame | None:
         """
-        Utile la méthode de NbaApiService pour obtenir le DF de common_player_info
+        Utile la méthode de NbaApiService pour obtenir le DF de CommonPlayerInfo
 
         :param player_id: L'identifiant unique du joueur.
         :return: Un DataFrame contenant les données du joueur ou None en cas d'erreur.
@@ -82,7 +82,6 @@ class PlayerService:
             return NbaApiService.get_common_player_info(player_id)
 
         except Exception as e:
-            # Logging d'une erreur (si un logger est configuré)
             print(f"Erreur lors de la récupération des données pour le joueur {player_id}: {e}")
             return None
 
