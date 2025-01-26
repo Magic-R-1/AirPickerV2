@@ -58,7 +58,6 @@ class PlayerTableMgmt:
                         print(f"Pause de {delai} secondes après l'ajout de {i} joueurs.")
                         time.sleep(delai)
 
-                # Commit final pour enregistrer tous les joueurs
                 db.commit()
                 print(f"Tous les {len(active_players_df)} joueurs ont été ajoutés à la base de données avec succès.")
 

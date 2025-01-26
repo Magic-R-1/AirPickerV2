@@ -35,7 +35,7 @@ class PlayerService:
         :return: Instance de Player.
         """
         try:
-            # Convertir la première ligne du DataFrame en dictionnaire
+            # Convertir la première (et seul) ligne du DataFrame en dictionnaire
             player_dict = player_df.iloc[0].to_dict()
 
             # Utilisation de PlayerSchema pour valider et structurer les données
@@ -53,11 +53,11 @@ class PlayerService:
         """
         Convertit les données de l'API NBA en PlayerDTO en utilisant PlayerSchema.
 
-        :param player_df: Dictionnaire contenant les données de l'API NBA.
+        :param player_df: DataFrame contenant les données de l'API NBA.
         :return: Instance de PlayerDTO.
         """
         try:
-            # Convertir la première ligne du DataFrame en dictionnaire
+            # Convertir la première (et seul) ligne du DataFrame en dictionnaire
             player_dict = player_df.iloc[0].to_dict()
 
             # Utilisation de PlayerSchema pour valider et structurer les données
