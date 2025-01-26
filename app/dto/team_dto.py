@@ -20,4 +20,4 @@ class TeamDTO:
 
     def __repr__(self):
         # Affichage propre pour le débogage ou la journalisation
-        return f"TeamDTO(id={self.team_id}, team_full_name={self.team_full_name}, team_tricode={self.team_tricode}, team_city={self.team_city})"
+        return f"TeamDTO(id={self.team_id}, {self.team_full_name})"

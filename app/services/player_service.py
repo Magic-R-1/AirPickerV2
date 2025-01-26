@@ -95,7 +95,7 @@ class PlayerService:
             df_player_data = Utils.convert_yes_no_to_boolean(df_player_data)
 
             # Étape 4 : Renommage des colonnes selon le mapper défini
-            df_player_data = NbaApiColumnMapper.rename_columns(
+            df_player_data = NbaApiColumnMapper.rename_columns_in_df(
                 df_player_data, NbaApiEndpoints.COMMON_PLAYER_INFO.value
             )
 

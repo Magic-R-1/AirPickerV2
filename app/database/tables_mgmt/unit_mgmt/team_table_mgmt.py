@@ -5,6 +5,7 @@ from app.models.team import Team
 from app.services.nba_api_service import NbaApiService
 from app.services.team_service import TeamService
 from app.dto.team_dto import TeamDTO
+from app.dao.team_dao import TeamDAO
 
 
 class TeamTableMgmt:
@@ -21,11 +22,10 @@ class TeamTableMgmt:
         teams_list = NbaApiService.get_teams()
         team_dto_list = []
 
-        # Boucle sur chaque équipe dans la liste
+        # Boucle sur chaque équipe dans la liste, avant d'en faire un DTO ajouté à la liste de DTO
         for team in teams_list:
             team_dto = TeamService.map_static_team_to_team_dto(team)
             team_dto_list.append(team_dto)
-
 
         # Ajout de l'équipe "No team"
         no_team = TeamDTO(team_id=0, team_full_name="No team", team_tricode="NT", team_city="No team")
@@ -35,15 +35,14 @@ class TeamTableMgmt:
         with SessionLocal() as db:
             try:
                 # La barre de progression avec tqdm
-                for team in tqdm(
-                        enumerate(teams_list),
+                for index, team in tqdm( # ne pas oublier l'index, qui évite de créer des tuples
+                        enumerate(team_dto_list),
                         desc="Ajout des équipes",
                         unit="équipe",
-                        total=len(teams_list)
+                        total=len(team_dto_list)
                 ):
 
-                    team_sqlalchemy = TeamService.map_static_team_to_team_model(team)
-                    #team_sqlalchemy = TeamDAO.team_from_dto_to_sql(team_dto)
+                    team_sqlalchemy = TeamDAO.team_from_dto_to_sql(team)
 
                     # Ajouter l'entrée à la session sans valider
                     db.add(team_sqlalchemy)
@@ -53,7 +52,7 @@ class TeamTableMgmt:
 
             except Exception as e:
                 db.rollback()
-                print(f"Une erreur est survenue lors de l'ajout des joueurs : {e}")
+                print(f"Une erreur est survenue lors de l'ajout des équipes : {e}")
 
     @staticmethod
     def clear_team_table():

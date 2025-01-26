@@ -3,6 +3,8 @@ from app.exceptions.exceptions import TeamNotFoundError
 from app.schemas.team_schema import TeamSchema
 from app.dto.team_dto import TeamDTO
 from app.models.team import Team
+from app.enums.nba_api_endpoints import NbaApiEndpoints
+from app.utils.nba_api_column_mapper import NbaApiColumnMapper
 
 
 class TeamService:
@@ -11,10 +13,10 @@ class TeamService:
         pass
 
     @staticmethod
-    def get_team_dto_by_nickname(nickname: str):
+    def get_team_dto_by_team_name(team_name: str):
 
         try:
-            team_sql = TeamDAO.get_team_by_nickname(nickname)
+            team_sql = TeamDAO.get_team_by_nickname(team_name)
         except (TeamNotFoundError, ValueError) as e:
             print(f"Erreur: {e}")
             return None
@@ -61,13 +63,11 @@ class TeamService:
         :return: Une instance de TeamDTO ou None en cas d'erreur.
         """
         try:
-            team_dict = team_data[1]  # Extraire les données de l'équipe
-
-            # Vérifier et renommer la clé 'id' en 'team_id'
-            team_dict['team_id'] = team_dict.pop('id')
+            # Renommer les clés du dictionnaire
+            team_dict_renamed = NbaApiColumnMapper.rename_keys_in_dict(team_data,NbaApiEndpoints.TEAMS_GET_TEAMS.value)
 
             # Désérialisation des données pour obtenir un objet TeamDTO
-            team_schema = TeamSchema().load(team_dict)
+            team_schema = TeamSchema().load(team_dict_renamed)
 
             # Création de TeamDTO à partir des données validées
             return TeamDTO(**team_schema)

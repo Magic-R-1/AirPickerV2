@@ -1,5 +1,7 @@
 import os
 import json
+from typing import Dict
+
 import pandas as pd
 
 from app.enums.nba_api_endpoints import NbaApiEndpoints
@@ -75,7 +77,7 @@ class NbaApiColumnMapper:
         return None
 
     @staticmethod
-    def rename_columns(df: pd.DataFrame, endpoint: NbaApiEndpoints):
+    def rename_columns_in_df(df: pd.DataFrame, endpoint: NbaApiEndpoints):
         """Renomme les colonnes d'un DataFrame selon les correspondances dans le fichier JSON en fonction de l'endpoint."""
         # Vérifier que l'endpoint est valide
         if not endpoint:
@@ -103,6 +105,35 @@ class NbaApiColumnMapper:
 
         # Renommer les colonnes du DataFrame
         return df.rename(columns=rename_dict)
+
+    @staticmethod
+    def rename_keys_in_dict(data: Dict, endpoint: NbaApiEndpoints) -> Dict:
+        """Renomme les clés d'un dictionnaire selon les correspondances dans le fichier JSON en fonction de l'endpoint."""
+        # Vérifier que l'endpoint est valide
+        if not endpoint:
+            raise ValueError("L'argument 'endpoint' ne peut pas être None ou vide.")
+
+        # Crée un dictionnaire pour les nouvelles clés
+        rename_dict = {}
+
+        for key in data.keys():
+            # Récupère la référence pour la clé
+            reference = NbaApiColumnMapper.get_reference(key)
+
+            # Essayer de récupérer le champ correspondant à l'endpoint
+            field_for_endpoint = NbaApiColumnMapper.get_field_for_endpoint(endpoint, key)
+            if field_for_endpoint:
+                rename_dict[key] = field_for_endpoint
+            elif reference:
+                # Si la clé a une référence, on la renomme avec cette référence
+                rename_dict[key] = reference
+            else:
+                # Si la clé n'est pas dans le fichier JSON, on la garde telle quelle
+                rename_dict[key] = key
+                print(f"Clé {key} non renommée")
+
+        # Renommer les clés en créant un nouveau dictionnaire
+        return {rename_dict[key]: value for key, value in data.items()}
 
 
 if __name__ == "__main__":
