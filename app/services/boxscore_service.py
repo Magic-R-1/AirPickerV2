@@ -25,5 +25,5 @@ class BoxscoreService:
 
 
 if __name__ == "__main__":
-    df_boxscore = BoxscoreService.get_df_boxscore_by_game_id("0022400596")
+    df_boxscore = BoxscoreService.get_df_boxscore_by_game_id("1610612747")
     print("")

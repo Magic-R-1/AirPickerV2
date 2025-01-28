@@ -1,11 +1,34 @@
 {
+  "season_id": {
+    "reference": "season_id",
+    "exemple": "",
+    "endpoints": {
+      "playergamelog": "SEASON_ID"
+    }
+  },
+  "season": {
+    "reference": "season",
+    "exemple": "2024",
+    "endpoints": {
+      "commonteamroster": "SEASON"
+    }
+  },
+  "league_id": {
+    "reference": "league_id",
+    "exemple": "00",
+    "endpoints": {
+      "commonteamroster": "LeagueID"
+    }
+  },
   "game_id": {
     "reference": "game_id",
     "exemple": "0022300061",
     "endpoints": {
       "boxscoretraditionalv3": "gameId",
       "teamgamelog": "Game_ID",
-      "commonplayerinfo": ""
+      "commonplayerinfo": "",
+      "playergamelog": "Game_ID",
+      "playernextngames": "GAME_ID"
     }
   },
   "team_id": {
@@ -15,7 +38,78 @@
       "boxscoretraditionalv3": "teamId",
       "teamgamelog": "Team_ID",
       "commonplayerinfo": "TEAM_ID",
-      "teams.get_teams": "id"
+      "teams.get_teams": "id",
+      "commonteamroster": "TeamID"
+    }
+  },
+  "home_team_id": {
+    "reference": "home_team_id",
+    "exemple": "1610612747",
+    "endpoints": {
+      "playernextngames": "HOME_TEAM_ID"
+    }
+  },
+  "visitor_team_id": {
+    "reference": "visitor_team_id",
+    "exemple": "1610612747",
+    "endpoints": {
+      "playernextngames": "VISITOR_TEAM_ID"
+    }
+  },
+  "home_team_name": {
+    "reference": "home_team_name",
+    "exemple": "Los Angeles",
+    "endpoints": {
+      "playernextngames": "HOME_TEAM_NAME"
+    }
+  },
+  "visitor_team_name": {
+    "reference": "visitor_team_name",
+    "exemple": "Cleveland",
+    "endpoints": {
+      "playernextngames": "VISITOR_TEAM_NAME"
+    }
+  },
+  "home_team_abbreviation": {
+    "reference": "home_team_abbreviation",
+    "exemple": "LAL",
+    "endpoints": {
+      "playernextngames": "HOME_TEAM_ABBREVIATION"
+    }
+  },
+  "visitor_team_abbreviation": {
+    "reference": "visitor_team_abbreviation",
+    "exemple": "CLE",
+    "endpoints": {
+      "playernextngames": "VISITOR_TEAM_ABBREVIATION"
+    }
+  },
+  "home_team_nickname": {
+    "reference": "home_team_nickname",
+    "exemple": "Lakers",
+    "endpoints": {
+      "playernextngames": "HOME_TEAM_NICKNAME"
+    }
+  },
+  "visitor_team_nickname": {
+    "reference": "visitor_team_nickname",
+    "exemple": "Cavaliers",
+    "endpoints": {
+      "playernextngames": "VISITOR_TEAM_NICKNAME"
+    }
+  },
+  "home_wl": {
+    "reference": "home_wl",
+    "exemple": "",
+    "endpoints": {
+      "playernextngames": "HOME_WL"
+    }
+  },
+  "visitor_wl": {
+    "reference": "visitor_wl",
+    "exemple": "",
+    "endpoints": {
+      "playernextngames": "VISITOR_WL"
     }
   },
   "team_city": {
@@ -90,7 +184,16 @@
     "endpoints": {
       "boxscoretraditionalv3": "",
       "teamgamelog": "GAME_DATE",
-      "commonplayerinfo": ""
+      "commonplayerinfo": "",
+      "playergamelog": "GAME_DATE",
+      "playernextngames": "GAME_DATE"
+    }
+  },
+  "game_time": {
+    "reference": "game_time",
+    "exemple": "",
+    "endpoints": {
+      "playernextngames": "GAME_TIME"
     }
   },
   "matchup": {
@@ -99,7 +202,8 @@
     "endpoints": {
       "boxscoretraditionalv3": "",
       "teamgamelog": "MATCHUP",
-      "commonplayerinfo": ""
+      "commonplayerinfo": "",
+      "playergamelog": "MATCHUP"
     }
   },
   "player_id": {
@@ -109,7 +213,9 @@
       "boxscoretraditionalv3": "personId",
       "teamgamelog": "",
       "commonplayerinfo": "PERSON_ID",
-      "players.get_players": "id"
+      "players.get_players": "id",
+      "playergamelog": "Player_ID",
+      "commonteamroster": "PLAYER_ID"
     }
   },
   "first_name": {
@@ -119,7 +225,8 @@
       "boxscoretraditionalv3": "firstName",
       "teamgamelog": "",
       "commonplayerinfo": "FIRST_NAME",
-      "players.get_players": "first_name"
+      "players.get_players": "first_name",
+      "commonteamroster": "NICKNAME"
     }
   },
   "family_name": {
@@ -139,7 +246,8 @@
       "boxscoretraditionalv3": "",
       "teamgamelog": "",
       "commonplayerinfo": "DISPLAY_FIRST_LAST",
-      "players.get_players": "full_name"
+      "players.get_players": "full_name",
+      "commonteamroster": "PLAYER"
     }
   },
   "display_last_comma_first": {
@@ -166,7 +274,8 @@
     "endpoints": {
       "boxscoretraditionalv3": "playerSlug",
       "teamgamelog": "",
-      "commonplayerinfo": "PLAYER_SLUG"
+      "commonplayerinfo": "PLAYER_SLUG",
+      "commonteamroster": "PLAYER_SLUG"
     }
   },
   "player_code": {
@@ -184,7 +293,15 @@
     "endpoints": {
       "boxscoretraditionalv3": "",
       "teamgamelog": "",
-      "commonplayerinfo": "BIRTHDATE"
+      "commonplayerinfo": "BIRTHDATE",
+      "commonteamroster": "BIRTH_DATE"
+    }
+  },
+  "age": {
+    "reference": "age",
+    "exemple": "40",
+    "endpoints": {
+      "commonteamroster": "AGE"
     }
   },
   "school": {
@@ -193,7 +310,8 @@
     "endpoints": {
       "boxscoretraditionalv3": "",
       "teamgamelog": "",
-      "commonplayerinfo": "SCHOOL"
+      "commonplayerinfo": "SCHOOL",
+      "commonteamroster": "SCHOOL"
     }
   },
   "country": {
@@ -220,7 +338,8 @@
     "endpoints": {
       "boxscoretraditionalv3": "",
       "teamgamelog": "",
-      "commonplayerinfo": "HEIGHT"
+      "commonplayerinfo": "HEIGHT",
+      "commonteamroster": "HEIGHT"
     }
   },
   "weight": {
@@ -229,7 +348,8 @@
     "endpoints": {
       "boxscoretraditionalv3": "",
       "teamgamelog": "",
-      "commonplayerinfo": "WEIGHT"
+      "commonplayerinfo": "WEIGHT",
+      "commonteamroster": "WEIGHT"
     }
   },
   "season_exp": {
@@ -238,7 +358,8 @@
     "endpoints": {
       "boxscoretraditionalv3": "",
       "teamgamelog": "",
-      "commonplayerinfo": "SEASON_EXP"
+      "commonplayerinfo": "SEASON_EXP",
+      "commonteamroster": "EXP"
     }
   },
   "roster_status": {
@@ -356,7 +477,8 @@
     "endpoints": {
       "boxscoretraditionalv3": "position",
       "teamgamelog": "",
-      "commonplayerinfo": ""
+      "commonplayerinfo": "",
+      "commonteamroster": "POSITION"
     }
   },
   "full_position": {
@@ -382,7 +504,8 @@
     "endpoints": {
       "boxscoretraditionalv3": "jerseyNum",
       "teamgamelog": "",
-      "commonplayerinfo": "JERSEY"
+      "commonplayerinfo": "JERSEY",
+      "commonteamroster": "NUM"
     }
   },
   "wl": {
@@ -391,7 +514,8 @@
     "endpoints": {
       "boxscoretraditionalv3": "",
       "teamgamelog": "WL",
-      "commonplayerinfo": ""
+      "commonplayerinfo": "",
+      "playergamelog": "WL"
     }
   },
   "w": {
@@ -427,7 +551,8 @@
     "endpoints": {
       "boxscoretraditionalv3": "minutes",
       "teamgamelog": "MIN",
-      "commonplayerinfo": ""
+      "commonplayerinfo": "",
+      "playergamelog": "MIN"
     }
   },
   "fgm": {
@@ -436,7 +561,8 @@
     "endpoints": {
       "boxscoretraditionalv3": "fieldGoalsMade",
       "teamgamelog": "FGM",
-      "commonplayerinfo": ""
+      "commonplayerinfo": "",
+      "playergamelog": "FGM"
     }
   },
   "fga": {
@@ -445,7 +571,8 @@
     "endpoints": {
       "boxscoretraditionalv3": "fieldGoalsAttempted",
       "teamgamelog": "FGA",
-      "commonplayerinfo": ""
+      "commonplayerinfo": "",
+      "playergamelog": "FGA"
     }
   },
   "fg_pct": {
@@ -454,7 +581,8 @@
     "endpoints": {
       "boxscoretraditionalv3": "fieldGoalsPercentage",
       "teamgamelog": "FG_PCT",
-      "commonplayerinfo": ""
+      "commonplayerinfo": "",
+      "playergamelog": "FG_PCT"
     }
   },
   "fg3m": {
@@ -463,7 +591,8 @@
     "endpoints": {
       "boxscoretraditionalv3": "threePointersMade",
       "teamgamelog": "FG3M",
-      "commonplayerinfo": ""
+      "commonplayerinfo": "",
+      "playergamelog": "FG3M"
     }
   },
   "fg3a": {
@@ -472,7 +601,8 @@
     "endpoints": {
       "boxscoretraditionalv3": "threePointersAttempted",
       "teamgamelog": "FG3A",
-      "commonplayerinfo": ""
+      "commonplayerinfo": "",
+      "playergamelog": "FG3A"
     }
   },
   "fg3_pct": {
@@ -481,7 +611,8 @@
     "endpoints": {
       "boxscoretraditionalv3": "threePointersPercentage",
       "teamgamelog": "FG3_PCT",
-      "commonplayerinfo": ""
+      "commonplayerinfo": "",
+      "playergamelog": "FG3_PCT"
     }
   },
   "ftm": {
@@ -490,7 +621,8 @@
     "endpoints": {
       "boxscoretraditionalv3": "freeThrowsMade",
       "teamgamelog": "FTM",
-      "commonplayerinfo": ""
+      "commonplayerinfo": "",
+      "playergamelog": "FTM"
     }
   },
   "fta": {
@@ -499,7 +631,8 @@
     "endpoints": {
       "boxscoretraditionalv3": "freeThrowsAttempted",
       "teamgamelog": "FTA",
-      "commonplayerinfo": ""
+      "commonplayerinfo": "",
+      "playergamelog": "FTA"
     }
   },
   "ft_pct": {
@@ -508,7 +641,8 @@
     "endpoints": {
       "boxscoretraditionalv3": "freeThrowsPercentage",
       "teamgamelog": "FT_PCT",
-      "commonplayerinfo": ""
+      "commonplayerinfo": "",
+      "playergamelog": "FT_PCT"
     }
   },
   "o_reb": {
@@ -517,7 +651,8 @@
     "endpoints": {
       "boxscoretraditionalv3": "reboundsOffensive",
       "teamgamelog": "OREB",
-      "commonplayerinfo": ""
+      "commonplayerinfo": "",
+      "playergamelog": "OREB"
     }
   },
   "d_reb": {
@@ -526,7 +661,8 @@
     "endpoints": {
       "boxscoretraditionalv3": "reboundsDefensive",
       "teamgamelog": "DREB",
-      "commonplayerinfo": ""
+      "commonplayerinfo": "",
+      "playergamelog": "DREB"
     }
   },
   "reb": {
@@ -535,7 +671,8 @@
     "endpoints": {
       "boxscoretraditionalv3": "reboundsTotal",
       "teamgamelog": "REB",
-      "commonplayerinfo": ""
+      "commonplayerinfo": "",
+      "playergamelog": "REB"
     }
   },
   "ast": {
@@ -544,7 +681,8 @@
     "endpoints": {
       "boxscoretraditionalv3": "assists",
       "teamgamelog": "AST",
-      "commonplayerinfo": ""
+      "commonplayerinfo": "",
+      "playergamelog": "AST"
     }
   },
   "stl": {
@@ -553,7 +691,8 @@
     "endpoints": {
       "boxscoretraditionalv3": "steals",
       "teamgamelog": "STL",
-      "commonplayerinfo": ""
+      "commonplayerinfo": "",
+      "playergamelog": "STL"
     }
   },
   "blk": {
@@ -562,7 +701,8 @@
     "endpoints": {
       "boxscoretraditionalv3": "blocks",
       "teamgamelog": "BLK",
-      "commonplayerinfo": ""
+      "commonplayerinfo": "",
+      "playergamelog": "BLK"
     }
   },
   "tov": {
@@ -571,7 +711,8 @@
     "endpoints": {
       "boxscoretraditionalv3": "turnovers",
       "teamgamelog": "TOV",
-      "commonplayerinfo": ""
+      "commonplayerinfo": "",
+      "playergamelog": "TOV"
     }
   },
   "pf": {
@@ -580,7 +721,8 @@
     "endpoints": {
       "boxscoretraditionalv3": "foulsPersonal",
       "teamgamelog": "PF",
-      "commonplayerinfo": ""
+      "commonplayerinfo": "",
+      "playergamelog": "PF"
     }
   },
   "pts": {
@@ -589,7 +731,8 @@
     "endpoints": {
       "boxscoretraditionalv3": "points",
       "teamgamelog": "PTS",
-      "commonplayerinfo": ""
+      "commonplayerinfo": "",
+      "playergamelog": "PTS"
     }
   },
   "plus_minus_points": {
@@ -598,7 +741,22 @@
     "endpoints": {
       "boxscoretraditionalv3": "plusMinusPoints",
       "teamgamelog": "",
-      "commonplayerinfo": ""
+      "commonplayerinfo": "",
+      "playergamelog": "PLUS_MINUS"
+    }
+  },
+  "video_available": {
+    "reference": "video_available",
+    "exemple": "5",
+    "endpoints": {
+      "playergamelog": "VIDEO_AVAILABLE"
+    }
+  },
+  "how_acquired": {
+    "reference": "how_acquired",
+    "exemple": "Signed on 07/14/23",
+    "endpoints": {
+      "commonteamroster": "HOW_ACQUIRED"
     }
   }
 }
