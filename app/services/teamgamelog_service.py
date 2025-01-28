@@ -1,3 +1,7 @@
+from builtins import list
+
+from pandas import Series
+
 from app.models.teamgamelog import TeamGameLog
 from app.schemas.teamgamelog_schema import TeamGameLogSchema
 from app.services.nba_api_service import NbaApiService
@@ -6,6 +10,7 @@ from marshmallow import ValidationError
 import pandas as pd
 
 from dao.teamgamelog_dao import TeamGameLogDAO
+from dto.teamgamelog_dto import TeamGameLogDTO
 
 
 class TeamGameLogService:
@@ -14,14 +19,14 @@ class TeamGameLogService:
         pass
 
     @staticmethod
-    def get_df_teamgamelog_from_api_by_team_id(team_id: int):
+    def get_df_teamgamelog_from_api_by_team_id(team_id: int) -> pd.DataFrame:
         teamgamelog_data = NbaApiService.get_raw_team_game_log_by_team_id(team_id)
         teamgamelog_df = Utils.obtenir_df_manipulable(teamgamelog_data)
 
         return teamgamelog_df
 
     @staticmethod
-    def get_list_teamgamelog_dto_by_team_id(team_id: int):
+    def get_list_teamgamelog_dto_by_team_id(team_id: int) -> list[TeamGameLogDTO]:
         """
         Récupère une liste de TeamGameLogDTO pour un team_id donné.
 
@@ -41,7 +46,7 @@ class TeamGameLogService:
         return teamgamelogs_dto
 
     @staticmethod
-    def get_df_all_teamgamelogs():
+    def get_df_all_teamgamelogs() -> pd.DataFrame:
 
         teamgamelogs_from_sql = TeamGameLogDAO.get_all_teamgamelogs()
 
@@ -58,7 +63,7 @@ class TeamGameLogService:
         return df_teamgamelogs
 
     @staticmethod
-    def get_df_pk_teamgamelog_by_team_id(team_id: int):
+    def get_df_pk_teamgamelog_by_team_id(team_id: int) -> pd.DataFrame:
 
         list_pk = TeamGameLogDAO.get_list_pk_by_team_id(team_id)
 
@@ -68,7 +73,7 @@ class TeamGameLogService:
         return df_pk
 
     @staticmethod
-    def map_df_teamgamelog_to_teamgamelog_models(teamgamelog_df: pd.DataFrame):
+    def map_df_teamgamelog_to_teamgamelog_models(teamgamelog_df: pd.DataFrame) -> list[TeamGameLog: dict]:
         """
         Cette méthode prend un DataFrame et le convertit en une liste de TeamGameLog
         en utilisant le schema Marshmallow.
@@ -86,7 +91,7 @@ class TeamGameLogService:
         return team_game_logs
 
     @staticmethod
-    def map_row_teamgamelog_df_to_teamgamelog_model(row):
+    def map_row_teamgamelog_df_to_teamgamelog_model(row: Series) -> TeamGameLog | None :
         """
         Cette méthode prend un dictionnaire représentant une ligne de données et le convertit
         en un objet TeamGameLog en utilisant le schema Marshmallow.
