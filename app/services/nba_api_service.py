@@ -22,7 +22,12 @@ class NbaApiService:
         Transformation en DataFrame, et renommage des colonnes.
         :return: pd.DataFrame: Liste des joueurs.
         """
-        list_dicts = players.get_players()  # Appel API
+        try:
+            list_dicts = players.get_players()  # Appel API
+        except Exception as e:
+            print(f"Erreur lors de l'appel à get_players : {e}")
+            list_dicts = []  # Valeur par défaut en cas d'échec
+
         df = pd.DataFrame(list_dicts)
         df_ameliore = Utils.ameliore_df(df)
         df_renamed = NbaApiColumnMapper.rename_columns_in_df(df_ameliore, NbaApiEndpoints.PLAYERS_GET_PLAYERS.value)
@@ -35,7 +40,12 @@ class NbaApiService:
         Transformation en DataFrame, et renommage des colonnes.
         :return: pd.DataFrame: Informations du joueur.
         """
-        raw_data = commonplayerinfo.CommonPlayerInfo(player_id=player_id)   # Appel API
+        try:
+            raw_data = commonplayerinfo.CommonPlayerInfo(player_id=player_id)  # Appel API
+        except Exception as e:
+            print(f"Erreur lors de l'appel à CommonPlayerInfo pour player_id={player_id} : {e}")
+            raw_data = None  # Valeur par défaut en cas d'échec
+
         df = Utils.obtenir_df_manipulable(raw_data)
         df_renamed = NbaApiColumnMapper.rename_columns_in_df(df, NbaApiEndpoints.COMMON_PLAYER_INFO.value)
         return df_renamed
@@ -47,7 +57,12 @@ class NbaApiService:
         Transformation en DataFrame, renommage des colonnes, et convertion des dates.
         :return: pd.DataFrame: Logs des boxscores du joueur.
         """
-        raw_data = playergamelog.PlayerGameLog(player_id=player_id, season=Config.SAISON_EN_COURS)  # Appel API
+        try:
+            raw_data = playergamelog.PlayerGameLog(player_id=player_id, season=Config.SAISON_EN_COURS)  # Appel API
+        except Exception as e:
+            print(f"Erreur lors de l'appel à PlayerGameLog pour player_id={player_id}, saison={Config.SAISON_EN_COURS} : {e}")
+            raw_data = None  # Valeur par défaut en cas d'échec
+
         df = Utils.obtenir_df_manipulable(raw_data)
         df_renamed = NbaApiColumnMapper.rename_columns_in_df(df, NbaApiEndpoints.PLAYER_GAME_LOG.value)
         df_renamed["game_date"] = df_renamed["game_date"].apply(Utils.convert_to_date)  # Convertir les valeurs JUN 19, 2003 en Date 2003-06-19
@@ -60,7 +75,12 @@ class NbaApiService:
         Transformation en DataFrame, renommage des colonnes, et convertion des dates.
         :return: pd.DataFrame: Logs des prochains matchs du joueur.
         """
-        raw_data = playernextngames.PlayerNextNGames(player_id=player_id)   # Appel API
+        try:
+            raw_data = playernextngames.PlayerNextNGames(player_id=player_id)  # Appel API
+        except Exception as e:
+            print(f"Erreur lors de l'appel à PlayerNextNGames pour player_id={player_id} : {e}")
+            raw_data = None  # Valeur par défaut en cas d'échec
+
         df = Utils.obtenir_df_manipulable(raw_data)
         df_renamed = NbaApiColumnMapper.rename_columns_in_df(df, NbaApiEndpoints.PLAYER_GAME_LOG.value)
         df_renamed["game_date"] = df_renamed["game_date"].apply(Utils.convert_to_date)  # Convertir les valeurs JUN 19, 2003 en Date 2003-06-19
@@ -75,7 +95,12 @@ class NbaApiService:
         Transformation en DataFrame, et renommage des colonnes.
         :return: pd.DataFrame: Liste des équipes.
         """
-        list_dicts = teams.get_teams()  # Appel API
+        try:
+            list_dicts = teams.get_teams()  # Appel API
+        except Exception as e:
+            print(f"Erreur lors de l'appel à get_teams : {e}")
+            list_dicts = []  # Valeur par défaut en cas d'échec
+
         df = pd.DataFrame(list_dicts)
         df_ameliore = Utils.ameliore_df(df)
         df_renamed = NbaApiColumnMapper.rename_columns_in_df(df_ameliore, NbaApiEndpoints.TEAMS_GET_TEAMS.value)
@@ -88,7 +113,12 @@ class NbaApiService:
         Transformation en DataFrame, renommage des colonnes, et convertion des dates.
         :return: pd.DataFrame: Informations des rosters.
         """
-        raw_data = commonteamroster.CommonTeamRoster(team_id=team_id)   # Appel API
+        try:
+            raw_data = commonteamroster.CommonTeamRoster(team_id=team_id)  # Appel API
+        except Exception as e:
+            print(f"Erreur lors de l'appel à CommonTeamRoster avec team_id={team_id} : {e}")
+            raw_data = None  # Valeur par défaut en cas d'échec
+
         df = Utils.obtenir_df_manipulable(raw_data)
         df_renamed = NbaApiColumnMapper.rename_columns_in_df(df, NbaApiEndpoints.COMMON_TEAM_ROSTER.value)
         df_renamed["birthdate"] = df_renamed["birthdate"].apply(Utils.convert_to_date)  # Convertir les valeurs JUN 19, 2003 en Date 2003-06-19
@@ -101,7 +131,12 @@ class NbaApiService:
         Transformation en DataFrame, renommage des colonnes, et convertion des dates.
         :return: pd.DataFrame: Logs des boxscores des équipes.
         """
-        raw_data = teamgamelog.TeamGameLog(team_id=team_id, season=Config.SAISON_EN_COURS)  # Appel API
+        try:
+            raw_data = teamgamelog.TeamGameLog(team_id=team_id, season=Config.SAISON_EN_COURS)  # Appel API
+        except Exception as e:
+            print(f"Erreur lors de l'appel à TeamGameLog avec team_id={team_id}, season={Config.SAISON_EN_COURS} : {e}")
+            raw_data = None  # Valeur par défaut en cas d'échec
+
         df = Utils.obtenir_df_manipulable(raw_data)
         df_renamed = NbaApiColumnMapper.rename_columns_in_df(df, NbaApiEndpoints.TEAM_GAME_LOG.value)
         df_renamed["game_date"] = df_renamed["game_date"].apply(Utils.convert_to_date)  # Convertir les valeurs JUN 19, 2003 en Date 2003-06-19
@@ -116,7 +151,12 @@ class NbaApiService:
         Transformation en DataFrame, et renommage des colonnes.
         :return: pd.DataFrame: Informations des boxscores.
         """
-        raw_data = boxscoretraditionalv3.BoxScoreTraditionalV3(game_id=game_id) # Appel API
+        try:
+            raw_data = boxscoretraditionalv3.BoxScoreTraditionalV3(game_id=game_id)  # Appel API
+        except Exception as e:
+            print(f"Erreur lors de l'appel à BoxScoreTraditionalV3 avec game_id={game_id} : {e}")
+            raw_data = None  # Valeur par défaut en cas d'échec
+
         df = Utils.obtenir_df_manipulable(raw_data)
         df_renamed = NbaApiColumnMapper.rename_columns_in_df(df, NbaApiEndpoints.BOX_SCORE_TRADITIONAL_V3.value)
         return df_renamed
