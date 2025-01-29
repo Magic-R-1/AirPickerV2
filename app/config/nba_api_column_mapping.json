@@ -10,7 +10,8 @@
     "reference": "season",
     "exemple": "2024",
     "endpoints": {
-      "commonteamroster": "SEASON"
+      "commonteamroster": "SEASON",
+      "scoreboardv2": "SEASON"
     }
   },
   "league_id": {
@@ -28,7 +29,29 @@
       "teamgamelog": "Game_ID",
       "commonplayerinfo": "",
       "playergamelog": "Game_ID",
-      "playernextngames": "GAME_ID"
+      "playernextngames": "GAME_ID",
+      "scoreboardv2": "GAME_ID"
+    }
+  },
+  "game_status_id": {
+    "reference": "game_status_id",
+    "exemple": "",
+    "endpoints": {
+      "scoreboardv2": "GAME_STATUS_ID"
+    }
+  },
+  "game_status_text": {
+    "reference": "game_status_text",
+    "exemple": "",
+    "endpoints": {
+      "scoreboardv2": "GAME_STATUS_TEXT"
+    }
+  },
+  "game_code": {
+    "reference": "game_code",
+    "exemple": "",
+    "endpoints": {
+      "scoreboardv2": "GAMECODE"
     }
   },
   "team_id": {
@@ -46,14 +69,16 @@
     "reference": "home_team_id",
     "exemple": "1610612747",
     "endpoints": {
-      "playernextngames": "HOME_TEAM_ID"
+      "playernextngames": "HOME_TEAM_ID",
+      "scoreboardv2": "HOME_TEAM_ID"
     }
   },
   "visitor_team_id": {
     "reference": "visitor_team_id",
     "exemple": "1610612747",
     "endpoints": {
-      "playernextngames": "VISITOR_TEAM_ID"
+      "playernextngames": "VISITOR_TEAM_ID",
+      "scoreboardv2": "VISITOR_TEAM_ID"
     }
   },
   "home_team_name": {
@@ -186,7 +211,15 @@
       "teamgamelog": "GAME_DATE",
       "commonplayerinfo": "",
       "playergamelog": "GAME_DATE",
-      "playernextngames": "GAME_DATE"
+      "playernextngames": "GAME_DATE",
+      "scoreboardv2": "GAME_DATE_EST"
+    }
+  },
+  "game_sequence": {
+    "reference": "game_sequence",
+    "exemple": "",
+    "endpoints": {
+      "scoreboardv2": "GAME_SEQUENCE"
     }
   },
   "game_time": {
@@ -752,11 +785,67 @@
       "playergamelog": "VIDEO_AVAILABLE"
     }
   },
-  "how_acquired": {
-    "reference": "how_acquired",
-    "exemple": "Signed on 07/14/23",
+  "live_period": {
+    "reference": "live_period",
+    "exemple": "",
     "endpoints": {
-      "commonteamroster": "HOW_ACQUIRED"
+      "scoreboardv2": "LIVE_PERIOD"
+    }
+  },
+  "live_pc_time": {
+    "reference": "live_pc_time",
+    "exemple": "",
+    "endpoints": {
+      "scoreboardv2": "LIVE_PC_TIME"
+    }
+  },
+  "natl_tv_broadcaster_abbreviation": {
+    "reference": "natl_tv_broadcaster_abbreviation",
+    "exemple": "",
+    "endpoints": {
+      "scoreboardv2": "NATL_TV_BROADCASTER_ABBREVIATION"
+    }
+  },
+  "home_tv_broadcaster_abbreviation": {
+    "reference": "home_tv_broadcaster_abbreviation",
+    "exemple": "",
+    "endpoints": {
+      "scoreboardv2": "HOME_TV_BROADCASTER_ABBREVIATION"
+    }
+  },
+  "away_tv_broadcaster_abbreviation": {
+    "reference": "away_tv_broadcaster_abbreviation",
+    "exemple": "",
+    "endpoints": {
+      "scoreboardv2": "AWAY_TV_BROADCASTER_ABBREVIATION"
+    }
+  },
+  "live_period_time_bcast": {
+    "reference": "live_period_time_bcast",
+    "exemple": "",
+    "endpoints": {
+      "scoreboardv2": "LIVE_PERIOD_TIME_BCAST"
+    }
+  },
+  "arena_name": {
+    "reference": "arena_name",
+    "exemple": "",
+    "endpoints": {
+      "scoreboardv2": "ARENA_NAME"
+    }
+  },
+  "wh_status": {
+    "reference": "wh_status",
+    "exemple": "",
+    "endpoints": {
+      "scoreboardv2": "WH_STATUS"
+    }
+  },
+  "wnba_commissioner_flag": {
+    "reference": "wnba_commissioner_flag",
+    "exemple": "",
+    "endpoints": {
+      "scoreboardv2": "WNBA_COMMISSIONER_FLAG"
     }
   }
 }

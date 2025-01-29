@@ -24,12 +24,21 @@ class Utils:
     @staticmethod
     def convert_to_date(date_str: str) -> date:
         """
-        Convertit une date sous forme de chaîne (format : 'APR 14, 2024') en un objet datetime.date.
+        Convertit une date sous forme de chaîne en un objet datetime.date.
+        Gère les formats :
+        - 'APR 14, 2024'
+        - '2025-01-30T00:00:00'
 
         :param date_str: La date sous forme de chaîne.
         :return: Un objet datetime.date correspondant.
         """
-        return datetime.strptime(date_str, "%b %d, %Y").date()
+        try:
+            return datetime.strptime(date_str, "%b %d, %Y").date()
+        except ValueError:
+            try:
+                return datetime.strptime(date_str, "%Y-%m-%dT%H:%M:%S").date()
+            except ValueError:
+                raise ValueError(f"Format de date inconnu : {date_str}")
 
     @staticmethod
     def convert_y_n_to_boolean(df: pd.DataFrame) -> pd.DataFrame:

@@ -11,6 +11,7 @@ class NbaApiEndpoints(Enum):
     COMMON_TEAM_ROSTER = "commonteamroster"
 
     BOX_SCORE_TRADITIONAL_V3 = "boxscoretraditionalv3"
+    SCORE_BOARD_V2 = "scoreboardv2"
 
     # Static
     TEAMS_GET_TEAMS = "teams.get_teams"

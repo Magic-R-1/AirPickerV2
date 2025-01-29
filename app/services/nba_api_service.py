@@ -1,7 +1,8 @@
 import pandas as pd
 from nba_api.stats.static import players, teams
-from nba_api.stats.endpoints import boxscoretraditionalv3, commonplayerinfo, commonteamroster, playergamelog, playernextngames, teamgamelog
-# scoreboardv2 : permet d’obtenir les matchs programmés pour une date précise
+from nba_api.stats.endpoints import boxscoretraditionalv3, commonplayerinfo, commonteamroster, playergamelog, playernextngames, teamgamelog, scoreboardv2
+
+from datetime import date
 
 from app.config.config import Config
 from app.utils.nba_api_column_mapper import NbaApiColumnMapper
@@ -65,7 +66,7 @@ class NbaApiService:
 
         df = Utils.obtenir_df_manipulable(raw_data)
         df_renamed = NbaApiColumnMapper.rename_columns_in_df(df, NbaApiEndpoints.PLAYER_GAME_LOG.value)
-        df_renamed["game_date"] = df_renamed["game_date"].apply(Utils.convert_to_date)  # Convertir les valeurs JUN 19, 2003 en Date 2003-06-19
+        df_renamed["game_date"] = df_renamed["game_date"].apply(Utils.convert_to_date)  
         return df_renamed
 
     @staticmethod
@@ -83,7 +84,7 @@ class NbaApiService:
 
         df = Utils.obtenir_df_manipulable(raw_data)
         df_renamed = NbaApiColumnMapper.rename_columns_in_df(df, NbaApiEndpoints.PLAYER_GAME_LOG.value)
-        df_renamed["game_date"] = df_renamed["game_date"].apply(Utils.convert_to_date)  # Convertir les valeurs JUN 19, 2003 en Date 2003-06-19
+        df_renamed["game_date"] = df_renamed["game_date"].apply(Utils.convert_to_date)  
         return df_renamed
 
     # 2. Team
@@ -121,7 +122,7 @@ class NbaApiService:
 
         df = Utils.obtenir_df_manipulable(raw_data)
         df_renamed = NbaApiColumnMapper.rename_columns_in_df(df, NbaApiEndpoints.COMMON_TEAM_ROSTER.value)
-        df_renamed["birthdate"] = df_renamed["birthdate"].apply(Utils.convert_to_date)  # Convertir les valeurs JUN 19, 2003 en Date 2003-06-19
+        df_renamed["birthdate"] = df_renamed["birthdate"].apply(Utils.convert_to_date)  
         return df_renamed
 
     @staticmethod
@@ -139,7 +140,7 @@ class NbaApiService:
 
         df = Utils.obtenir_df_manipulable(raw_data)
         df_renamed = NbaApiColumnMapper.rename_columns_in_df(df, NbaApiEndpoints.TEAM_GAME_LOG.value)
-        df_renamed["game_date"] = df_renamed["game_date"].apply(Utils.convert_to_date)  # Convertir les valeurs JUN 19, 2003 en Date 2003-06-19
+        df_renamed["game_date"] = df_renamed["game_date"].apply(Utils.convert_to_date)  
         return df_renamed
 
     # 3. Feuilles de match
@@ -161,6 +162,25 @@ class NbaApiService:
         df_renamed = NbaApiColumnMapper.rename_columns_in_df(df, NbaApiEndpoints.BOX_SCORE_TRADITIONAL_V3.value)
         return df_renamed
 
+    @staticmethod
+    def get_scoreboardv2_by_game_date(game_date: date) -> pd.DataFrame:
+        """
+        input : objet scoreboardv2
+        Transformation en DataFrame, renommage des colonnes, et convertion des dates.
+        :return: pd.DataFrame: Informations des matchs.
+        """
+        try:
+            raw_data = scoreboardv2.ScoreboardV2(game_date=game_date)  # Appel API
+        except Exception as e:
+            print(f"Erreur lors de l'appel à ScoreboardV2 avec game_date={game_date} : {e}")
+            raw_data = None  # Valeur par défaut en cas d'échec
+
+        df = Utils.obtenir_df_manipulable(raw_data)
+        df_renamed = NbaApiColumnMapper.rename_columns_in_df(df, NbaApiEndpoints.SCORE_BOARD_V2.value)
+        df_renamed["game_date"] = df_renamed["game_date"].apply(Utils.convert_to_date)  
+
+        return df_renamed
+
 if __name__ == "__main__":
     # data = NbaApiService.get_common_player_info(2544)
     # data = NbaApiService.get_teams()
@@ -169,5 +189,6 @@ if __name__ == "__main__":
     # data = NbaApiService.get_team_game_log_by_team_id(1610612747)
     # data = NbaApiService.get_player_game_log_by_player_id(2544)
     # data = NbaApiService.get_player_next_games_by_player_id(2544)
+    data = NbaApiService.get_scoreboardv2_by_game_date(date(2025,1,30))
     
     print("")
