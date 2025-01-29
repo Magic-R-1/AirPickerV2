@@ -21,7 +21,7 @@ class PlayerTableMgmt:
         des joueurs actifs via l'API et en les ajoutant à la base de données.
         """
         # Récupérer la liste des joueurs actifs via PlayerService
-        active_players_df = PlayerService.get_df_active_players()
+        active_players_df = PlayerService.get_df_active_players_from_api()
 
         # Diviser le DataFrame en deux moitiés pour éviter les erreurs de timeout
         size = len(active_players_df) // 2
@@ -44,7 +44,7 @@ class PlayerTableMgmt:
                         total=len(active_players_df)
                 ):
                     # Récupérer le DataFrame commonplayerinfo depuis l'API
-                    player_info = PlayerService.get_df_common_player_info_by_player_id(player.player_id)
+                    player_info = PlayerService.get_df_common_player_from_api_info_by_player_id(player.player_id)
 
                     # Mapper les données vers le modèle Player
                     player_sqlalchemy = PlayerService.map_common_player_info_df_to_player_model(player_info)

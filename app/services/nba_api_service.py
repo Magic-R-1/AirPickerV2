@@ -81,23 +81,35 @@ class NbaApiService:
     def get_raw_team_roster_by_team_id(team_id: int) -> commonteamroster:
         return commonteamroster.CommonTeamRoster(team_id=team_id)
 
-    # TODO : gestion de birthdate à faire, reçu JUN 19, 2003
     @staticmethod
     def get_team_roster_by_team_id(team_id: int) -> commonteamroster:
         """
-        Récupère l'objet CommonTeamRoster via l'API, le transforme en DataFrame et renomme les colonnes.
+        Récupère l'objet CommonTeamRoster via l'API, le transforme en DataFrame, renomme les colonnes, et converti les dates.
         :return: pd.DataFrame: Informations des rosters.
         """
 
         raw_data = NbaApiService.get_raw_team_roster_by_team_id(team_id)
         df = Utils.obtenir_df_manipulable(raw_data)
         df_renamed = NbaApiColumnMapper.rename_columns_in_df(df, NbaApiEndpoints.COMMON_TEAM_ROSTER.value)
+        df_renamed["birthdate"] = df_renamed["birthdate"].apply(Utils.convert_to_date)  # Convertir les valeurs JUN 19, 2003 en Date 2003-06-19
         return df_renamed
 
-    #TODO : avec la gestion des dates, Utils.convert_to_date(date_string)
     @staticmethod
     def get_raw_team_game_log_by_team_id(team_id: int) -> teamgamelog:
         return teamgamelog.TeamGameLog(team_id=team_id, season=Config.SAISON_EN_COURS)
+
+    @staticmethod
+    def get_team_game_log_by_team_id(team_id: int) -> pd.DataFrame:
+        """
+        Récupère l'objet TeamGameLog via l'API, le transforme en DataFrame, renomme les colonnes, et converti les dates.
+        :return: pd.DataFrame: Informations des teamgamelog.
+        """
+
+        raw_data = NbaApiService.get_raw_team_game_log_by_team_id(team_id)
+        df = Utils.obtenir_df_manipulable(raw_data)
+        df_renamed = NbaApiColumnMapper.rename_columns_in_df(df, NbaApiEndpoints.TEAM_GAME_LOG.value)
+        df_renamed["game_date"] = df_renamed["game_date"].apply(Utils.convert_to_date)  # Convertir les valeurs JUN 19, 2003 en Date 2003-06-19
+        return df_renamed
 
     # 3. Feuilles de match
     # =================================
@@ -121,6 +133,7 @@ if __name__ == "__main__":
     # data = NbaApiService.get_common_player_info(2544)
     # data = NbaApiService.get_teams()
     # data = NbaApiService.get_boxscore_by_game_id("0022400629")
-    data = NbaApiService.get_team_roster_by_team_id(1610612747)
+    # data = NbaApiService.get_team_roster_by_team_id(1610612747)
+    data = NbaApiService.get_team_game_log_by_team_id(1610612747)
     
     print("")

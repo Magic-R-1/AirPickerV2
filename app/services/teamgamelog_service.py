@@ -20,10 +20,7 @@ class TeamGameLogService:
 
     @staticmethod
     def get_df_teamgamelog_from_api_by_team_id(team_id: int) -> pd.DataFrame:
-        teamgamelog_data = NbaApiService.get_raw_team_game_log_by_team_id(team_id)
-        teamgamelog_df = Utils.obtenir_df_manipulable(teamgamelog_data)
-
-        return teamgamelog_df
+        return NbaApiService.get_team_game_log_by_team_id(team_id)
 
     @staticmethod
     def get_list_teamgamelog_dto_by_team_id(team_id: int) -> list[TeamGameLogDTO]:
@@ -117,5 +114,5 @@ class TeamGameLogService:
 if __name__ == "__main__":
 
     #teamgamelog_df = TeamGameLogService.get_teamgamelog_df_from_api_by_team_id(1610612742)
-    list = TeamGameLogService.get_list_teamgamelog_dto_by_team_id(1610612737)
+    my_list = TeamGameLogService.get_list_teamgamelog_dto_by_team_id(1610612737)
     print("toto")

@@ -6,10 +6,7 @@ class TeamGameLogSchema(Schema):
     team_id = fields.Int(required=True)
 
     game_id = fields.Str(required=True)
-    # TODO : à convertir en Date, pour le moment : APR 14, 2024
-    # Utils.convert_to_date(date_string)
     game_date = fields.Date(required=True)
-    # game_date = fields.Str(required=True)
     matchup = fields.Str(required=True)
 
     wl = fields.Str(allow_none=True)

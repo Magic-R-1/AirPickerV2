@@ -49,8 +49,6 @@ class TeamGameLogTableMgmt:
 
                     # Appel API à TeamGameLog, pour récupérer les TeamGameLogs de l'équipe
                     teamgamelog_df = TeamGameLogService.get_df_teamgamelog_from_api_by_team_id(team_id)
-                    # Passer tous les champs en minuscule
-                    teamgamelog_df.columns = teamgamelog_df.columns.str.lower()
 
                     # Effectuer un merge pour garder uniquement les nouvelles lignes
                     merged_df = teamgamelog_df.merge(

@@ -71,7 +71,7 @@ class PlayerService:
             return None
 
     @staticmethod
-    def get_df_common_player_info_by_player_id(player_id: int) -> pd.DataFrame | None:
+    def get_df_common_player_from_api_info_by_player_id(player_id: int) -> pd.DataFrame | None:
         """
         Utile la méthode de NbaApiService pour obtenir le DF de CommonPlayerInfo
 
@@ -86,7 +86,7 @@ class PlayerService:
             return None
 
     @staticmethod
-    def get_df_active_players():
+    def get_df_active_players_from_api():
 
         df_players = NbaApiService.get_players()
         df_filtered = df_players[df_players['is_active']]
@@ -96,6 +96,6 @@ class PlayerService:
 
 if __name__ == "__main__":
 
-    player_info = PlayerService.get_df_common_player_info_by_player_id(2544)
+    player_info = PlayerService.get_df_common_player_from_api_info_by_player_id(2544)
     player_dto = PlayerService.map_common_player_info_df_to_player_dto(player_info)
     print(player_dto)

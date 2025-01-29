@@ -11,10 +11,7 @@ class TeamGameLog(Base):
     team_id = Column(Integer, ForeignKey('team.team_id'), primary_key=True) # Clé primaire composée, et clé étrangère
 
     game_id = Column(String, primary_key=True)  # Clé primaire composée. Pas de clé étrangère, car table teamgamelog mise à jour avant boxscore : IntegrityError
-    # TODO : à convertir en Date, pour le moment : APR 14, 2024
-    # Utils.convert_to_date(date_string)
     game_date = Column(Date, nullable=False)
-    # game_date = Column(String, nullable=False)
     matchup = Column(String, nullable=False)
 
     wl = Column(String, nullable=True)
