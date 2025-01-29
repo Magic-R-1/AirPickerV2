@@ -1,5 +1,3 @@
-import pandas as pd
-
 from app.dto.player_dto import PlayerDTO
 from app.dao.player_dao import PlayerDAO
 from app.exceptions.exceptions import PlayerNotFoundError
@@ -71,21 +69,6 @@ class PlayerService:
             return None
 
     @staticmethod
-    def get_df_common_player_from_api_info_by_player_id(player_id: int) -> pd.DataFrame | None:
-        """
-        Utile la méthode de NbaApiService pour obtenir le DF de CommonPlayerInfo
-
-        :param player_id: L'identifiant unique du joueur.
-        :return: Un DataFrame contenant les données du joueur ou None en cas d'erreur.
-        """
-        try:
-            return NbaApiService.get_common_player_info(player_id)
-
-        except Exception as e:
-            print(f"Erreur lors de la récupération des données pour le joueur {player_id}: {e}")
-            return None
-
-    @staticmethod
     def get_df_active_players_from_api():
 
         df_players = NbaApiService.get_players()
@@ -95,7 +78,4 @@ class PlayerService:
 
 
 if __name__ == "__main__":
-
-    player_info = PlayerService.get_df_common_player_from_api_info_by_player_id(2544)
-    player_dto = PlayerService.map_common_player_info_df_to_player_dto(player_info)
-    print(player_dto)
+    print("")

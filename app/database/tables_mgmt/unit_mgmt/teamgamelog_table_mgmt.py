@@ -5,6 +5,7 @@ from app.database.db_connector import engine, SessionLocal
 from app.models.teamgamelog import TeamGameLog
 from app.services.team_service import TeamService
 from app.services.teamgamelog_service import TeamGameLogService
+from services.nba_api_service import NbaApiService
 
 
 class TeamGameLogTableMgmt:
@@ -48,7 +49,7 @@ class TeamGameLogTableMgmt:
                     df_pk_teamgamelog_in_base = df_teamgamelog_in_base[df_teamgamelog_in_base['team_id'] == team_id]
 
                     # Appel API à TeamGameLog, pour récupérer les TeamGameLogs de l'équipe
-                    teamgamelog_df = TeamGameLogService.get_df_teamgamelog_from_api_by_team_id(team_id)
+                    teamgamelog_df = NbaApiService.get_team_game_log_by_team_id(team_id)
 
                     # Effectuer un merge pour garder uniquement les nouvelles lignes
                     merged_df = teamgamelog_df.merge(

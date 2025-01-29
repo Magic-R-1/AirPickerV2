@@ -5,6 +5,7 @@ from app.config.config import Config
 from app.database.db_connector import engine, SessionLocal
 from app.models.player import Player
 from app.services.player_service import PlayerService
+from app.services.nba_api_service import NbaApiService
 
 
 class PlayerTableMgmt:
@@ -44,7 +45,7 @@ class PlayerTableMgmt:
                         total=len(active_players_df)
                 ):
                     # Récupérer le DataFrame commonplayerinfo depuis l'API
-                    player_info = PlayerService.get_df_common_player_from_api_info_by_player_id(player.player_id)
+                    player_info = NbaApiService.get_common_player_info(player.player_id)
 
                     # Mapper les données vers le modèle Player
                     player_sqlalchemy = PlayerService.map_common_player_info_df_to_player_model(player_info)

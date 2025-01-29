@@ -4,23 +4,16 @@ from pandas import Series
 
 from app.models.teamgamelog import TeamGameLog
 from app.schemas.teamgamelog_schema import TeamGameLogSchema
-from app.services.nba_api_service import NbaApiService
-from app.utils.utils import Utils
+from app.dao.teamgamelog_dao import TeamGameLogDAO
+from app.dto.teamgamelog_dto import TeamGameLogDTO
 from marshmallow import ValidationError
 import pandas as pd
-
-from dao.teamgamelog_dao import TeamGameLogDAO
-from dto.teamgamelog_dto import TeamGameLogDTO
 
 
 class TeamGameLogService:
 
     def __init__(self):
         pass
-
-    @staticmethod
-    def get_df_teamgamelog_from_api_by_team_id(team_id: int) -> pd.DataFrame:
-        return NbaApiService.get_team_game_log_by_team_id(team_id)
 
     @staticmethod
     def get_list_teamgamelog_dto_by_team_id(team_id: int) -> list[TeamGameLogDTO]:
