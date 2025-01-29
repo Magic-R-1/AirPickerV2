@@ -48,10 +48,22 @@ class NbaApiService:
         df_renamed = NbaApiColumnMapper.rename_columns_in_df(df, NbaApiEndpoints.COMMON_PLAYER_INFO.value)
         return df_renamed
 
-    #TODO
     @staticmethod
     def get_raw_player_game_log_by_player_id(player_id: int) -> playergamelog:
         return playergamelog.PlayerGameLog(player_id=player_id, season=Config.SAISON_EN_COURS)
+
+    @staticmethod
+    def get_player_game_log_by_player_id(player_id: int) -> pd.DataFrame:
+        """
+        Récupère l'objet PlayerGameLog via l'API, le transforme en DataFrame, renomme les colonnes, et converti les dates.
+        :return: pd.DataFrame: Logs des boxscores du joueur.
+        """
+
+        raw_data = NbaApiService.get_raw_player_game_log_by_player_id(player_id)
+        df = Utils.obtenir_df_manipulable(raw_data)
+        df_renamed = NbaApiColumnMapper.rename_columns_in_df(df, NbaApiEndpoints.PLAYER_GAME_LOG.value)
+        df_renamed["game_date"] = df_renamed["game_date"].apply(Utils.convert_to_date)  # Convertir les valeurs JUN 19, 2003 en Date 2003-06-19
+        return df_renamed
 
     #TODO
     @staticmethod
@@ -102,7 +114,7 @@ class NbaApiService:
     def get_team_game_log_by_team_id(team_id: int) -> pd.DataFrame:
         """
         Récupère l'objet TeamGameLog via l'API, le transforme en DataFrame, renomme les colonnes, et converti les dates.
-        :return: pd.DataFrame: Informations des teamgamelog.
+        :return: pd.DataFrame: Logs des boxscores des équipes.
         """
 
         raw_data = NbaApiService.get_raw_team_game_log_by_team_id(team_id)
@@ -134,6 +146,7 @@ if __name__ == "__main__":
     # data = NbaApiService.get_teams()
     # data = NbaApiService.get_boxscore_by_game_id("0022400629")
     # data = NbaApiService.get_team_roster_by_team_id(1610612747)
-    data = NbaApiService.get_team_game_log_by_team_id(1610612747)
+    # data = NbaApiService.get_team_game_log_by_team_id(1610612747)
+    data = NbaApiService.get_player_game_log_by_player_id(2544)
     
     print("")
