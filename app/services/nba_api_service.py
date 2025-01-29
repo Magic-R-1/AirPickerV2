@@ -189,6 +189,6 @@ if __name__ == "__main__":
     # data = NbaApiService.get_team_game_log_by_team_id(1610612747)
     # data = NbaApiService.get_player_game_log_by_player_id(2544)
     # data = NbaApiService.get_player_next_games_by_player_id(2544)
-    data = NbaApiService.get_scoreboardv2_by_game_date(date(2025,1,30))
+    # data = NbaApiService.get_scoreboardv2_by_game_date(date(2025,1,30))
     
     print("")
