@@ -21,7 +21,7 @@ class Boxscore(Base):
     player_slug = Column(String, nullable=True)
     position = Column(String, nullable=True)
     comment = Column(String, nullable=True)
-    jersey_num = Column(Integer, nullable=True)
+    jersey_num = Column(String, nullable=True)
     minutes = Column(String, nullable=True)
 
     fgm = Column(Integer, nullable=True)

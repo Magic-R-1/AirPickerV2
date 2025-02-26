@@ -21,7 +21,7 @@ class BoxscoreDTO:
     player_slug: Optional[str]
     position: Optional[str]
     comment: Optional[str]
-    jersey_num: Optional[int]
+    jersey_num: Optional[str]
     minutes: Optional[str]
 
     fgm: Optional[int]
