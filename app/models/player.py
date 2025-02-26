@@ -1,7 +1,7 @@
 from sqlalchemy import Column, Integer, String, Boolean, Date, ForeignKey
 from sqlalchemy.orm import relationship
 from app.database.db_connector import Base
-from app.models.team import Team # À conserver, pour la relation
+# from app.models.team import Team # À conserver, pour la relation
 
 
 class Player(Base):

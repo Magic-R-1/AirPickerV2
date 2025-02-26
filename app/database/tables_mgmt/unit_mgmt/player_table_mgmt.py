@@ -28,9 +28,10 @@ class PlayerTableMgmt:
         size = len(active_players_df) // 2
 
         # Choisir la moitié à traiter
-        moitie = 1  # Modifier cette variable pour choisir la moitié
+        moitie = 2  # Modifier cette variable pour choisir la moitié
         if moitie == 1:
-            active_players_df = active_players_df.iloc[:90]  # Limitation temporaire, à remplacer par active_players_df = active_players_df.iloc[:size]
+            #active_players_df = active_players_df.iloc[:90]  # Limitation temporaire, à remplacer par active_players_df = active_players_df.iloc[:size]
+            active_players_df = active_players_df.iloc[:size]
         elif moitie == 2:
             active_players_df = active_players_df.iloc[size:]
 
@@ -56,7 +57,7 @@ class PlayerTableMgmt:
                     # Pause après un certain nombre de joueurs pour éviter les limites de l'API
                     if (i % Config.NBA_API_TEMPO_PLAYERS == 0) and (i != 0):
                         delai = Config.NBA_API_TEMPO
-                        print(f"Pause de {delai} secondes après l'ajout de {i} joueurs.")
+                        print(f" Pause de {delai} secondes après l'ajout de {i} joueurs.")
                         time.sleep(delai)
 
                 db.commit()
@@ -95,3 +96,4 @@ class PlayerTableMgmt:
 
 if __name__ == "__main__":
     PlayerTableMgmt.fill_player_table()
+    #PlayerTableMgmt.clear_player_table()
