@@ -102,4 +102,5 @@ class TeamGameLogTableMgmt:
                 print(f"Une erreur est survenue lors de la suppression de la table teamgamelog : {e}")
 
 if __name__ == "__main__":
-    TeamGameLogTableMgmt.update_teamgamelog_table()
+    TeamGameLogTableMgmt.fill_teamgamelog_table()
+    #TeamGameLogTableMgmt.update_teamgamelog_table()

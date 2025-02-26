@@ -144,4 +144,5 @@ class TeamDAO:
 if __name__ == "__main__":
     #team_sql = TeamDAO.get_team_by_id(1610612763)
     #team_dto = TeamDAO.team_from_sql_to_dto(team_sql)
-    print("toto")
+    team_ids = TeamDAO.get_all_team_ids()
+    print("")

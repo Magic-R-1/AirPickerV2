@@ -39,7 +39,7 @@ class PlayerTableMgmt:
         with SessionLocal() as db:
             try:
                 # Barre de progression avec tqdm
-                for i, player in tqdm(
+                for i, player in tqdm( # ne pas oublier l'index, qui évite de créer des tuples
                         enumerate(active_players_df.itertuples(index=False)),
                         desc="Ajout des joueurs",
                         unit="joueur",
