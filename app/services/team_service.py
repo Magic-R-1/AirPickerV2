@@ -26,6 +26,7 @@ class TeamService:
         return team_dto
 
     @staticmethod
+    # TODO : à virer, passer directement par la classe DAO
     def get_list_all_team_ids():
         list_from_db = TeamDAO.get_all_team_ids() # Récupère la liste des résultats de la BDD sous forme de tuple
         return [team_id[0] for team_id in list_from_db] # Extraction du premier élément de chaque tuple
