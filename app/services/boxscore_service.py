@@ -1,7 +1,7 @@
 from marshmallow import ValidationError
 
 from app.models.boxscore import Boxscore
-from schemas.boxscore_schema import BoxscoreSchema
+from app.schemas.boxscore_schema import BoxscoreSchema
 
 
 class BoxscoreService:

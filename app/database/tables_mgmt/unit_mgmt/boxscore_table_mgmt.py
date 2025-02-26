@@ -2,10 +2,10 @@ from tqdm import tqdm
 
 from app.database.db_connector import engine, SessionLocal
 from app.models.boxscore import Boxscore
-from dao.teamgamelog_dao import TeamGameLogDAO
-from services.boxscore_service import BoxscoreService
-from services.nba_api_service import NbaApiService
-from services.team_service import TeamService
+from app.dao.teamgamelog_dao import TeamGameLogDAO
+from app.services.boxscore_service import BoxscoreService
+from app.services.nba_api_service import NbaApiService
+from app.services.team_service import TeamService
 
 
 class BoxscoreTableMgmt:
