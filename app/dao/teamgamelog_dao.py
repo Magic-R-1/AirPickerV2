@@ -1,3 +1,5 @@
+from typing import List, Tuple
+
 from app.database.db_connector import session_scope
 from app.dto.teamgamelog_dto import TeamGameLogDTO
 from app.exceptions.exceptions import TeamGameLogNotFoundError
@@ -44,7 +46,7 @@ class TeamGameLogDAO:
             return teamgamelogs_from_sql
 
     @staticmethod
-    def get_list_pk_by_team_id(team_id: int):
+    def get_list_pk_by_team_id(team_id: int) -> List[Tuple[int, str]]:
         with session_scope() as session:
             # Récupérer la liste des tuples (team_id, game_id) pour une équipe donnée
             list_pk = session.query(TeamGameLog.team_id, TeamGameLog.game_id) \
@@ -52,6 +54,17 @@ class TeamGameLogDAO:
                 .all()
 
         return list_pk
+
+    @staticmethod
+    def get_list_game_id_by_team_id(team_id: int) -> List[str]:
+        with session_scope() as session:
+            # Récupérer la liste des game_id pour une équipe donnée
+            list_game_ids = session.query(TeamGameLog.game_id) \
+                .filter(TeamGameLog.team_id == team_id) \
+                .all()
+
+        # Extraire les IDs des matchs à partir des tuples
+        return [game_id[0] for game_id in list_game_ids]
 
     @staticmethod
     def get_all_teamgamelogs():
@@ -91,5 +104,6 @@ class TeamGameLogDAO:
         return TeamGameLogDTO(**teamgamelog_schema)
 
 if __name__ == "__main__":
-    list = TeamGameLogDAO.get_list_pk_by_team_id(1610612737)
+    #myList = TeamGameLogDAO.get_list_pk_by_team_id(1610612737)
+    myList = TeamGameLogDAO.get_list_game_id_by_team_id(1610612737)
     print("")
