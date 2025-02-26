@@ -83,5 +83,6 @@ class TeamTableMgmt:
 
 
 if __name__ == "__main__":
-    TeamTableMgmt.fill_team_table()
     #TeamTableMgmt.create_team_table()
+    #TeamTableMgmt.drop_team_table()
+    TeamTableMgmt.fill_team_table()

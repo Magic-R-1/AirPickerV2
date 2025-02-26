@@ -9,7 +9,7 @@ class DropTables:
     @staticmethod
     def drop_all_tables():
         BoxscoreTableMgmt.drop_boxscore_table()
-        TeamGameLogTableMgmt.drop_teamgamelog_table()
+        # TeamGameLogTableMgmt.drop_teamgamelog_table()
         PlayerTableMgmt.drop_player_table()
         TeamTableMgmt.drop_team_table()
         

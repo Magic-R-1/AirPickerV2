@@ -8,11 +8,11 @@ class CreateTables:
 
     @staticmethod
     def create_all_tables():
-        # Base.metadata.create_all(engine)
-        # TeamTableLifeCycle.create_team_table()
-        # PlayerTableLifeCycle.create_player_table()
-        # BoxscoreTableLifeCycle.create_boxscore_table()
-        TeamGameLogTableMgmt.create_teamgamelog_table()
+        Base.metadata.create_all(engine)
+        # TeamTableMgmt.create_team_table()
+        # PlayerTableMgmt.create_player_table()
+        # BoxscoreTableMgmt.create_boxscore_table()
+        # TeamGameLogTableMgmt.create_teamgamelog_table()
 
 if __name__ == "__main__":
     CreateTables.create_all_tables()

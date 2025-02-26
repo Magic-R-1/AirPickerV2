@@ -40,3 +40,7 @@ class BoxscoreTableMgmt:
                 print("La table boxscore a été supprimée avec succès.")
             except Exception as e:
                 print(f"Une erreur est survenue lors de la suppression de la table boxscore : {e}")
+
+if __name__ == "__main__":
+    BoxscoreTableMgmt.create_boxscore_table()
+    # BoxscoreTableMgmt.fill_boxscore_table()

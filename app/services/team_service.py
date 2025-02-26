@@ -96,7 +96,7 @@ class TeamService:
             return TeamDTO(**team_schema)
 
         except Exception as e:
-            print(f"Erreur lors du mapping des données du joueur : {e}")
+            print(f"Erreur lors du mapping des données de l'équipe : {e}")
             return None
 
 
