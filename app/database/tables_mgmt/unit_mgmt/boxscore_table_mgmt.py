@@ -7,12 +7,17 @@ class BoxscoreTableMgmt:
     @staticmethod
     def create_boxscore_table():
         Boxscore.__table__.create(engine)
-
         print("Table 'boxscore' créée avec succès.")
 
     @staticmethod
+    # TODO
     def fill_boxscore_table():
         print("toto")
+
+    @staticmethod
+    # TODO
+    def update_boxscore_table():
+        print("")
 
     @staticmethod
     def clear_boxscore_table():

@@ -64,6 +64,7 @@ class TeamService:
         """
         try:
             # Renommer les clés du dictionnaire
+            # TODO : si méthode utilisée, remplacer par le rename columns, bien plus efficace
             team_dict_renamed = NbaApiColumnMapper.rename_keys_in_dict(team_data,NbaApiEndpoints.TEAMS_GET_TEAMS.value)
 
             # Désérialisation des données pour obtenir un objet TeamDTO

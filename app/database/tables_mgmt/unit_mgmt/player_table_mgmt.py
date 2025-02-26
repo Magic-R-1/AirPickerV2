@@ -67,8 +67,8 @@ class PlayerTableMgmt:
                 print(f"Une erreur est survenue lors de l'ajout des joueurs : {e}")
 
     @staticmethod
+    # TODO
     def update_player_table():
-        # TODO : Créer un DF avec ce qui est en base, un autre avec tous les joueurs de l'API, comparer les 2, et faire des updates depuis le DF API pour tout ce qui est différent
         print("")
 
     @staticmethod

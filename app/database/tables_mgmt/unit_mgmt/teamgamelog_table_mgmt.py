@@ -13,7 +13,6 @@ class TeamGameLogTableMgmt:
     @staticmethod
     def create_teamgamelog_table():
         TeamGameLog.__table__.create(engine)
-
         print("Table 'teamgamelog' créée avec succès.")
 
     @staticmethod

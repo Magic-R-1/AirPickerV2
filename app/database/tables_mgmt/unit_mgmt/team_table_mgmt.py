@@ -13,7 +13,6 @@ class TeamTableMgmt:
     @staticmethod
     def create_team_table():
         Team.__table__.create(engine)
-
         print("Table 'team' créée avec succès.")
 
     @staticmethod
@@ -24,7 +23,7 @@ class TeamTableMgmt:
 
         # Création de la liste de DTO
         # On utilise les DTO pour bénéficier de son contrôle strict des données, et ainsi ajouter "No team"
-        # Le faible nombre ne pousse pas à rester sur un DataFrame
+        # Le faible nombre ne pousse pas à rester sur un DataFrame pour les performances
         team_dto_list = [
             TeamService.map_team_tuple_to_team_dto(row) for row in teams_df.itertuples(index=False)
         ]
@@ -46,8 +45,6 @@ class TeamTableMgmt:
                 ):
 
                     team_sqlalchemy = TeamDAO.team_from_dto_to_sql(team)
-
-                    # Ajouter l'entrée à la session sans valider
                     db.add(team_sqlalchemy)
 
                 db.commit()
@@ -56,6 +53,11 @@ class TeamTableMgmt:
             except Exception as e:
                 db.rollback()
                 print(f"Une erreur est survenue lors de l'ajout des équipes : {e}")
+
+    @staticmethod
+    # TODO
+    def update_team_table():
+        print("")
 
     @staticmethod
     def clear_team_table():

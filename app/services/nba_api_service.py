@@ -108,7 +108,7 @@ class NbaApiService:
         return df_renamed
 
     @staticmethod
-    def get_team_roster_by_team_id(team_id: int) -> commonteamroster:
+    def get_team_roster_by_team_id(team_id: int) -> pd.DataFrame:
         """
         input : objet commonteamroster
         Transformation en DataFrame, renommage des colonnes, et convertion des dates.
