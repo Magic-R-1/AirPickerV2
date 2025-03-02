@@ -45,21 +45,13 @@ class TeamGameLogTableMgmt:
                         total=len(team_ids_list)
                 ):
                     # Filtrer les lignes de la table entière pour ne garder que celles correspondant à l'équipe en cours
-                    df_pk_teamgamelog_in_base = df_teamgamelog_in_base[df_teamgamelog_in_base['team_id'] == team_id]
+                    df_current_team_teamgamelog_in_base = df_teamgamelog_in_base[df_teamgamelog_in_base['team_id'] == team_id]
 
                     # Appel API à TeamGameLog, pour récupérer les TeamGameLogs de l'équipe
                     teamgamelog_df = NbaApiService.get_team_game_log_by_team_id(team_id)
 
-                    # Effectuer un merge pour garder uniquement les nouvelles lignes
-                    merged_df = teamgamelog_df.merge(
-                        df_pk_teamgamelog_in_base,
-                        on=["team_id", "game_id"],
-                        how="left",
-                        indicator=True
-                    )
-
-                    # Conserver uniquement les lignes qui ne sont pas dans la base
-                    teamgamelog_df = merged_df[merged_df["_merge"] == "left_only"].drop(columns=["_merge"])
+                    # Ne conserver que les lignes pour lesquelles les valeurs de game_id ne sont pas en base
+                    teamgamelog_df = teamgamelog_df[~teamgamelog_df["game_id"].isin(df_current_team_teamgamelog_in_base["game_id"])]
 
                     # Incrémenter le compteur global avec le nombre de nouvelles lignes
                     count_teamgamelogs += len(teamgamelog_df)
@@ -102,5 +94,5 @@ class TeamGameLogTableMgmt:
                 print(f"Une erreur est survenue lors de la suppression de la table teamgamelog : {e}")
 
 if __name__ == "__main__":
-    TeamGameLogTableMgmt.fill_teamgamelog_table()
-    #TeamGameLogTableMgmt.update_teamgamelog_table()
+    #TeamGameLogTableMgmt.fill_teamgamelog_table()
+    TeamGameLogTableMgmt.update_teamgamelog_table()
