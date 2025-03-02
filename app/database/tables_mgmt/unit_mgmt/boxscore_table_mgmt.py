@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from tqdm import tqdm
 
 from app.database.db_connector import engine, SessionLocal
@@ -16,7 +18,8 @@ class BoxscoreTableMgmt:
         print("Table 'boxscore' créée avec succès.")
 
     @staticmethod
-    # TODO
+    # TODO : reste à gérer les joueurs pas en base car inactif, mais présent dans des boxscores, comme 203926
+    # https://chatgpt.com/share/67c4c3b4-146c-8004-9dca-e77ad52aef08
     def fill_boxscore_table():
         # Récupérer la liste des ids de toutes les équipes dans la table team
         team_ids_list = TeamService.get_list_all_team_ids()
@@ -25,8 +28,8 @@ class BoxscoreTableMgmt:
         with SessionLocal() as db:
             try:
                 # Parcourir les équipes
-                for index, team_id in tqdm( # Ne pas oublier l'index, qui évite de créer des tuples
-                        enumerate(team_ids_list),
+                for team_id in tqdm(
+                        team_ids_list,
                         desc="Boucle sur les équipes",
                         unit="équipe",
                         total=len(team_ids_list)
@@ -36,8 +39,8 @@ class BoxscoreTableMgmt:
                     liste_game_ids = TeamGameLogDAO.get_list_game_id_by_team_id(team_id)
 
                     # Parcourir les game_id
-                    for i, game_id in tqdm( # Ne pas oublier l'index, qui évite de créer des tuples
-                            enumerate(liste_game_ids),
+                    for game_id in tqdm(
+                            liste_game_ids,
                             desc="Boucle sur les game_id",
                             unit="game_id",
                             total=len(liste_game_ids)
@@ -47,18 +50,17 @@ class BoxscoreTableMgmt:
                         df_boxscore = NbaApiService.get_boxscore_by_game_id(game_id)
 
                         # Mapper les données vers le modèle Boxscore
-                        list_boxscore_sqlalchemy = BoxscoreService.map_boxscore_df_to_boxscore_model(df_boxscore)
+                        list_boxscore_sqlalchemy = BoxscoreService.map_boxscore_df_to_list_boxscore_model(df_boxscore)
 
-                        for boxscore_sqlalchemy in list_boxscore_sqlalchemy:
-                            # Ajouter l'entrée à la session sans valider immédiatement
-                            db.add(boxscore_sqlalchemy)
+                        if list_boxscore_sqlalchemy:
+                            db.bulk_save_objects(list_boxscore_sqlalchemy)  # Insertion en batch
 
+                db.flush()  # Flush avant commit pour s'assurer que les objets sont envoyés à la base de données
                 db.commit()
 
             except Exception as e:
                 db.rollback()
                 print(f"Une erreur est survenue lors de l'ajout des boxscores : {e}")
-
 
     @staticmethod
     # TODO
@@ -86,6 +88,7 @@ class BoxscoreTableMgmt:
                 print("La table boxscore a été supprimée avec succès.")
             except Exception as e:
                 print(f"Une erreur est survenue lors de la suppression de la table boxscore : {e}")
+
 
 if __name__ == "__main__":
     BoxscoreTableMgmt.fill_boxscore_table()
