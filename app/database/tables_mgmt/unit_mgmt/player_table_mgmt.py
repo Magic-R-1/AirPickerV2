@@ -8,6 +8,7 @@ from app.database.db_connector import engine, SessionLocal
 from app.models.player import Player
 from app.services.player_service import PlayerService
 from app.services.nba_api_service import NbaApiService
+from utils.utils import Utils
 
 
 class PlayerTableMgmt:
@@ -74,7 +75,7 @@ class PlayerTableMgmt:
                 print(f"Une erreur est survenue lors de l'ajout des joueurs : {e}")
 
     @staticmethod
-    def update_player_table():
+    def update_player_table_old():
 
         df_players_from_base = PlayerService.get_df_all_players_from_base()
         df_active_players_from_api = PlayerService.get_df_active_players_from_api()
@@ -104,14 +105,17 @@ class PlayerTableMgmt:
         df_populated_players_from_api = pd.DataFrame(list_populated_players_from_api)
 
         # Convertir des colonnes d'object à float64 (conversion initiale causée par l'utilisation d'une liste)
-        df_populated_players_from_api['weight'] = pd.to_numeric(df_populated_players_from_api['weight'], errors='coerce')
-        df_populated_players_from_api['jersey_num'] = pd.to_numeric(df_populated_players_from_api['jersey_num'], errors='coerce')
+        df_populated_players_from_api['weight'] = pd.to_numeric(df_populated_players_from_api['weight'],
+                                                                errors='coerce')
+        df_populated_players_from_api['jersey_num'] = pd.to_numeric(df_populated_players_from_api['jersey_num'],
+                                                                    errors='coerce')
 
         # Enlever la colonne team du DF provenant de la base
         df_players_from_base.drop(columns=['team'], inplace=True)
 
         # Changer les formats de la colonne birthdate de chaque DF
-        df_populated_players_from_api['birthdate'] = pd.to_datetime(df_populated_players_from_api['birthdate']).dt.strftime('%Y-%m-%d')
+        df_populated_players_from_api['birthdate'] = pd.to_datetime(
+            df_populated_players_from_api['birthdate']).dt.strftime('%Y-%m-%d')
         df_players_from_base['birthdate'] = pd.to_datetime(df_players_from_base['birthdate']).dt.strftime('%Y-%m-%d')
 
         # Fusionner les deux DF
@@ -138,7 +142,6 @@ class PlayerTableMgmt:
 
                 # Ajout
                 for _, row in df_players_to_add.iterrows():
-
                     # Convertir la ligne en DF
                     row_df = pd.DataFrame([row])
 
@@ -156,6 +159,111 @@ class PlayerTableMgmt:
                 print(f" Update de {count_update} joueurs.")
                 print(f" Ajout de {count_ajout} joueurs.")
 
+        except Exception as e:
+            db.rollback()
+            print(f"Une erreur est survenue lors de la mise à jour des joueurs : {e}")
+
+    @staticmethod
+    def update_player_table():
+        # Récupérer les données
+        df_players_from_base = PlayerService.get_df_all_players_from_base()
+        df_active_players_from_api = PlayerService.get_df_active_players_from_api()
+
+        # Traitement des joueurs actifs
+        df_populated_players_from_api = PlayerTableMgmt.update_populate_active_players(df_active_players_from_api)
+
+        # Conversion et préparation des DataFrames
+        PlayerTableMgmt.update_prepare_df(df_players_from_base, df_populated_players_from_api)
+
+        # Fusionner et filtrer les DataFrames
+        df_players_to_add, df_players_to_update = PlayerTableMgmt.update_merge_and_filter_players(df_players_from_base,
+                                                                                                  df_populated_players_from_api)
+
+        # Mettre à jour la base de données
+        PlayerTableMgmt.update_write_in_database(df_players_to_add, df_players_to_update)
+
+    @staticmethod
+    def update_populate_active_players(df_active_players_from_api):
+        list_populated_players_from_api = []
+
+        # Limiter à 5 joueurs
+        # df_active_players_from_api = df_active_players_from_api.iloc[:5]
+
+        for i, row in tqdm(
+                enumerate(df_active_players_from_api.itertuples(index=False)),
+                desc="Ajout des joueurs",
+                unit="joueur",
+                total=len(df_active_players_from_api)
+        ):
+            player_info = NbaApiService.get_common_player_info(row.player_id)
+            list_populated_players_from_api.append(player_info.to_dict(orient='records')[0])
+
+            # Pause pour respecter les limites de l'API
+            if (i % Config.NBA_API_TEMPO_PLAYERS == 0) and (i != 0):
+                print(f" Pause de {Config.NBA_API_TEMPO} secondes après l'ajout de {i} joueurs.")
+                time.sleep(Config.NBA_API_TEMPO)
+
+        # Convertir la liste en DataFrame
+        return pd.DataFrame(list_populated_players_from_api)
+
+    @staticmethod
+    def update_prepare_df(df_players_from_base, df_populated_players_from_api):
+
+        #df_populated_players_from_api = Utils.obtenir_df_manipulable(df_populated_players_from_api)
+        #df_players_from_base = Utils.obtenir_df_manipulable(df_players_from_base)
+
+        # Conversion des colonnes en types appropriés
+        df_populated_players_from_api['weight'] = pd.to_numeric(df_populated_players_from_api['weight'],
+                                                                errors='coerce')
+        df_populated_players_from_api['jersey_num'] = pd.to_numeric(df_populated_players_from_api['jersey_num'],
+                                                                    errors='coerce')
+
+        # Supprimer la colonne team du DataFrame provenant de la base
+        df_players_from_base.drop(columns=['team'], inplace=True)
+
+        # Convertir les dates de naissance
+        df_populated_players_from_api['birthdate'] = pd.to_datetime(
+            df_populated_players_from_api['birthdate']).dt.strftime('%Y-%m-%d')
+        df_players_from_base['birthdate'] = pd.to_datetime(df_players_from_base['birthdate']).dt.strftime('%Y-%m-%d')
+
+    @staticmethod
+    def update_merge_and_filter_players(df_players_from_base, df_populated_players_from_api):
+        df_merge = df_populated_players_from_api.merge(df_players_from_base, how='outer', indicator=True)
+
+        # Récupérer les joueurs à ajouter et à mettre à jour
+        df_different_players_from_api = df_merge[df_merge['_merge'] == 'left_only'].drop(columns=['_merge'])
+
+        df_players_to_add = df_different_players_from_api[
+            ~df_different_players_from_api['player_id'].isin(df_players_from_base['player_id'])]
+        df_players_to_update = df_different_players_from_api[
+            df_different_players_from_api['player_id'].isin(df_players_from_base['player_id'])]
+
+        return df_players_to_add, df_players_to_update
+
+    @staticmethod
+    def update_write_in_database(df_players_to_add, df_players_to_update):
+        try:
+            with SessionLocal() as db:
+                # Mise à jour des joueurs existants
+                for _, row in df_players_to_update.iterrows():
+                    # Remplacer les NaN par None avant la mise à jour
+                    row_dict = row.to_dict()
+                    row_dict = {key: (None if pd.isna(value) else value) for key, value in row_dict.items()}
+
+                    # Mettre à jour la base de données avec les valeurs corrigées
+                    db.query(Player).filter(Player.player_id == row['player_id']).update(row_dict)
+
+                # Ajout des nouveaux joueurs
+                for _, row in df_players_to_add.iterrows():
+                    row_df = pd.DataFrame([row])
+                    player_sqlalchemy = PlayerService.map_common_player_info_df_to_player_model(row_df)
+                    db.add(player_sqlalchemy)
+
+                db.flush()
+                db.commit()
+
+                print(f" Update de {len(df_players_to_update)} joueurs.")
+                print(f" Ajout de {len(df_players_to_add)} joueurs.")
         except Exception as e:
             db.rollback()
             print(f"Une erreur est survenue lors de la mise à jour des joueurs : {e}")

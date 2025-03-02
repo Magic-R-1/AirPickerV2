@@ -74,6 +74,7 @@ class PlayerService:
     def get_df_active_players_from_api():
 
         df_players = NbaApiService.get_players()
+        # df_filtered = df_players[df_players['player_id'] == 203926]
         df_filtered = df_players[df_players['is_active']]
 
         return df_filtered
@@ -97,4 +98,5 @@ class PlayerService:
 
 
 if __name__ == "__main__":
+    PlayerService.get_df_active_players_from_api()
     print("")
