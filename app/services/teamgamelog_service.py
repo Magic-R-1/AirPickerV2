@@ -63,46 +63,26 @@ class TeamGameLogService:
         return df_pk
 
     @staticmethod
-    def map_df_teamgamelog_to_teamgamelog_models(teamgamelog_df: pd.DataFrame) -> list[TeamGameLog: dict]:
+    def map_df_teamgamelog_to_list_teamgamelog_model(teamgamelog_df: pd.DataFrame) -> list[TeamGameLog: dict]:
         """
-        Cette méthode prend un DataFrame et le convertit en une liste de TeamGameLog
-        en utilisant le schema Marshmallow.
+        Cette méthode prend un DataFrame et le convertit en une liste de TeamGameLog.
 
         :param teamgamelog_df: DataFrame contenant les données des matchs
         :return: Liste de dictionnaires représentant les objets TeamGameLog
         """
-        team_game_logs = []
+        teamgamelog_dict = teamgamelog_df.to_dict(orient='records')  # Convertir le DataFrame en liste de dicts
+        list_teamgamelog = []
 
-        for index, row in teamgamelog_df.iterrows():
-            # Désérialiser la ligne en un objet TeamGameLog
-            teamgamelog_model = TeamGameLogService.map_row_teamgamelog_df_to_teamgamelog_model(row)
-            team_game_logs.append(teamgamelog_model)
+        for teamgamelog_row in teamgamelog_dict:
+            try:
+                teamgamelog_schema = TeamGameLogSchema().load(teamgamelog_row)
+                teamgamelog_model = TeamGameLog(**teamgamelog_schema)
+                list_teamgamelog.append(teamgamelog_model)
 
-        return team_game_logs
+            except ValidationError as err:
+                print(f"Erreur de validation sur la ligne {teamgamelog_row}: {err.messages}")
 
-    @staticmethod
-    def map_row_teamgamelog_df_to_teamgamelog_model(row: Series) -> TeamGameLog | None :
-        """
-        Cette méthode prend un dictionnaire représentant une ligne de données et le convertit
-        en un objet TeamGameLog en utilisant le schema Marshmallow.
-
-        :param row: Ligne du DF représentant les données d'un match
-        :return: Un objet TeamGameLog
-        """
-
-        try:
-            # Convertir la ligne en dictionnaire
-            row_dict = dict(row)
-
-            # Sérialiser les données avec Marshmallow
-            team_game_log_data = TeamGameLogSchema().dump(row_dict)
-
-            # Créer une instance SQLAlchemy TeamGameLog à partir du dictionnaire créé par Marshmallow
-            return TeamGameLog(**team_game_log_data)
-
-        except ValidationError as err:
-            print(f"Erreur de validation: {err.messages}")
-            return None
+        return list_teamgamelog
 
 if __name__ == "__main__":
 

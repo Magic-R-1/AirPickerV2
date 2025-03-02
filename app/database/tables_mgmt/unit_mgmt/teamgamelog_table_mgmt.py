@@ -56,10 +56,11 @@ class TeamGameLogTableMgmt:
                     # Incrémenter le compteur global avec le nombre de nouvelles lignes
                     count_teamgamelogs += len(teamgamelog_df)
 
-                    # Boucle sur les lignes du DataFrame
-                    for i, row in teamgamelog_df.iterrows():
-                        teamgamelog_model = TeamGameLogService.map_row_teamgamelog_df_to_teamgamelog_model(row)
-                        db.add(teamgamelog_model)
+                    # Mapper les données vers le modèle Boxscore
+                    list_teamgamelog_sqlalchemy = TeamGameLogService.map_df_teamgamelog_to_list_teamgamelog_model(teamgamelog_df)
+
+                    if list_teamgamelog_sqlalchemy:
+                        db.bulk_save_objects(list_teamgamelog_sqlalchemy)  # Insertion en batch
 
                 db.flush()  # Flush avant commit pour s'assurer que les objets sont envoyés à la base de données
                 db.commit()
