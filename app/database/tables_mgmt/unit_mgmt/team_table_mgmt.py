@@ -37,8 +37,8 @@ class TeamTableMgmt:
         with SessionLocal() as db:
             try:
                 # La barre de progression avec tqdm
-                for index, team in tqdm( # ne pas oublier l'index, qui évite de créer des tuples
-                        enumerate(team_dto_list),
+                for team in tqdm(
+                        team_dto_list,
                         desc="Ajout des équipes",
                         unit="équipe",
                         total=len(team_dto_list)

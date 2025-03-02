@@ -33,14 +33,14 @@ class TeamGameLogTableMgmt:
                 # Récupérer toute la table teamgamelog avant la boucle
                 df_teamgamelog_in_base = TeamGameLogService.get_df_all_teamgamelogs()
 
-                # Vérification : Si aucun enregistrement existant, utiliser un DataFrame vide
+                # Si aucun enregistrement existant, utiliser un DataFrame vide
                 if df_teamgamelog_in_base is None or df_teamgamelog_in_base.empty:
                     print(
                         "Aucun TeamGameLog existant trouvé dans la base. Tous les enregistrements API seront considérés comme nouveaux.")
                     df_teamgamelog_in_base = pd.DataFrame(columns=["team_id", "game_id"])
 
-                for index, team_id in tqdm(
-                        enumerate(team_ids_list),
+                for team_id in tqdm(
+                        team_ids_list,
                         desc="Ajout des teamgamelogs",
                         unit="teamgamelog",
                         total=len(team_ids_list)
@@ -69,7 +69,6 @@ class TeamGameLogTableMgmt:
                 db.flush()  # Flush avant commit pour s'assurer que les objets sont envoyés à la base de données
                 db.commit()
 
-                # Afficher un message avec le nombre total de TeamGameLogs ajoutés
                 print(f"{count_teamgamelogs} nouveaux teamgamelogs ont été ajoutés à la base de données.")
 
             except Exception as e:

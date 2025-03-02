@@ -6,6 +6,8 @@ from app.dto.teamgamelog_dto import TeamGameLogDTO
 from marshmallow import ValidationError
 import pandas as pd
 
+from app.utils.utils import Utils
+
 
 class TeamGameLogService:
 
@@ -42,6 +44,8 @@ class TeamGameLogService:
 
         # Convertir la liste de dictionnaires en DataFrame
         df_teamgamelogs = pd.DataFrame(teamgamelogs_dict)
+
+        # df_teamgamelogs = Utils.obtenir_df_manipulable(df_teamgamelogs)
 
         # Supprimer la colonne '__table__' ajoutée par SQLAlchemy pour l'auto-référence
         if '_sa_instance_state' in df_teamgamelogs.columns:
