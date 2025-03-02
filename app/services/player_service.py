@@ -1,3 +1,5 @@
+import pandas as pd
+
 from app.dto.player_dto import PlayerDTO
 from app.dao.player_dao import PlayerDAO
 from app.exceptions.exceptions import PlayerNotFoundError
@@ -75,6 +77,23 @@ class PlayerService:
         df_filtered = df_players[df_players['is_active']]
 
         return df_filtered
+
+    @staticmethod
+    def get_df_all_players_from_base() -> pd.DataFrame:
+
+        players_from_sql = PlayerDAO.get_all_players()
+
+        # Utilisation de la méthode `__dict__` pour obtenir les attributs des objets en dictionnaire
+        players_dict = [player.__dict__ for player in players_from_sql]
+
+        # Convertir la liste de dictionnaires en DataFrame
+        df_players = pd.DataFrame(players_dict)
+
+        # Supprimer la colonne '__table__' ajoutée par SQLAlchemy pour l'auto-référence
+        if '_sa_instance_state' in df_players.columns:
+            df_players.drop('_sa_instance_state', axis=1, inplace=True)
+
+        return df_players
 
 
 if __name__ == "__main__":
