@@ -24,8 +24,8 @@ class PlayerTableMgmt:
         des joueurs actifs via l'API et en les ajoutant à la base de données.
         """
 
-        #PlayerTableMgmt.update_player_table()
-        #TODO : à virer lorsque ça sera testé
+        # PlayerTableMgmt.update_player_table()
+        # TODO : à virer lorsque ça sera testé
 
         # Récupérer la liste des joueurs actifs via PlayerService
         active_players_df = PlayerService.get_df_active_players_from_api()
@@ -74,67 +74,91 @@ class PlayerTableMgmt:
                 print(f"Une erreur est survenue lors de l'ajout des joueurs : {e}")
 
     @staticmethod
-    def add_new_player_to_table():
-        # Récupérer la liste des joueurs actifs via PlayerService
-        active_players_df = PlayerService.get_df_active_players_from_api()
+    def update_player_table():
 
-        # Diviser le DataFrame en deux moitiés pour éviter les erreurs de timeout
-        size = len(active_players_df) // 2
+        df_players_from_base = PlayerService.get_df_all_players_from_base()
+        df_active_players_from_api = PlayerService.get_df_active_players_from_api()
 
-        # Choisir la moitié à traiter
-        moitie = 2  # Modifier cette variable pour choisir la moitié
-        if moitie == 1:
-            # active_players_df = active_players_df.iloc[:90]  # Limitation temporaire, à remplacer par active_players_df = active_players_df.iloc[:size]
-            active_players_df = active_players_df.iloc[:size]
-        elif moitie == 2:
-            active_players_df = active_players_df.iloc[size:]
+        list_populated_players_from_api = []
 
-        # Boucler sur les joueurs pour ajouter leurs informations
-        with SessionLocal() as db:
-            try:
+        df_active_players_from_api = df_active_players_from_api.iloc[:5]
 
-                # Récupérer toute la table teamgamelog avant la boucle
-                df_players_in_base = PlayerService.get_df_all_players_from_base()
+        # Barre de progression avec tqdm
+        for i, row in tqdm(
+                enumerate(df_active_players_from_api.itertuples(index=False)),
+                desc="Ajout des joueurs",
+                unit="joueur",
+                total=len(df_active_players_from_api)
+        ):
+            player_info = NbaApiService.get_common_player_info(row.player_id)
+            # Ajout d'un DF player_info à une liste (plus rapide que de rajouter des lignes à un DF
+            list_populated_players_from_api.append(player_info.to_dict(orient='records')[0])
 
-                # Si aucun enregistrement existant, utiliser un DataFrame vide
-                if df_players_in_base is None or df_players_in_base.empty:
-                    print(
-                        "Aucun player existant trouvé dans la base. Tous les enregistrements API seront considérés comme nouveaux.")
-                    df_players_in_base = pd.DataFrame(columns=["player_id", "team_id"])
+            # Pause après un certain nombre de joueurs pour éviter les limites de l'API
+            if (i % Config.NBA_API_TEMPO_PLAYERS == 0) and (i != 0):
+                delai = Config.NBA_API_TEMPO
+                print(f" Pause de {delai} secondes après l'ajout de {i} joueurs.")
+                time.sleep(delai)
 
-                # Ne conserver que les lignes pour lesquelles les valeurs de player_id ne sont pas en base
-                active_players_df = active_players_df[
-                    ~active_players_df["player_id"].isin(df_players_in_base["player_id"])]
+        # Conversion de la liste en DF
+        df_populated_players_from_api = pd.DataFrame(list_populated_players_from_api)
 
-                # Barre de progression avec tqdm
-                for i, player in tqdm(
-                        enumerate(active_players_df.itertuples(index=False)),
-                        desc="Ajout des joueurs",
-                        unit="joueur",
-                        total=len(active_players_df)
-                ):
-                    # Récupérer le DataFrame commonplayerinfo depuis l'API
-                    player_info = NbaApiService.get_common_player_info(player.player_id)
+        # Convertir des colonnes d'object à float64 (conversion initiale causée par l'utilisation d'une liste)
+        df_populated_players_from_api['weight'] = pd.to_numeric(df_populated_players_from_api['weight'], errors='coerce')
+        df_populated_players_from_api['jersey_num'] = pd.to_numeric(df_populated_players_from_api['jersey_num'], errors='coerce')
+
+        # Enlever la colonne team du DF provenant de la base
+        df_players_from_base.drop(columns=['team'], inplace=True)
+
+        # Changer les formats de la colonne birthdate de chaque DF
+        df_populated_players_from_api['birthdate'] = pd.to_datetime(df_populated_players_from_api['birthdate']).dt.strftime('%Y-%m-%d')
+        df_players_from_base['birthdate'] = pd.to_datetime(df_players_from_base['birthdate']).dt.strftime('%Y-%m-%d')
+
+        # Fusionner les deux DF
+        df_merge = df_populated_players_from_api.merge(df_players_from_base, how='outer',
+                                                       indicator=True)
+
+        # Garder seulement les lignes présentes dans df_populated_players_from_api mais pas dans df_players_from_base
+        df_different_players_from_api = df_merge[
+            df_merge['_merge'] == 'left_only'].drop(columns=['_merge'])
+
+        # Filtrer df_different_players_from_api en excluant les player_id présents dans df_players_from_base
+        df_players_to_add = df_different_players_from_api[
+            ~df_different_players_from_api['player_id'].isin(df_players_from_base['player_id'])]
+
+        # Filtrer df_different_players_from_api en incluant uniquement les player_id présents dans df_players_from_base
+        df_players_to_update = df_different_players_from_api[
+            df_different_players_from_api['player_id'].isin(df_players_from_base['player_id'])]
+
+        try:
+            with SessionLocal() as db:
+                # Update
+                for _, row in df_players_to_update.iterrows():
+                    db.query(Player).filter(Player.player_id == row['player_id']).update(row.to_dict())
+
+                # Ajout
+                for _, row in df_players_to_add.iterrows():
+
+                    # Convertir la ligne en DF
+                    row_df = pd.DataFrame([row])
 
                     # Mapper les données vers le modèle Player
-                    player_sqlalchemy = PlayerService.map_common_player_info_df_to_player_model(player_info)
+                    player_sqlalchemy = PlayerService.map_common_player_info_df_to_player_model(row_df)
 
                     # Ajouter l'entrée à la session sans valider immédiatement
                     db.add(player_sqlalchemy)
 
-                    # Pause après un certain nombre de joueurs pour éviter les limites de l'API
-                    if (i % Config.NBA_API_TEMPO_PLAYERS == 0) and (i != 0):
-                        delai = Config.NBA_API_TEMPO
-                        print(f" Pause de {delai} secondes après l'ajout de {i} joueurs.")
-                        time.sleep(delai)
-
-                db.flush()  # Flush avant commit pour s'assurer que les objets sont envoyés à la base de données
+                db.flush()
                 db.commit()
-                print(f"Tous les {len(active_players_df)} joueurs ont été ajoutés à la base de données avec succès.")
 
-            except Exception as e:
-                db.rollback()
-                print(f"Une erreur est survenue lors de l'ajout des joueurs : {e}")
+                count_update = len(df_players_to_update)
+                count_ajout = len(df_players_to_add)
+                print(f" Update de {count_update} joueurs.")
+                print(f" Ajout de {count_ajout} joueurs.")
+
+        except Exception as e:
+            db.rollback()
+            print(f"Une erreur est survenue lors de la mise à jour des joueurs : {e}")
 
     @staticmethod
     def clear_player_table():
@@ -160,5 +184,5 @@ class PlayerTableMgmt:
 
 
 if __name__ == "__main__":
-    PlayerTableMgmt.add_new_player_to_table()
+    PlayerTableMgmt.update_player_table()
     # PlayerTableMgmt.clear_player_table()
