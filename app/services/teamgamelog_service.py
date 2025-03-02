@@ -1,7 +1,4 @@
 from builtins import list
-
-from pandas import Series
-
 from app.models.teamgamelog import TeamGameLog
 from app.schemas.teamgamelog_schema import TeamGameLogSchema
 from app.dao.teamgamelog_dao import TeamGameLogDAO
@@ -84,8 +81,8 @@ class TeamGameLogService:
 
         return list_teamgamelog
 
-if __name__ == "__main__":
 
-    #teamgamelog_df = TeamGameLogService.get_teamgamelog_df_from_api_by_team_id(1610612742)
+if __name__ == "__main__":
+    # teamgamelog_df = TeamGameLogService.get_teamgamelog_df_from_api_by_team_id(1610612742)
     my_list = TeamGameLogService.get_list_teamgamelog_dto_by_team_id(1610612737)
     print("toto")

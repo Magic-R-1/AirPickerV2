@@ -35,7 +35,8 @@ class TeamGameLogTableMgmt:
 
                 # Vérification : Si aucun enregistrement existant, utiliser un DataFrame vide
                 if df_teamgamelog_in_base is None or df_teamgamelog_in_base.empty:
-                    print("Aucun TeamGameLog existant trouvé dans la base. Tous les enregistrements API seront considérés comme nouveaux.")
+                    print(
+                        "Aucun TeamGameLog existant trouvé dans la base. Tous les enregistrements API seront considérés comme nouveaux.")
                     df_teamgamelog_in_base = pd.DataFrame(columns=["team_id", "game_id"])
 
                 for index, team_id in tqdm(
@@ -45,19 +46,22 @@ class TeamGameLogTableMgmt:
                         total=len(team_ids_list)
                 ):
                     # Filtrer les lignes de la table entière pour ne garder que celles correspondant à l'équipe en cours
-                    df_current_team_teamgamelog_in_base = df_teamgamelog_in_base[df_teamgamelog_in_base['team_id'] == team_id]
+                    df_current_team_teamgamelog_in_base = df_teamgamelog_in_base[
+                        df_teamgamelog_in_base['team_id'] == team_id]
 
                     # Appel API à TeamGameLog, pour récupérer les TeamGameLogs de l'équipe
                     teamgamelog_df = NbaApiService.get_team_game_log_by_team_id(team_id)
 
                     # Ne conserver que les lignes pour lesquelles les valeurs de game_id ne sont pas en base
-                    teamgamelog_df = teamgamelog_df[~teamgamelog_df["game_id"].isin(df_current_team_teamgamelog_in_base["game_id"])]
+                    teamgamelog_df = teamgamelog_df[
+                        ~teamgamelog_df["game_id"].isin(df_current_team_teamgamelog_in_base["game_id"])]
 
                     # Incrémenter le compteur global avec le nombre de nouvelles lignes
                     count_teamgamelogs += len(teamgamelog_df)
 
                     # Mapper les données vers le modèle Boxscore
-                    list_teamgamelog_sqlalchemy = TeamGameLogService.map_df_teamgamelog_to_list_teamgamelog_model(teamgamelog_df)
+                    list_teamgamelog_sqlalchemy = TeamGameLogService.map_df_teamgamelog_to_list_teamgamelog_model(
+                        teamgamelog_df)
 
                     if list_teamgamelog_sqlalchemy:
                         db.bulk_save_objects(list_teamgamelog_sqlalchemy)  # Insertion en batch
@@ -94,6 +98,7 @@ class TeamGameLogTableMgmt:
             except Exception as e:
                 print(f"Une erreur est survenue lors de la suppression de la table teamgamelog : {e}")
 
+
 if __name__ == "__main__":
-    #TeamGameLogTableMgmt.fill_teamgamelog_table()
+    # TeamGameLogTableMgmt.fill_teamgamelog_table()
     TeamGameLogTableMgmt.update_teamgamelog_table()
