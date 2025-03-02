@@ -8,15 +8,23 @@ class Utils:
 
     @staticmethod
     def obtenir_df_manipulable(data: Any, df_index: int = 0) -> pd.DataFrame:
-        df = data.get_data_frames()[df_index]  # Obtenir le DataFrame
-        df = df.astype(object) # Convertir les types NumPy en types natifs Python, évite psycopg2: can't adapt type 'numpy.int64', cannot convert float NaN to integer
+
+        # Vérifier si 'data' est un DataFrame
+        if not isinstance(data, pd.DataFrame):
+            df = data.get_data_frames()[df_index]  # Obtenir le DataFrame uniquement si data n'est pas déjà un DataFrame
+        else:
+            df = data
+
+        df = df.astype(
+            object)  # Convertir les types NumPy en types natifs Python, évite psycopg2: can't adapt type 'numpy.int64', cannot convert float NaN to integer
         df = Utils.convert_empty_to_none(df)
         df = Utils.convert_y_n_to_boolean(df)
         return df
 
     @staticmethod
     def ameliore_df(df: pd.DataFrame) -> pd.DataFrame:
-        df = df.astype(object) # Convertir les types NumPy en types natifs Python, évite psycopg2: can't adapt type 'numpy.int64', cannot convert float NaN to integer
+        df = df.astype(
+            object)  # Convertir les types NumPy en types natifs Python, évite psycopg2: can't adapt type 'numpy.int64', cannot convert float NaN to integer
         df = Utils.convert_empty_to_none(df)
         df = Utils.convert_y_n_to_boolean(df)
         return df
@@ -46,7 +54,8 @@ class Utils:
         Parcourt chaque élément d'un DataFrame et convertit les valeurs 'Y' en True
         et 'N' en False dans toutes les colonnes qui contiennent ces valeurs.
         """
-        return df.map(lambda x: True if isinstance(x, str) and x.upper() == 'Y' else (False if isinstance(x, str) and x.upper() == 'N' else x))
+        return df.map(lambda x: True if isinstance(x, str) and x.upper() == 'Y' else (
+            False if isinstance(x, str) and x.upper() == 'N' else x))
 
     @staticmethod
     def convert_empty_to_none(df: pd.DataFrame) -> pd.DataFrame:
@@ -63,8 +72,8 @@ class Utils:
         """
         return df.map(lambda x: None if x in ("", None, float("nan")) else x)
 
-if __name__ == "__main__":
 
+if __name__ == "__main__":
     date_string = "APR 14, 2024"
     converted_date = Utils.convert_to_date(date_string)
     print(converted_date)  # Résultat : 2024-04-14
