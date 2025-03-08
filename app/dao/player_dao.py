@@ -1,8 +1,11 @@
+import pandas as pd
+
 from app.database.db_connector import session_scope
 from app.dto.player_dto import PlayerDTO
 from app.exceptions.exceptions import PlayerNotFoundError
 from app.models.player import Player
 from app.schemas.player_schema import PlayerSchema
+from services.nba_api_service import NbaApiService
 
 
 class PlayerDAO:
@@ -21,6 +24,7 @@ class PlayerDAO:
                 session.add(player_sqlalchemy)
                 session.commit()
                 session.refresh(player_sqlalchemy)
+                print(f"Player ajouté : {player_dto.display_first_last}")
                 return player_sqlalchemy  # Retourner l'objet Player nouvellement ajouté
 
         except Exception as e:
@@ -39,11 +43,11 @@ class PlayerDAO:
     def get_player_by_display_first_last(display_first_last: str):
         with session_scope() as session:
             player_sqlalchemy = session.query(Player).filter_by(display_first_last=display_first_last).all()
-            if not player_sqlalchemy: # Aucun joueur trouvé
+            if not player_sqlalchemy:  # Aucun joueur trouvé
                 raise PlayerNotFoundError(f"Joueur avec display_first_last '{display_first_last}' non trouvé.")
             elif len(player_sqlalchemy) == 1:  # Un joueur trouvé
                 player_sqlalchemy = player_sqlalchemy[0]
-            else: # Plusieurs joueurs trouvés
+            else:  # Plusieurs joueurs trouvés
                 raise ValueError(f"Plusieurs joueurs trouvés pour le nom '{display_first_last}.")
             return player_sqlalchemy
 
@@ -134,17 +138,18 @@ class PlayerDAO:
         # Création de l'instance PlayerDTO
         return PlayerDTO(**player_schema)
 
+    @staticmethod
+    def player_from_commonplayerinfo_to_dto(player_df: pd.DataFrame):
+        player_dict = player_df.to_dict(orient="records")[0]
+
+        player_schema = PlayerSchema().load(player_dict)
+        player_model = Player(**player_schema)
+
+        return player_model
+
 
 if __name__ == "__main__":
-
-    #player = PlayerDTO(player_id=201587, first_name="Nicolas", last_name="Batum")
-    #PlayerDAO.update_player(player)
-
-    #player_dto = PlayerDTO(player_id=1, first_name="Erwan", last_name="Gretillat")
-    #player_sqlalchemy = PlayerDAO.player_from_dto_to_sql(player_dto)
-    #PlayerDAO.add_player(player_dto)
-    PlayerDAO.delete_player_by_id(1)
-
-    #player_sql = PlayerDAO.get_player_by_id(2544)
-    #player_dto = PlayerDAO.player_from_sql_to_dto(player_sql)
-    #print(player_dto)
+    # player = NbaApiService.get_common_player_info(1641936)
+    # playerDto = PlayerDAO.player_from_commonplayerinfo_to_dto(player)
+    # PlayerDAO.add_player(playerDto)
+    print()
