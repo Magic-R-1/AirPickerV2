@@ -29,6 +29,7 @@ class Config:
     # Configurer le logging global avec le niveau provenant du .env
     LOG_LEVEL = os.getenv("LOG_LEVEL", "INFO").upper()
     logging.basicConfig(level=LOG_LEVEL)
+    logging.getLogger('sqlalchemy.engine.Engine').disabled = True # Ligne pour désactiver les logs sqlalchemy
 
     # NBA API config
     NBA_API_TEMPO = int(os.getenv("NBA_API_TEMPO", 60))
