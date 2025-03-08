@@ -1,10 +1,11 @@
 from builtins import list
+from marshmallow import ValidationError
+import pandas as pd
+
 from app.models.teamgamelog import TeamGameLog
 from app.schemas.teamgamelog_schema import TeamGameLogSchema
 from app.dao.teamgamelog_dao import TeamGameLogDAO
 from app.dto.teamgamelog_dto import TeamGameLogDTO
-from marshmallow import ValidationError
-import pandas as pd
 
 
 class TeamGameLogService:

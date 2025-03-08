@@ -8,7 +8,6 @@ from app.enums.nba_api_endpoints import NbaApiEndpoints
 
 
 class NbaApiColumnMapper:
-
     # Charger le chemin du fichier JSON une seule fois pour éviter de charger à chaque appel de méthode
     json_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'config', 'nba_api_column_mapping.json')
 
@@ -19,7 +18,8 @@ class NbaApiColumnMapper:
             with open(NbaApiColumnMapper.json_path, 'r') as file:
                 return json.load(file)
         except FileNotFoundError:
-            raise FileNotFoundError(f"Le fichier JSON n'a pas été trouvé à l'emplacement : {NbaApiColumnMapper.json_path}")
+            raise FileNotFoundError(
+                f"Le fichier JSON n'a pas été trouvé à l'emplacement : {NbaApiColumnMapper.json_path}")
         except json.JSONDecodeError:
             raise ValueError("Le fichier JSON est malformé.")
 

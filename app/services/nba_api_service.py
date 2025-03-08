@@ -1,6 +1,7 @@
 import pandas as pd
 from nba_api.stats.static import players, teams
-from nba_api.stats.endpoints import boxscoretraditionalv3, commonplayerinfo, commonteamroster, playergamelog, playernextngames, teamgamelog, scoreboardv2
+from nba_api.stats.endpoints import boxscoretraditionalv3, commonplayerinfo, commonteamroster, playergamelog, \
+    playernextngames, teamgamelog, scoreboardv2
 
 from datetime import date
 
@@ -61,12 +62,13 @@ class NbaApiService:
         try:
             raw_data = playergamelog.PlayerGameLog(player_id=player_id, season=Config.SAISON_EN_COURS)  # Appel API
         except Exception as e:
-            print(f"Erreur lors de l'appel à PlayerGameLog pour player_id={player_id}, saison={Config.SAISON_EN_COURS} : {e}")
+            print(
+                f"Erreur lors de l'appel à PlayerGameLog pour player_id={player_id}, saison={Config.SAISON_EN_COURS} : {e}")
             raw_data = None  # Valeur par défaut en cas d'échec
 
         df = Utils.obtenir_df_manipulable(raw_data)
         df_renamed = NbaApiColumnMapper.rename_columns_in_df(df, NbaApiEndpoints.PLAYER_GAME_LOG.value)
-        df_renamed["game_date"] = df_renamed["game_date"].apply(Utils.convert_to_date)  
+        df_renamed["game_date"] = df_renamed["game_date"].apply(Utils.convert_to_date)
         return df_renamed
 
     @staticmethod
@@ -84,7 +86,7 @@ class NbaApiService:
 
         df = Utils.obtenir_df_manipulable(raw_data)
         df_renamed = NbaApiColumnMapper.rename_columns_in_df(df, NbaApiEndpoints.PLAYER_GAME_LOG.value)
-        df_renamed["game_date"] = df_renamed["game_date"].apply(Utils.convert_to_date)  
+        df_renamed["game_date"] = df_renamed["game_date"].apply(Utils.convert_to_date)
         return df_renamed
 
     # 2. Team
@@ -122,7 +124,7 @@ class NbaApiService:
 
         df = Utils.obtenir_df_manipulable(raw_data)
         df_renamed = NbaApiColumnMapper.rename_columns_in_df(df, NbaApiEndpoints.COMMON_TEAM_ROSTER.value)
-        df_renamed["birthdate"] = df_renamed["birthdate"].apply(Utils.convert_to_date)  
+        df_renamed["birthdate"] = df_renamed["birthdate"].apply(Utils.convert_to_date)
         return df_renamed
 
     @staticmethod
@@ -140,7 +142,7 @@ class NbaApiService:
 
         df = Utils.obtenir_df_manipulable(raw_data)
         df_renamed = NbaApiColumnMapper.rename_columns_in_df(df, NbaApiEndpoints.TEAM_GAME_LOG.value)
-        df_renamed["game_date"] = df_renamed["game_date"].apply(Utils.convert_to_date)  
+        df_renamed["game_date"] = df_renamed["game_date"].apply(Utils.convert_to_date)
         return df_renamed
 
     # 3. Feuilles de match
@@ -177,9 +179,10 @@ class NbaApiService:
 
         df = Utils.obtenir_df_manipulable(raw_data)
         df_renamed = NbaApiColumnMapper.rename_columns_in_df(df, NbaApiEndpoints.SCORE_BOARD_V2.value)
-        df_renamed["game_date"] = df_renamed["game_date"].apply(Utils.convert_to_date)  
+        df_renamed["game_date"] = df_renamed["game_date"].apply(Utils.convert_to_date)
 
         return df_renamed
+
 
 if __name__ == "__main__":
     # data = NbaApiService.get_common_player_info(2544)
@@ -191,5 +194,5 @@ if __name__ == "__main__":
     # data = NbaApiService.get_player_next_games_by_player_id(2544)
     # data = NbaApiService.get_scoreboardv2_by_game_date(date(2025,1,30))
     data = NbaApiService.get_boxscore_by_game_id("0022400001")
-    
+
     print("")

@@ -4,7 +4,6 @@ from marshmallow import Schema, fields, pre_load
 
 
 class TeamGameLogSchema(Schema):
-
     team_id = fields.Int(required=True)
 
     game_id = fields.Str(required=True)

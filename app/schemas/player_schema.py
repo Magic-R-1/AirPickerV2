@@ -4,7 +4,6 @@ from app.schemas.team_schema import TeamSchema
 
 
 class PlayerSchema(Schema):
-
     player_id = fields.Int(required=True)
     first_name = fields.Str(allow_none=True)
     family_name = fields.Str(allow_none=True)
@@ -37,7 +36,7 @@ class PlayerSchema(Schema):
     dleague_flag = fields.Bool(allow_none=True)
     nba_flag = fields.Bool(allow_none=True)
     games_played_flag = fields.Bool(allow_none=True)
-    games_played_current_season_flag  = fields.Bool(allow_none=True)
+    games_played_current_season_flag = fields.Bool(allow_none=True)
     greatest_75_flag = fields.Bool(allow_none=True)
 
     draft_year = fields.Str(allow_none=True)

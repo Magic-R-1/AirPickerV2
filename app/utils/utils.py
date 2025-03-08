@@ -60,15 +60,15 @@ class Utils:
     @staticmethod
     def convert_empty_to_none(df: pd.DataFrame) -> pd.DataFrame:
         """
-        Cette méthode prend un DataFrame et remplace toutes les valeurs vides (comme des chaînes vides,
-        des valeurs None, ou NaN) par `None` (qui est l'équivalent Python de `null` en base de données).
+        Remplace toutes les valeurs vides (chaînes vides, `None`, ou `NaN`) par `None` dans un DataFrame.
+        Cette méthode garantit que les valeurs manquantes sont uniformément représentées par `None`,
+        ce qui est l'équivalent de `NULL` en base de données.
+
+        Elle utilise la méthode `map` de Pandas pour appliquer une transformation à chaque élément du DataFrame,
+        remplaçant les valeurs vides par `None`.
 
         :param df: Le DataFrame sur lequel effectuer la conversion.
         :return: Un DataFrame où toutes les valeurs vides sont remplacées par `None`.
-
-        Cette méthode utilise la fonction `map` de Pandas pour itérer sur chaque élément du DataFrame
-        et applique une condition qui vérifie si l'élément est une valeur vide (une chaîne vide,
-        `None` ou NaN). Si c'est le cas, il est remplacé par `None`, sinon l'élément reste inchangé.
         """
         return df.map(lambda x: None if x in ("", None, float("nan")) else x)
 

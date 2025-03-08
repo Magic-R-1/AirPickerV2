@@ -28,8 +28,8 @@ class TeamService:
     @staticmethod
     # TODO : à virer, passer directement par la classe DAO
     def get_list_all_team_ids():
-        list_from_db = TeamDAO.get_all_team_ids() # Récupère la liste des résultats de la BDD sous forme de tuple
-        return [team_id[0] for team_id in list_from_db] # Extraction du premier élément de chaque tuple
+        list_from_db = TeamDAO.get_all_team_ids()  # Récupère la liste des résultats de la BDD sous forme de tuple
+        return [team_id[0] for team_id in list_from_db]  # Extraction du premier élément de chaque tuple
 
     @staticmethod
     def map_static_team_to_team_model(team_data):
@@ -66,7 +66,7 @@ class TeamService:
         try:
             # Renommer les clés du dictionnaire
             # TODO : si méthode utilisée, remplacer par le rename columns, bien plus efficace
-            team_dict_renamed = NbaApiColumnMapper.rename_keys_in_dict(team_data,NbaApiEndpoints.TEAMS_GET_TEAMS.value)
+            team_dict_renamed = NbaApiColumnMapper.rename_keys_in_dict(team_data, NbaApiEndpoints.TEAMS_GET_TEAMS.value)
 
             # Désérialisation des données pour obtenir un objet TeamDTO
             team_schema = TeamSchema().load(team_dict_renamed)
@@ -88,7 +88,7 @@ class TeamService:
         """
         try:
             # Convertir le tuple en dictionnaire
-            team_dict = team_tuple._asdict() # méthode couramment utilisée, ne pas tenir compte du warning
+            team_dict = team_tuple._asdict()  # méthode couramment utilisée, ne pas tenir compte du warning
 
             # Utilisation de TeamSchema pour valider et structurer les données
             team_schema = TeamSchema().load(team_dict)  # Valide et prépare les données

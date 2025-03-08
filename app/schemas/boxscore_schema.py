@@ -2,7 +2,6 @@ from marshmallow import Schema, fields
 
 
 class BoxscoreSchema(Schema):
-
     game_id = fields.String(required=True)
 
     team_id = fields.Integer(required=False)
