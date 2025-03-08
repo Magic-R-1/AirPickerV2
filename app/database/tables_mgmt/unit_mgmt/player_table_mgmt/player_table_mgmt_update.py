@@ -39,11 +39,11 @@ class PlayerTableMgmtUpdate:
         Nécessaire pour éviter les erreurs sur les imports de boxscore (joueurs dans boxscore, mais inactif depuis l'API)
         """
         # À remplir avec les erreurs remontées d'update_boxscore_table
-        list_id_joueur_erreur = [203926, 203901, 1642484, 1642486, 203109, 1630639, 1631209, 202687, 1641878,
-                                 1628365, 1642443, 1641772, 1641879, 1628396, 1631123, 1626143, 1630623, 1641936]
+        list_id_joueur_erreur = [1626143, 1628365, 1628396, 1630623, 1630639, 1631123, 1631209, 1641772, 1641878,
+                                 1641879, 1641936, 1642443, 1642484, 1642486, 203109, 203901, 203926, 202687]
 
         for id_player in list_id_joueur_erreur:
-            df_active_players_from_api.loc[len(df_active_players_from_api)] = [id_player, "","", "", True]
+            df_active_players_from_api.loc[len(df_active_players_from_api)] = [id_player, "", "", "", True]
 
     @staticmethod
     def populate_active_players(df_active_players_from_api):
@@ -61,7 +61,7 @@ class PlayerTableMgmtUpdate:
             list_populated_players_from_api.append(player_info.to_dict(orient='records')[0])
 
             # Pause pour respecter les limites de l'API
-            #if (i % Config.NBA_API_TEMPO_PLAYERS == 0) and (i != 0):
+            # if (i % Config.NBA_API_TEMPO_PLAYERS == 0) and (i != 0):
             #    print(f" Pause de {Config.NBA_API_TEMPO} secondes après l'ajout de {i} joueurs.")
             #    time.sleep(Config.NBA_API_TEMPO)
 
