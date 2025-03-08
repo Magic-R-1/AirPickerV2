@@ -1,4 +1,6 @@
-from marshmallow import Schema, fields
+from datetime import date
+
+from marshmallow import Schema, fields, pre_load
 
 
 class TeamGameLogSchema(Schema):
@@ -36,3 +38,10 @@ class TeamGameLogSchema(Schema):
     tov = fields.Int(allow_none=True)
     pf = fields.Int(allow_none=True)
     pts = fields.Int(allow_none=True)
+
+    # Ajout de cette méthode pour convertir automatiquement les dates reçues en format str acceptés par le model
+    @pre_load
+    def convert_date(self, data, **kwargs):
+        if isinstance(data.get("game_date"), date):
+            data["game_date"] = data["game_date"].isoformat()  # Convertir en 'YYYY-MM-DD'
+        return data

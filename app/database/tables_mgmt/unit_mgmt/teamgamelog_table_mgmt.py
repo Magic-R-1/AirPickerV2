@@ -5,7 +5,7 @@ from app.database.db_connector import engine, SessionLocal
 from app.models.teamgamelog import TeamGameLog
 from app.services.team_service import TeamService
 from app.services.teamgamelog_service import TeamGameLogService
-from services.nba_api_service import NbaApiService
+from app.services.nba_api_service import NbaApiService
 
 
 class TeamGameLogTableMgmt:

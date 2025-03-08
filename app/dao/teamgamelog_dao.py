@@ -74,6 +74,17 @@ class TeamGameLogDAO:
                 raise TeamGameLogNotFoundError(f"Aucun TeamGameLog trouvé.")
             return teamgamelogs_from_sql
 
+    @staticmethod
+    def get_list_unique_game_ids() -> List[str]:
+        """
+        Récupère la liste des game_id uniques depuis la table teamgamelog.
+
+        :return: Liste des game_id uniques.
+        """
+        with session_scope() as session:
+            unique_game_ids = session.query(TeamGameLog.game_id).distinct().all()
+            return [row[0] for row in unique_game_ids]
+
     # 2. Utils
     # =================================
 
@@ -103,7 +114,8 @@ class TeamGameLogDAO:
         # Création de l'instance TeamGameLogDTO
         return TeamGameLogDTO(**teamgamelog_schema)
 
+
 if __name__ == "__main__":
-    #myList = TeamGameLogDAO.get_list_pk_by_team_id(1610612737)
+    # myList = TeamGameLogDAO.get_list_pk_by_team_id(1610612737)
     myList = TeamGameLogDAO.get_list_game_id_by_team_id(1610612737)
     print("")

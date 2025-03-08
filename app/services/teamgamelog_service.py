@@ -6,8 +6,6 @@ from app.dto.teamgamelog_dto import TeamGameLogDTO
 from marshmallow import ValidationError
 import pandas as pd
 
-from app.utils.utils import Utils
-
 
 class TeamGameLogService:
 
@@ -82,6 +80,7 @@ class TeamGameLogService:
 
             except ValidationError as err:
                 print(f"Erreur de validation sur la ligne {teamgamelog_row}: {err.messages}")
+                raise  # Planter le code si passage ici
 
         return list_teamgamelog
 
