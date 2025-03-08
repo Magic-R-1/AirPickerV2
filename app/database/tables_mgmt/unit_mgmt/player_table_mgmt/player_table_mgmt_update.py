@@ -1,9 +1,6 @@
-import time
-
 import pandas as pd
 from tqdm import tqdm
 
-from app.config.config import Config
 from app.database.db_connector import SessionLocal
 from app.models import Player
 from app.services.nba_api_service import NbaApiService
