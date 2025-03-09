@@ -41,8 +41,8 @@ class TeamGameLogTableMgmt:
 
                 for team_id in tqdm(
                         team_ids_list,
-                        desc="Ajout des teamgamelogs",
-                        unit="teamgamelog",
+                        desc="Parcourir les équipes",
+                        unit="équipe",
                         total=len(team_ids_list)
                 ):
                     # Filtrer les lignes de la table entière pour ne garder que celles correspondant à l'équipe en cours

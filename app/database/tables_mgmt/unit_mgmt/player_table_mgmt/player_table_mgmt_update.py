@@ -30,6 +30,7 @@ class PlayerTableMgmtUpdate:
         PlayerTableMgmtUpdate.write_in_database(df_players_to_add, df_players_to_update)
 
     @staticmethod
+    # TODO : si correctement géré dans update_boxscore_table, à enlever
     def ajouter_joueurs_inactifs_erreur(df_active_players_from_api: pd.DataFrame):
         """
         Ajoute des joueurs à la liste de joueurs actifs
@@ -46,7 +47,7 @@ class PlayerTableMgmtUpdate:
     def populate_active_players(df_active_players_from_api):
         list_populated_players_from_api = []
 
-        PlayerTableMgmtUpdate.ajouter_joueurs_inactifs_erreur(df_active_players_from_api)
+        # PlayerTableMgmtUpdate.ajouter_joueurs_inactifs_erreur(df_active_players_from_api)
 
         for i, row in tqdm(
                 enumerate(df_active_players_from_api.itertuples(index=False)),

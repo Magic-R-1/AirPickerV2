@@ -96,7 +96,6 @@ class BoxscoreTableMgmt:
                             db.rollback()
                             print(f"Échec de la réinsertion pour le game_id {game_id}: {e}")
 
-
     @staticmethod
     def clear_boxscore_table():
         with SessionLocal() as session:
