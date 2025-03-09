@@ -1,3 +1,5 @@
+from typing import List
+
 import pandas as pd
 
 from app.database.db_connector import session_scope
@@ -5,7 +7,7 @@ from app.dto.player_dto import PlayerDTO
 from app.exceptions.exceptions import PlayerNotFoundError
 from app.models.player import Player
 from app.schemas.player_schema import PlayerSchema
-from services.nba_api_service import NbaApiService
+from app.services.nba_api_service import NbaApiService
 
 
 class PlayerDAO:
@@ -14,7 +16,7 @@ class PlayerDAO:
     # =================================
 
     @staticmethod
-    def add_player(player_dto: PlayerDTO):
+    def add_player(player_dto: PlayerDTO) -> bool:
         try:
             # Convertir le PlayerDTO en objet Player
             player_sqlalchemy = PlayerDAO.player_from_dto_to_sql(player_dto)
@@ -25,14 +27,20 @@ class PlayerDAO:
                 session.commit()
                 session.refresh(player_sqlalchemy)
                 print(f"Player ajouté : {player_dto.display_first_last}")
-                return player_sqlalchemy  # Retourner l'objet Player nouvellement ajouté
+                return True
 
         except Exception as e:
             print(f"Erreur lors de l'ajout du joueur : {e}")
-            return None
+            return False
 
     @staticmethod
-    def get_player_by_id(player_id: int):
+    def add_player_from_player_id(player_id: int) -> bool:
+        player = NbaApiService.get_common_player_info(player_id)
+        player_dto = PlayerDAO.player_from_commonplayerinfo_to_dto(player)
+        return PlayerDAO.add_player(player_dto)
+
+    @staticmethod
+    def get_player_by_id(player_id: int) -> Player:
         with session_scope() as session:
             player_sqlalchemy = session.query(Player).filter_by(player_id=player_id).first()
             if player_sqlalchemy is None:
@@ -40,7 +48,7 @@ class PlayerDAO:
             return player_sqlalchemy
 
     @staticmethod
-    def get_player_by_display_first_last(display_first_last: str):
+    def get_player_by_display_first_last(display_first_last: str) -> Player:
         with session_scope() as session:
             player_sqlalchemy = session.query(Player).filter_by(display_first_last=display_first_last).all()
             if not player_sqlalchemy:  # Aucun joueur trouvé
@@ -52,7 +60,7 @@ class PlayerDAO:
             return player_sqlalchemy
 
     @staticmethod
-    def get_all_players():
+    def get_all_players() -> List[Player]:
         with session_scope() as session:
             players_from_sqlalchemy = session.query(Player).all()
             if players_from_sqlalchemy is None:
@@ -60,7 +68,7 @@ class PlayerDAO:
             return players_from_sqlalchemy
 
     @staticmethod
-    def update_player(player_dto: PlayerDTO):
+    def update_player(player_dto: PlayerDTO) -> Player | None:
         """
         Met à jour les informations d'un joueur en base de données à partir d'un PlayerDTO.
         Méthode non-destructive : les champs existants non spécifiés dans l'input restent inchangés.
@@ -94,7 +102,7 @@ class PlayerDAO:
                 return None
 
     @staticmethod
-    def delete_player_by_id(player_id: int):
+    def delete_player_by_id(player_id: int) -> bool:
         try:
             with session_scope() as session:
                 player_sqlalchemy = session.query(Player).filter_by(player_id=player_id).first()
@@ -113,7 +121,7 @@ class PlayerDAO:
     # =================================
 
     @staticmethod
-    def player_from_dto_to_sql(player_dto: PlayerDTO):
+    def player_from_dto_to_sql(player_dto: PlayerDTO) -> Player:
         """
         Convertit une instance PlayerDTO en une instance SQLAlchemy Player en passant par PlayerSchema.
 
@@ -126,7 +134,7 @@ class PlayerDAO:
         return Player(**player_schema)
 
     @staticmethod
-    def player_from_sql_to_dto(player_sqlalchemy: Player):
+    def player_from_sql_to_dto(player_sqlalchemy: Player) -> PlayerDTO:
         """
         Convertit une instance SQLAlchemy Player en une instance PlayerDTO.
 
@@ -139,7 +147,7 @@ class PlayerDAO:
         return PlayerDTO(**player_schema)
 
     @staticmethod
-    def player_from_commonplayerinfo_to_dto(player_df: pd.DataFrame):
+    def player_from_commonplayerinfo_to_dto(player_df: pd.DataFrame) -> PlayerDTO:
         player_dict = player_df.to_dict(orient="records")[0]
 
         player_schema = PlayerSchema().load(player_dict)
@@ -149,7 +157,5 @@ class PlayerDAO:
 
 
 if __name__ == "__main__":
-    # player = NbaApiService.get_common_player_info(1641936)
-    # playerDto = PlayerDAO.player_from_commonplayerinfo_to_dto(player)
-    # PlayerDAO.add_player(playerDto)
+    PlayerDAO.add_player_from_player_id(1641936)
     print()
