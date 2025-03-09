@@ -151,7 +151,8 @@
     "endpoints": {
       "boxscoretraditionalv3": "teamName",
       "commonplayerinfo": "TEAM_NAME",
-      "teams.get_teams": "nickname"
+      "teams.get_teams": "nickname",
+      "scoreboardv2" : "TEAM_CITY_NAME"
     }
   },
   "team_tricode": {
@@ -476,7 +477,8 @@
     "exemple": ["W","L"],
     "endpoints": {
       "teamgamelog": "WL",
-      "playergamelog": "WL"
+      "playergamelog": "WL",
+      "scoreboardv2": "TEAM_WINS_LOSSES"
     }
   },
   "w": {
@@ -533,7 +535,8 @@
     "endpoints": {
       "boxscoretraditionalv3": "fieldGoalsPercentage",
       "teamgamelog": "FG_PCT",
-      "playergamelog": "FG_PCT"
+      "playergamelog": "FG_PCT",
+      "scoreboardv2": "FG_PCT"
     }
   },
   "fg3m": {
@@ -560,7 +563,8 @@
     "endpoints": {
       "boxscoretraditionalv3": "threePointersPercentage",
       "teamgamelog": "FG3_PCT",
-      "playergamelog": "FG3_PCT"
+      "playergamelog": "FG3_PCT",
+      "scoreboardv2": "FG3_PCT"
     }
   },
   "ftm": {
@@ -587,7 +591,8 @@
     "endpoints": {
       "boxscoretraditionalv3": "freeThrowsPercentage",
       "teamgamelog": "FT_PCT",
-      "playergamelog": "FT_PCT"
+      "playergamelog": "FT_PCT",
+      "scoreboardv2": "FT_PCT"
     }
   },
   "o_reb": {
@@ -614,7 +619,8 @@
     "endpoints": {
       "boxscoretraditionalv3": "reboundsTotal",
       "teamgamelog": "REB",
-      "playergamelog": "REB"
+      "playergamelog": "REB",
+      "scoreboardv2": "REB"
     }
   },
   "ast": {
@@ -623,7 +629,8 @@
     "endpoints": {
       "boxscoretraditionalv3": "assists",
       "teamgamelog": "AST",
-      "playergamelog": "AST"
+      "playergamelog": "AST",
+      "scoreboardv2": "AST"
     }
   },
   "stl": {
@@ -650,7 +657,8 @@
     "endpoints": {
       "boxscoretraditionalv3": "turnovers",
       "teamgamelog": "TOV",
-      "playergamelog": "TOV"
+      "playergamelog": "TOV",
+      "scoreboardv2": "TOV"
     }
   },
   "pf": {
@@ -668,7 +676,106 @@
     "endpoints": {
       "boxscoretraditionalv3": "points",
       "teamgamelog": "PTS",
-      "playergamelog": "PTS"
+      "playergamelog": "PTS",
+      "scoreboardv2": "PTS"
+    }
+  },
+  "pts_qt_1": {
+    "reference": "pts_qt_1",
+    "exemple": "",
+    "endpoints": {
+      "scoreboardv2": "PTS_QTR1"
+    }
+  },
+  "pts_qt_2": {
+    "reference": "pts_qt_2",
+    "exemple": "",
+    "endpoints": {
+      "scoreboardv2": "PTS_QTR2"
+    }
+  },
+  "pts_qt_3": {
+    "reference": "pts_qt_3",
+    "exemple": "",
+    "endpoints": {
+      "scoreboardv2": "PTS_QTR3"
+    }
+  },
+  "pts_qt_4": {
+    "reference": "pts_qt_4",
+    "exemple": "",
+    "endpoints": {
+      "scoreboardv2": "PTS_QTR4"
+    }
+  },
+  "pts_ot_1": {
+    "reference": "pts_ot_1",
+    "exemple": "",
+    "endpoints": {
+      "scoreboardv2": "PTS_OT1"
+    }
+  },
+  "pts_ot_2": {
+    "reference": "pts_ot_2",
+    "exemple": "",
+    "endpoints": {
+      "scoreboardv2": "PTS_OT2"
+    }
+  },
+  "pts_ot_3": {
+    "reference": "pts_ot_3",
+    "exemple": "",
+    "endpoints": {
+      "scoreboardv2": "PTS_OT3"
+    }
+  },
+  "pts_ot_4": {
+    "reference": "pts_ot_4",
+    "exemple": "",
+    "endpoints": {
+      "scoreboardv2": "PTS_OT4"
+    }
+  },
+  "pts_ot_5": {
+    "reference": "pts_ot_5",
+    "exemple": "",
+    "endpoints": {
+      "scoreboardv2": "PTS_OT5"
+    }
+  },
+  "pts_ot_6": {
+    "reference": "pts_ot_6",
+    "exemple": "",
+    "endpoints": {
+      "scoreboardv2": "PTS_OT6"
+    }
+  },
+  "pts_ot_7": {
+    "reference": "pts_ot_7",
+    "exemple": "",
+    "endpoints": {
+      "scoreboardv2": "PTS_OT7"
+    }
+  },
+  "pts_ot_8": {
+    "reference": "pts_ot_8",
+    "exemple": "",
+    "endpoints": {
+      "scoreboardv2": "PTS_OT8"
+    }
+  },
+  "pts_ot_9": {
+    "reference": "pts_ot_9",
+    "exemple": "",
+    "endpoints": {
+      "scoreboardv2": "PTS_OT9"
+    }
+  },
+  "pts_ot_10": {
+    "reference": "pts_ot_10",
+    "exemple": "",
+    "endpoints": {
+      "scoreboardv2": "PTS_OT10"
     }
   },
   "plus_minus_points": {
