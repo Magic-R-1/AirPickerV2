@@ -1,3 +1,6 @@
+import re
+
+from sqlalchemy.exc import IntegrityError
 from tqdm import tqdm
 
 from app.database.db_connector import engine, SessionLocal
@@ -6,6 +9,7 @@ from app.dao.teamgamelog_dao import TeamGameLogDAO
 from app.services.boxscore_service import BoxscoreService
 from app.services.nba_api_service import NbaApiService
 from app.dao.boxscore_dao import BoxscoreDAO
+from app.dao.player_dao import PlayerDAO
 
 
 class BoxscoreTableMgmt:
@@ -20,7 +24,8 @@ class BoxscoreTableMgmt:
         BoxscoreTableMgmt.update_boxscore_table()
 
     @staticmethod
-    def update_boxscore_table():
+    # TODO : à enlever si update_boxscore_table OK
+    def update_boxscore_table_old():
         liste_game_id_in_teamgamelog = set(TeamGameLogDAO.get_list_unique_game_ids())  # Convertir en set dès le début
         liste_game_id_in_boxscore = set(BoxscoreDAO.get_list_unique_game_ids())
 
@@ -52,6 +57,45 @@ class BoxscoreTableMgmt:
             except Exception as e:
                 db.rollback()
                 print(f"Une erreur est survenue lors de l'ajout des boxscores : {e}")
+
+    @staticmethod
+    def update_boxscore_table():
+        liste_game_id_in_teamgamelog = TeamGameLogDAO.get_list_unique_game_ids()
+        liste_game_id_in_boxscore = BoxscoreDAO.get_list_unique_game_ids()
+        liste_nouveaux_game_id = list(set(liste_game_id_in_teamgamelog) - set(liste_game_id_in_boxscore))
+
+        with SessionLocal() as db:
+            for game_id in tqdm(liste_nouveaux_game_id, desc="Boucle sur les game_id", unit="game_id", total=len(liste_nouveaux_game_id)):
+                try:
+                    df_boxscore = NbaApiService.get_boxscore_by_game_id(game_id)
+                    list_boxscore_sqlalchemy = BoxscoreService.map_boxscore_df_to_list_boxscore_model(df_boxscore)
+
+                    if list_boxscore_sqlalchemy:
+                        db.bulk_save_objects(list_boxscore_sqlalchemy)
+                        db.flush()
+                        db.commit()
+
+                except IntegrityError as e:
+                    db.rollback()
+
+                    # Extraction des player_id manquants
+                    missing_players = set(re.findall(r"Key \(player_id\)=\((\d+)\)", str(e)))
+                    if missing_players:
+                        print(f"Joueurs manquants détectés : {missing_players}, tentative d'ajout...")
+
+                        for player_id in missing_players:
+                            PlayerDAO.add_player_from_player_id(int(player_id))
+
+                        # Réessayer l'insertion après avoir ajouté les joueurs
+                        try:
+                            if list_boxscore_sqlalchemy:
+                                db.bulk_save_objects(list_boxscore_sqlalchemy)
+                                db.flush()
+                                db.commit()
+                        except IntegrityError as e:
+                            db.rollback()
+                            print(f"Échec de la réinsertion pour le game_id {game_id}: {e}")
+
 
     @staticmethod
     def clear_boxscore_table():
