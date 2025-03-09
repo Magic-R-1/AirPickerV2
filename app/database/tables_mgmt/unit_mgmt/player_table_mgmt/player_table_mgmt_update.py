@@ -1,4 +1,5 @@
 import pandas as pd
+from pandas import DataFrame
 from tqdm import tqdm
 
 from app.database.db_connector import SessionLocal
@@ -31,7 +32,7 @@ class PlayerTableMgmtUpdate:
 
     @staticmethod
     # TODO : si correctement géré dans update_boxscore_table, à enlever
-    def ajouter_joueurs_inactifs_erreur(df_active_players_from_api: pd.DataFrame):
+    def ajouter_joueurs_inactifs_erreur(df_active_players_from_api: DataFrame):
         """
         Ajoute des joueurs à la liste de joueurs actifs
         Nécessaire pour éviter les erreurs sur les imports de boxscore (joueurs dans boxscore, mais inactif depuis l'API)

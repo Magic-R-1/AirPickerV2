@@ -1,6 +1,6 @@
 from typing import List
 
-import pandas as pd
+from pandas import DataFrame
 
 from app.database.db_connector import session_scope
 from app.dto.player_dto import PlayerDTO
@@ -147,7 +147,7 @@ class PlayerDAO:
         return PlayerDTO(**player_schema)
 
     @staticmethod
-    def player_from_commonplayerinfo_to_dto(player_df: pd.DataFrame) -> PlayerDTO:
+    def player_from_commonplayerinfo_to_dto(player_df: DataFrame) -> PlayerDTO:
         player_dict = player_df.to_dict(orient="records")[0]
 
         player_schema = PlayerSchema().load(player_dict)

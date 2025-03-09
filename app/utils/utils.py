@@ -2,12 +2,13 @@ from datetime import datetime, date
 from typing import Any
 
 import pandas as pd
+from pandas import DataFrame
 
 
 class Utils:
 
     @staticmethod
-    def obtenir_df_manipulable(data: Any, df_index: int = 0) -> pd.DataFrame:
+    def obtenir_df_manipulable(data: Any, df_index: int = 0) -> DataFrame:
 
         # Vérifier si 'data' est un DataFrame
         if not isinstance(data, pd.DataFrame):
@@ -22,7 +23,7 @@ class Utils:
         return df
 
     @staticmethod
-    def ameliore_df(df: pd.DataFrame) -> pd.DataFrame:
+    def ameliore_df(df: DataFrame) -> DataFrame:
         df = df.astype(
             object)  # Convertir les types NumPy en types natifs Python, évite psycopg2: can't adapt type 'numpy.int64', cannot convert float NaN to integer
         df = Utils.convert_empty_to_none(df)
@@ -49,7 +50,7 @@ class Utils:
                 raise ValueError(f"Format de date inconnu : {date_str}")
 
     @staticmethod
-    def convert_y_n_to_boolean(df: pd.DataFrame) -> pd.DataFrame:
+    def convert_y_n_to_boolean(df: DataFrame) -> DataFrame:
         """
         Parcourt chaque élément d'un DataFrame et convertit les valeurs 'Y' en True
         et 'N' en False dans toutes les colonnes qui contiennent ces valeurs.
@@ -58,7 +59,7 @@ class Utils:
             False if isinstance(x, str) and x.upper() == 'N' else x))
 
     @staticmethod
-    def convert_empty_to_none(df: pd.DataFrame) -> pd.DataFrame:
+    def convert_empty_to_none(df: DataFrame) -> DataFrame:
         """
         Remplace toutes les valeurs vides (chaînes vides, `None`, ou `NaN`) par `None` dans un DataFrame.
         Cette méthode garantit que les valeurs manquantes sont uniformément représentées par `None`,

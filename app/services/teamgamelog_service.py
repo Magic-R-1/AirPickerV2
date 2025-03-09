@@ -1,6 +1,7 @@
 from builtins import list
 from marshmallow import ValidationError
 import pandas as pd
+from pandas import DataFrame
 
 from app.models.teamgamelog import TeamGameLog
 from app.schemas.teamgamelog_schema import TeamGameLogSchema
@@ -34,7 +35,7 @@ class TeamGameLogService:
         return teamgamelogs_dto
 
     @staticmethod
-    def get_df_all_teamgamelogs() -> pd.DataFrame:
+    def get_df_all_teamgamelogs() -> DataFrame:
 
         teamgamelogs_from_sql = TeamGameLogDAO.get_all_teamgamelogs()
 
@@ -53,7 +54,7 @@ class TeamGameLogService:
         return df_teamgamelogs
 
     @staticmethod
-    def get_df_pk_teamgamelog_by_team_id(team_id: int) -> pd.DataFrame:
+    def get_df_pk_teamgamelog_by_team_id(team_id: int) -> DataFrame:
 
         list_pk = TeamGameLogDAO.get_list_pk_by_team_id(team_id)
 
@@ -63,7 +64,7 @@ class TeamGameLogService:
         return df_pk
 
     @staticmethod
-    def map_df_teamgamelog_to_list_teamgamelog_model(teamgamelog_df: pd.DataFrame) -> list[TeamGameLog: dict]:
+    def map_df_teamgamelog_to_list_teamgamelog_model(teamgamelog_df: DataFrame) -> list[TeamGameLog: dict]:
         """
         Cette méthode prend un DataFrame et le convertit en une liste de TeamGameLog.
 

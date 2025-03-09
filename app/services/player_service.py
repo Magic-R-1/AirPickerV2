@@ -1,4 +1,5 @@
 import pandas as pd
+from pandas import DataFrame
 
 from app.dto.player_dto import PlayerDTO
 from app.dao.player_dao import PlayerDAO
@@ -80,7 +81,7 @@ class PlayerService:
         return df_filtered
 
     @staticmethod
-    def get_df_all_players_from_base() -> pd.DataFrame:
+    def get_df_all_players_from_base() -> DataFrame:
 
         players_from_sql = PlayerDAO.get_all_players()
 

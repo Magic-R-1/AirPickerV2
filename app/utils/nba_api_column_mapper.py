@@ -2,7 +2,7 @@ import os
 import json
 from typing import Dict
 
-import pandas as pd
+from pandas import DataFrame
 
 from app.enums.nba_api_endpoints import NbaApiEndpoints
 
@@ -76,7 +76,7 @@ class NbaApiColumnMapper:
         return None
 
     @staticmethod
-    def rename_columns_in_df(df: pd.DataFrame, endpoint: NbaApiEndpoints) -> pd.DataFrame:
+    def rename_columns_in_df(df: DataFrame, endpoint: NbaApiEndpoints) -> DataFrame:
         """Renomme les colonnes d'un DataFrame selon les correspondances dans le fichier JSON en fonction de l'endpoint."""
         # Vérifier que l'endpoint est valide
         if not endpoint:

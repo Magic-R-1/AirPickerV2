@@ -1,5 +1,5 @@
-import pandas as pd
 from marshmallow import ValidationError
+from pandas import DataFrame
 
 from app.models.boxscore import Boxscore
 from app.schemas.boxscore_schema import BoxscoreSchema
@@ -11,7 +11,7 @@ class BoxscoreService:
         pass
 
     @staticmethod
-    def map_boxscore_df_to_list_boxscore_model(df_boxscore: pd.DataFrame) -> list[Boxscore: dict]:
+    def map_boxscore_df_to_list_boxscore_model(df_boxscore: DataFrame) -> list[Boxscore: dict]:
         """
         Convertit les données de l'API NBA en Boxscore en utilisant BoxscoreSchema.
 
